@@ -1,5 +1,40 @@
-bin/
-obj/
 /packages/
 riderModule.iml
 /_ReSharper.Caches/
+
+# Default ignored files
+/shelf/
+/workspace.xml
+# Rider ignored files
+/modules.xml
+/projectSettingsUpdater.xml
+/contentModel.xml
+/.idea.ProductsAPI.iml
+# Editor-based HTTP Client requests
+/httpRequests/
+# Datasource local storage ignored files
+/dataSources/
+/dataSources.local.xml
+
+# Rider / IntelliJ IDEA
+.idea/
+*.sln.iml
+
+# Build
+bin/
+obj/
+out/
+
+# User-specific
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+*.DotSettings.user
+
+# Logs
+*.log
+
+# OS
+.DS_Store
+Thumbs.db
