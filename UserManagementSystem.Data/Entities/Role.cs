@@ -1,3 +1,5 @@
+using System.ComponentModel.DataAnnotations;
+
 namespace UserManagementSystem.Data.Entities;
 
 // Represents a role within the application (e.g., Admin, User, Moderator).
@@ -5,8 +7,12 @@ namespace UserManagementSystem.Data.Entities;
 public class Role
 {
     public int RoleId { get; set; }
+    
+    [Required(ErrorMessage = "Role Name is required")]
+    [Length(0,20, ErrorMessage = "Role Name must be 0-20 characters")]
     public string RoleName { get; set; } = string.Empty;
     
+    public ICollection<UserRole> UserRoles { get; set; } = new List<UserRole>();
 }
 
 

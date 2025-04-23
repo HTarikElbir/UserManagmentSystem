@@ -4,5 +4,8 @@ namespace UserManagementSystem.Data.Entities;
 public class UserRole
 {
     public int UserId { get; set; }  // Foreign key to User
+    public User User { get; set; } = null!;
+    
     public int RoleId { get; set; }  // Foreign key to Role
+    public Role Role { get; set; } = null!;
 }
