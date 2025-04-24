@@ -36,5 +36,43 @@ public class ApplicationDbContext : DbContext
             .HasOne(ur => ur.Role)
             .WithMany(u => u.UserRoles)
             .HasForeignKey(ur => ur.RoleId);
+        
+        // Seed Roles
+        modelBuilder.Entity<Role>().HasData(
+            new Role { RoleId = 1, RoleName = "Admin" },
+            new Role { RoleId = 2, RoleName = "User" }
+        );
+
+        // Seed Users
+        modelBuilder.Entity<User>().HasData(
+            new User
+            {
+                UserId = 1,
+                UserName = "aliveli",
+                Password = "aliveli",
+                Phone = "05333333333",
+                Email = "aliveli@example.com",
+                Department = "IT",
+                UserRoles = new List<UserRole>(),
+                IsActive = true
+            },
+            new User
+            {
+                UserId = 2,
+                UserName = "aysefatma",
+                Password = "123456",
+                Phone = "0533333334",
+                Email = "aysefatma@example.com",
+                Department = "HR",
+                UserRoles = new List<UserRole>(),
+                IsActive = true
+            }
+        );
+
+        // Seed UserRoles
+        modelBuilder.Entity<UserRole>().HasData(
+            new UserRole { UserId = 1, RoleId = 1 },
+            new UserRole { UserId = 2, RoleId = 2 }
+        );
     }
 }
