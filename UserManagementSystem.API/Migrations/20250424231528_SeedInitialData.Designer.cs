@@ -10,7 +10,7 @@ using UserManagementSystem.Data.Contexts;
 namespace UserManagementSystem.API.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20250424164758_SeedInitialData")]
+    [Migration("20250424231528_SeedInitialData")]
     partial class SeedInitialData
     {
         /// <inheritdoc />
