@@ -2,6 +2,8 @@ using Microsoft.EntityFrameworkCore;
 using UserManagementSystem.Business.Interfaces;
 using UserManagementSystem.Business.Services;
 using UserManagementSystem.Data.Contexts;
+using UserManagementSystem.Data.Interfaces;
+using UserManagementSystem.Data.Repositories;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -20,6 +22,8 @@ builder.Services.AddControllers();
 builder.Services.AddDbContext<ApplicationDbContext>(options => 
     options.UseSqlite(connectionString, b => b.MigrationsAssembly("UserManagementSystem.API"))); //SQLite Configuration
 
+builder.Services.AddScoped<IUserRepository, UserRepository>();
+builder.Services.AddScoped<IUserService, UserService>();
 
 var app = builder.Build();
 
@@ -32,4 +36,5 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
+app.MapControllers();
 app.Run();
