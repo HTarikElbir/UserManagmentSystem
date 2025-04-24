@@ -10,4 +10,12 @@
       <ProjectReference Include="..\UserManagementSystem.Data\UserManagementSystem.Data.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+      <PackageReference Include="FluentValidation" Version="11.11.0" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Folder Include="Dtos\" />
+    </ItemGroup>
+
 </Project>
