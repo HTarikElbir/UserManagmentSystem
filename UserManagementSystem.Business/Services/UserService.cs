@@ -19,8 +19,19 @@ public class UserService : IUserService
         await _userRepository.AddUserAsync(user);
     }
 
-    public async Task UpdateUserAsync(User user)
+    public async Task UpdateUserAsync(UserUpdateDto userUpdateDto)
     {
+        var user = await _userRepository.GetByIdUser(userUpdateDto.UserId);
+
+        if (user == null)
+        {
+            throw new Exception("User not found");
+        }
+
+        user.UserName = userUpdateDto.UserName;
+        user.Email = userUpdateDto.Email;
+        user.Phone = userUpdateDto.Phone;
+        
         await _userRepository.UpdateUserAsync(user);
     }
 
@@ -90,9 +101,7 @@ public class UserService : IUserService
     {
         return _userRepository.GetUsersByRoleAsync(roleName);
     }
-
-  
-
+    
     public Task<User?> GetUserByEmailAsync(string email)
     {
         return _userRepository.GetByEmail(email);

@@ -10,7 +10,7 @@ public interface IUserService
     Task AddUserAsync(User user);
     
     // Updates an existing user
-    Task UpdateUserAsync(User user);
+    Task UpdateUserAsync(UserUpdateDto userUpdateDto);
     
     // Deletes a user by their ID
     Task DeleteUserAsync(int userId);

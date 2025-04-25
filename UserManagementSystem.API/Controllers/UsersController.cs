@@ -4,8 +4,8 @@ using UserManagementSystem.Business.Interfaces;
 using UserManagementSystem.Data.Entities;
 namespace UserManagementSystem.API.Controllers
 {
-    [Route("api/[controller]")] // Route prefix for the controller, the URL will be 'api/users'
-    [ApiController] // Automatically validates models and binds parameters
+    [Route("api/users")] 
+    [ApiController] 
     public class UsersController : ControllerBase
     {
         private readonly IUserService _userService; // Service layer to handle business logic
@@ -25,8 +25,7 @@ namespace UserManagementSystem.API.Controllers
         }
 
         // Endpoint to get a user by their ID
-        [HttpGet] 
-        [Route("{userId}")] // Maps to the URL with a userId parameter (e.g., api/users/{userId})
+        [HttpGet("{userId}")] 
         public async Task<IActionResult> GetUserByIdAsync(int userId)
         {
             // If the userId is invalid (e.g., less than or equal to 0), return a 400 BadRequest
@@ -47,5 +46,7 @@ namespace UserManagementSystem.API.Controllers
             // If the user is found, return the result with a 200 OK status
             return Ok(result);
         }
+        
+        
     }
 }
