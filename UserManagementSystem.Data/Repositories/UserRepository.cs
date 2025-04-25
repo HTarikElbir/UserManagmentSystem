@@ -16,10 +16,17 @@ public class UserRepository : IUserRepository
     }
 
     // Returns a list of all users in the system.
-    public async Task<List<User>> GetAllUsers() => await _context.Users.ToListAsync();
+    public async Task<List<User>> GetAllUsers() => await _context.Users
+        .Include(u => u.UserRoles)
+            .ThenInclude(ur => ur.Role)
+        .ToListAsync();
+    
     
     // Returns a user by their unique ID.
-    public async Task<User?> GetByIdUser(int userId) => await _context.Users.FindAsync(userId);
+    public async Task<User?> GetByIdUser(int userId) => await _context.Users
+        .Include(u=>u.UserRoles)
+            .ThenInclude(ur=>ur.Role)
+        .FirstOrDefaultAsync(u => u.UserId == userId);
     
     // Returns a user by their email address.
     public async Task<User?> GetByEmail(string email) => await _context.Users.FirstOrDefaultAsync(u => u.Email == email);

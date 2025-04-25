@@ -1,3 +1,4 @@
+using UserManagementSystem.Business.Dtos;
 using UserManagementSystem.Data.Entities;
 
 namespace UserManagementSystem.Business.Interfaces;
@@ -15,7 +16,7 @@ public interface IUserService
     Task DeleteUserAsync(int userId);
     
     // Get all users
-    Task<List<User>> GetAllUsersAsync();
+    Task<List<UserDto>> GetAllUsersAsync();
     
     // Get users by Department 
     Task<List<User>> GetUsersByDepartmentAsync(string departmentName);
@@ -24,7 +25,7 @@ public interface IUserService
     Task<List<User>> GetUsersByRoleAsync(string roleName);
     
     // Get user by ID
-    Task<User?> GetUserByIdAsync(int userId);
+    Task<UserDto?> GetUserByIdAsync(int userId);
     
     // Get user by email
     Task<User?> GetUserByEmailAsync(string email);
