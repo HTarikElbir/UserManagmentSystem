@@ -18,21 +18,29 @@ public class UserService : IUserService
     {
         await _userRepository.AddUserAsync(user);
     }
-
-    public async Task UpdateUserAsync(UserUpdateDto userUpdateDto)
+    
+    // Updates the user entity with new information
+    public async Task<bool> UpdateUserAsync(int userId, UserUpdateDto userUpdateDto)
     {
-        var user = await _userRepository.GetByIdUser(userUpdateDto.UserId);
+        // Retrieve the user by their ID
+        var user = await _userRepository.GetByIdUser(userId);
 
+        // If the user does not exist, return false
         if (user == null)
         {
-            throw new Exception("User not found");
+            return false;
         }
 
+        // Update user properties with the new values
         user.UserName = userUpdateDto.UserName;
         user.Email = userUpdateDto.Email;
         user.Phone = userUpdateDto.Phone;
-        
+    
+        // Save the updated user entity
         await _userRepository.UpdateUserAsync(user);
+    
+        // Return true to indicate the update was successful
+        return true;
     }
 
     public async Task DeleteUserAsync(int userId)

@@ -39,10 +39,10 @@ public class UserRepository : IUserRepository
     }
     
     // Updates an existing user's data.
-    public Task UpdateUserAsync(User user)
+    public async  Task UpdateUserAsync(User user)
     {
-        _context.Users.Update(user);
-        return _context.SaveChangesAsync();
+        _context.Users.Update(user); 
+        await _context.SaveChangesAsync();
     }
     
     // Deletes a user by ID if found.

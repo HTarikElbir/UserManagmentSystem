@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using UserManagementSystem.Business.Dtos;
 using UserManagementSystem.Business.Interfaces;
 using UserManagementSystem.Data.Entities;
 namespace UserManagementSystem.API.Controllers
@@ -46,7 +47,29 @@ namespace UserManagementSystem.API.Controllers
             // If the user is found, return the result with a 200 OK status
             return Ok(result);
         }
-        
+
+        [HttpPut("{userId}")]
+        // Updates a user by their ID with the provided updated data
+        public async Task<IActionResult> UpdateUserAsync(int userId, [FromBody] UserUpdateDto userUpdateDto)
+        {
+            // Check if the incoming model is valid
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+    
+            // Attempt to update the user
+            bool updateSuccess = await _userService.UpdateUserAsync(userId, userUpdateDto);
+    
+            // If update is successful, return 204 No Content
+            if (updateSuccess)
+            {
+                return NoContent();
+            }
+            else
+                // If user not found, return 404 Not Found
+                return NotFound();
+        }
         
     }
 }
