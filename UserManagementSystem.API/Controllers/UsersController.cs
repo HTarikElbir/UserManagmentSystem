@@ -1,8 +1,6 @@
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using UserManagementSystem.Business.Dtos;
 using UserManagementSystem.Business.Interfaces;
-using UserManagementSystem.Data.Entities;
 namespace UserManagementSystem.API.Controllers
 {
     [Route("api/users")] 
@@ -21,7 +19,7 @@ namespace UserManagementSystem.API.Controllers
         [HttpGet] 
         public async Task<IActionResult> GetAllUsers()
         {
-            // Call the service to get all users and return the result with a 200 OK status
+            // Call the service to get all users and return the result with a 200-OK status
             return Ok(await _userService.GetAllUsersAsync());
         }
 
@@ -29,7 +27,7 @@ namespace UserManagementSystem.API.Controllers
         [HttpGet("{userId}")] 
         public async Task<IActionResult> GetUserByIdAsync(int userId)
         {
-            // If the userId is invalid (e.g., less than or equal to 0), return a 400 BadRequest
+            // If the userId is invalid (e.g., less than or equal to 0), return a 400-BadRequest
             if (userId <= 0)
             {
                 return BadRequest("Invalid user ID."); 
@@ -38,13 +36,13 @@ namespace UserManagementSystem.API.Controllers
             // Call the service to get the user by ID
             var result = await _userService.GetUserByIdAsync(userId);
             
-            // If the user is not found, return a 404 NotFound
+            // If the user is not found, return a 404-NotFound
             if (result == null)
             {
                 return NotFound("User not found.");
             }
 
-            // If the user is found, return the result with a 200 OK status
+            // If the user is found, return the result with a 200-OK status
             return Ok(result);
         }
 
@@ -68,6 +66,24 @@ namespace UserManagementSystem.API.Controllers
             }
             else
                 // If user not found, return 404 Not Found
+                return NotFound();
+        }
+
+        [HttpDelete("{userId}")]
+        public async Task<IActionResult> DeleteUserAsync(int userId)
+        {
+            if (userId <= 0)
+            {
+                return BadRequest("Invalid user ID.");
+            }
+            
+            bool deleteSuccess = await _userService.DeleteUserAsync(userId);
+
+            if (deleteSuccess)
+            {
+                return NoContent();
+            }
+            else
                 return NotFound();
         }
         
