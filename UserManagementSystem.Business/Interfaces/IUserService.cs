@@ -13,7 +13,7 @@ public interface IUserService
     Task<bool> UpdateUserAsync(int userId, UserUpdateDto userUpdateDto);
     
     // Deletes a user by their ID
-    Task DeleteUserAsync(int userId);
+    Task<bool> DeleteUserAsync(int userId);
     
     // Get all users
     Task<List<UserDto>> GetAllUsersAsync();

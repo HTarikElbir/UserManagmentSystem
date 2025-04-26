@@ -43,9 +43,17 @@ public class UserService : IUserService
         return true;
     }
 
-    public async Task DeleteUserAsync(int userId)
+    public async Task<bool> DeleteUserAsync(int userId)
     {
+        var user = await _userRepository.GetByIdUser(userId);
+        
+        if (user == null)
+        {
+            return false;
+        }
+        
         await _userRepository.DeleteUserAsync(userId);
+        return true;
     }
 
     public async Task<List<UserDto>> GetAllUsersAsync()
