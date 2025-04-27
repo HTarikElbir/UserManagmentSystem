@@ -1,4 +1,4 @@
-namespace UserManagementSystem.Business.Dtos;
+namespace UserManagementSystem.Business.Dtos.User;
 
 public class UserUpdateDto
 {

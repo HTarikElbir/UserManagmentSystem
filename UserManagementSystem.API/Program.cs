@@ -1,5 +1,7 @@
+using Microsoft.Build.Framework;
 using Microsoft.EntityFrameworkCore;
 using UserManagementSystem.Business.Interfaces;
+using UserManagementSystem.Business.MappingProfiles;
 using UserManagementSystem.Business.Services;
 using UserManagementSystem.Data.Contexts;
 using UserManagementSystem.Data.Interfaces;
@@ -24,6 +26,10 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
 
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IUserService, UserService>();
+
+// Add MappingProfile 
+builder.Services.AddAutoMapper(typeof(UserProfile).Assembly);
+builder.Services.AddAutoMapper(typeof(RoleProfile).Assembly);
 
 var app = builder.Build();
 

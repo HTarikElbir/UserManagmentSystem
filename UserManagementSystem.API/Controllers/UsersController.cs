@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using UserManagementSystem.Business.Dtos;
+using UserManagementSystem.Business.Dtos.User;
 using UserManagementSystem.Business.Interfaces;
 namespace UserManagementSystem.API.Controllers
 {

@@ -1,4 +1,5 @@
 using UserManagementSystem.Business.Dtos;
+using UserManagementSystem.Business.Dtos.User;
 using UserManagementSystem.Data.Entities;
 
 namespace UserManagementSystem.Business.Interfaces;
