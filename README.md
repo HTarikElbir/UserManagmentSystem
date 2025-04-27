@@ -1,6 +1,6 @@
 # User Management System - n-Tier ASP.NET Core Project (ONGOING)
 This project is a user management-focused application built with ASP.NET Core Web API.
-It follows the principles of N-Layer Architecture (Entity, Data Access, Business, API) to ensure scalability, maintainability, and separation of concerns.
+It follows the principles of N-Layer Architecture to ensure scalability, maintainability, and separation of concerns.
 The system provides secure and scalable solutions for core operations such as user registration, login, listing, authorization, and role-based access control.
 
 Technologies and Techniques Used:
