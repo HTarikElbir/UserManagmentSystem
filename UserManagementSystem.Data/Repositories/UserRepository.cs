@@ -19,6 +19,7 @@ public class UserRepository : IUserRepository
     public async Task<List<User>> GetAllUsers() => await _context.Users
         .Include(u => u.UserRoles)
             .ThenInclude(ur => ur.Role)
+        .AsNoTracking()
         .ToListAsync();
     
     
