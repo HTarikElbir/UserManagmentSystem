@@ -74,21 +74,41 @@ public class UserService : IUserService
 
     public async Task<bool> DeleteUserAsync(int userId)
     {
+        // Retrieve the user by their ID from the repository
         var user = await _userRepository.GetByIdUser(userId);
-        
+
+        // Check if the user exists
         if (user == null)
         {
+            // Return false if the user was not found
             return false;
         }
-        
+
+        // Delete the user through the repository
         await _userRepository.DeleteUserAsync(userId);
+        
+        // Return true indicating successful deletion
         return true;
     }
 
    
-    public Task<List<User>> GetUsersByDepartmentAsync(string departmentName)
+    public async Task<List<UserDto>> GetUsersByDepartmentAsync(string departmentName)
     {
-        return _userRepository.GetUsersByDepartmentAsync(departmentName);
+        // Retrieve users from the data layer
+        var users = await _userRepository.GetUsersByDepartmentAsync(departmentName);
+
+        // Check if any users were found
+        if (users == null)
+        {
+            // Throw an exception if no users are returned
+            throw new Exception("Users not found");
+        }
+        
+        // Map the list of User entities to a list of UserDto objects
+        var userDtos = _mapper.Map<List<UserDto>>(users);
+        
+        // Return the mapped DTOs
+        return userDtos;
     }
 
     public Task<List<User>> GetUsersByRoleAsync(string roleName)

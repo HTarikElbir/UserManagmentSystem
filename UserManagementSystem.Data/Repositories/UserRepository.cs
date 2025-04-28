@@ -63,6 +63,7 @@ public class UserRepository : IUserRepository
         // Uses CurrentCultureIgnoreCase for case-insensitive comparison based on the current culture.
        return _context.Users
            .Where(u => string.Equals(u.Department, department, StringComparison.CurrentCultureIgnoreCase))
+           .AsNoTracking()
            .ToListAsync();
     }
     
