@@ -98,10 +98,10 @@ public class UserService : IUserService
         var users = await _userRepository.GetUsersByDepartmentAsync(departmentName);
 
         // Check if any users were found
-        if (users == null)
+        if (users == null || users.Count == 0)
         {
             // Throw an exception if no users are returned
-            throw new Exception("Users not found");
+            throw new Exception("No users found for the specified department.");
         }
         
         // Map the list of User entities to a list of UserDto objects

@@ -25,7 +25,7 @@ namespace UserManagementSystem.API.Controllers
         }
 
         // Endpoint to get a user by their ID
-        [HttpGet("{userId}")] 
+        [HttpGet("id/{userId}")] 
         public async Task<IActionResult> GetUserByIdAsync(int userId)
         {
             // If the userId is invalid (e.g., less than or equal to 0), return a 400-BadRequest
@@ -47,7 +47,7 @@ namespace UserManagementSystem.API.Controllers
             return Ok(result);
         }
 
-        [HttpPut("{userId}")]
+        [HttpPut("{userId:int}")]
         // Updates a user by their ID with the provided updated data
         public async Task<IActionResult> UpdateUserAsync(int userId, [FromBody] UserUpdateDto userUpdateDto)
         {
@@ -70,23 +70,42 @@ namespace UserManagementSystem.API.Controllers
                 return NotFound();
         }
 
-        [HttpDelete("{userId}")]
+        [HttpDelete("{userId:int}")] // HTTP DELETE endpoint for user ID
         public async Task<IActionResult> DeleteUserAsync(int userId)
         {
+            // Validate user ID
             if (userId <= 0)
             {
                 return BadRequest("Invalid user ID.");
             }
-            
+
+            // Call business logic to delete user
             bool deleteSuccess = await _userService.DeleteUserAsync(userId);
 
+            // Return result based on deletion success
             if (deleteSuccess)
             {
-                return NoContent();
+                return NoContent(); // 204-Success (No Content)
             }
             else
-                return NotFound();
+                return NotFound(); // 404 Not Found
         }
-        
+
+        // Retrieves users based on the specified department name.
+        [HttpGet("department/{departmentName}")]
+        public async Task<IActionResult> GetUsersByDepartmentAsync(string? departmentName)
+        {
+            // Validate if the department name is provided.
+            if (departmentName == null)
+            {
+                return BadRequest("Invalid department name.");
+            }
+
+            // Get users belonging to the specified department.
+            var users = await _userService.GetUsersByDepartmentAsync(departmentName);
+    
+            // Return the list of users with HTTP 200 OK.
+            return Ok(users);
+        }
     }
 }

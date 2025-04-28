@@ -57,12 +57,14 @@ public class UserRepository : IUserRepository
         }
     }
     
-    public Task<List<User>> GetUsersByDepartmentAsync(string department)
+    public async Task<List<User>> GetUsersByDepartmentAsync(string department)
     {
         // Returns a list of users that belong to the specified department.
         // Uses CurrentCultureIgnoreCase for case-insensitive comparison based on the current culture.
-       return _context.Users
-           .Where(u => string.Equals(u.Department, department, StringComparison.CurrentCultureIgnoreCase))
+       return await _context.Users
+           .Where(u => EF.Functions.Like(u.Department, department))
+           .Include(u => u.UserRoles)
+                .ThenInclude(ur => ur.Role)
            .AsNoTracking()
            .ToListAsync();
     }
