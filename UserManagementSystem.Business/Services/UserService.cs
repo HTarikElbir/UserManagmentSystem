@@ -16,11 +16,7 @@ public class UserService : IUserService
         _userRepository = userRepository; 
         _mapper = mapper;
     }
-    
-    public async Task AddUserAsync(User user)
-    {
-        await _userRepository.AddUserAsync(user);
-    }
+   
     
     public async Task<List<UserDto>> GetAllUsersAsync()
     {
@@ -111,13 +107,32 @@ public class UserService : IUserService
         return userDtos;
     }
 
-    public Task<List<User>> GetUsersByRoleAsync(string roleName)
+    public async Task<List<UserDto>> GetUsersByRoleAsync(string roleName)
     {
-        return _userRepository.GetUsersByRoleAsync(roleName);
+        // Fetch users by role from repository
+        var users = await _userRepository.GetUsersByRoleAsync(roleName);
+
+        // Check if no users found for the specified role
+        if (users == null || users.Count == 0)
+        {
+            throw new Exception("No users found for the specified role.");
+        }
+
+        // Map users to UserDto
+        var userDtos = _mapper.Map<List<UserDto>>(users);
+    
+        // Return the list of UserDto
+        return userDtos;
     }
     
     public Task<User?> GetUserByEmailAsync(string email)
     {
         return _userRepository.GetByEmail(email);
+    }
+    
+     
+    public async Task AddUserAsync(User user)
+    {
+        await _userRepository.AddUserAsync(user);
     }
 }

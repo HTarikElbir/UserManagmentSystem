@@ -59,22 +59,22 @@ public class UserRepository : IUserRepository
     
     public async Task<List<User>> GetUsersByDepartmentAsync(string department)
     {
-        // Returns a list of users that belong to the specified department.
-        // Uses CurrentCultureIgnoreCase for case-insensitive comparison based on the current culture.
-       return await _context.Users
-           .Where(u => EF.Functions.Like(u.Department, department))
-           .Include(u => u.UserRoles)
+        // // Returns a list of users that belong to the specified department.
+        return await _context.Users
+            .Where(u => u.Department.ToLower() == department.ToLower())
+            .Include(u => u.UserRoles)
                 .ThenInclude(ur => ur.Role)
-           .AsNoTracking()
-           .ToListAsync();
+            .AsNoTracking()
+            .ToListAsync();
     }
     
-    public Task<List<User>> GetUsersByRoleAsync(string roleName)
+    public async Task<List<User>> GetUsersByRoleAsync(string roleName)
     {
         // Returns a list of users who have the specified role.
         // It checks if the role name associated with each user's UserRoles matches the given role name.
-        return _context.Users
-            .Where(u => u.UserRoles.Any(ur => ur.Role.RoleName == roleName))
+        return await _context.Users
+            .Where(u => u.UserRoles.Any(ur => ur.Role.RoleName.ToLower() == roleName.ToLower()))
+            .AsNoTracking()
             .ToListAsync();
     }
 }

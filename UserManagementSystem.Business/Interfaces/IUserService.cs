@@ -23,7 +23,7 @@ public interface IUserService
     Task<List<UserDto>> GetUsersByDepartmentAsync(string departmentName);
     
     // Get users by Role
-    Task<List<User>> GetUsersByRoleAsync(string roleName);
+    Task<List<UserDto>> GetUsersByRoleAsync(string roleName);
     
     // Get user by ID
     Task<UserDto?> GetUserByIdAsync(int userId);

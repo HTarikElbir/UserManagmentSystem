@@ -107,5 +107,22 @@ namespace UserManagementSystem.API.Controllers
             // Return the list of users with HTTP 200 OK.
             return Ok(users);
         }
+
+        // Endpoint to get users by their role
+        [HttpGet("role/{roleName}")]
+        public async Task<IActionResult> GetUsersByRoleAsync(string? roleName)
+        {
+            // Check if roleName is null
+            if (roleName == null)
+            {
+                return BadRequest("Invalid role name.");
+            }
+
+            // Get users by role from service
+            var users = await _userService.GetUsersByRoleAsync(roleName);
+    
+            // Return the list of users
+            return Ok(users);
+        }
     }
 }
