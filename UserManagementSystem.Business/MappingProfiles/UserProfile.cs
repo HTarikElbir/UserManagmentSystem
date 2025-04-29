@@ -21,6 +21,9 @@ public class UserProfile : Profile
             .ForMember(dest => dest.Password, opt => opt.Ignore())
             .ForMember(dest => dest.Department, opt => opt.Ignore())
             .ForMember(dest => dest.IsActive, opt => opt.Ignore());
-
+        
+        // UserAddDto -> User (For Add)
+        CreateMap<UserAddDto, User>()
+            .ForMember(dest => dest.IsActive, opt => opt.MapFrom(src => false)); // Set IsActive to true by default
     }
 }

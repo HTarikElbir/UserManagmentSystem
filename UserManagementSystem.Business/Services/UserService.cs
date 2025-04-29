@@ -1,4 +1,5 @@
 using AutoMapper;
+using FluentValidation;
 using UserManagementSystem.Business.Dtos;
 using UserManagementSystem.Business.Dtos.User;
 using UserManagementSystem.Business.Interfaces;
@@ -11,10 +12,12 @@ public class UserService : IUserService
 {
     private readonly IUserRepository _userRepository;
     private readonly IMapper _mapper;
-    public UserService(IUserRepository userRepository, IMapper mapper)
+    private readonly IValidator<UserAddDto> _validator;
+    public UserService(IUserRepository userRepository, IMapper mapper, IValidator<UserAddDto> validator)
     {
         _userRepository = userRepository; 
         _mapper = mapper;
+        _validator = validator;
     }
    
     
@@ -131,8 +134,21 @@ public class UserService : IUserService
     }
     
      
-    public async Task AddUserAsync(User user)
+    public async Task AddUserAsync(UserAddDto userAddDto)
     {
+        // Validate the incoming DTO using FluentValidation
+        var validationResult = await _validator.ValidateAsync(userAddDto);
+        
+        if (!validationResult.IsValid)
+        {
+            // Handle validation errors
+            throw new ValidationException(validationResult.Errors);
+        }
+        
+        // Map the DTO to the User entity
+        var user = _mapper.Map<User>(userAddDto);
+        
+        // Save the new user to the repository
         await _userRepository.AddUserAsync(user);
     }
 }

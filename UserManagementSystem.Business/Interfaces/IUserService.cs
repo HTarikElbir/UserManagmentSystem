@@ -8,7 +8,7 @@ namespace UserManagementSystem.Business.Interfaces;
 public interface IUserService
 {
     // Adds a new user
-    Task AddUserAsync(User user);
+    Task AddUserAsync(UserAddDto userAddDto);
     
     // Updates an existing user
     Task<bool> UpdateUserAsync(int userId, UserUpdateDto userUpdateDto);

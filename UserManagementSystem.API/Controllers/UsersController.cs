@@ -18,7 +18,7 @@ namespace UserManagementSystem.API.Controllers
 
         // Endpoint to get all users
         [HttpGet] 
-        public async Task<IActionResult> GetAllUsers()
+        public async Task<IActionResult> GetAllUsersAsync()
         {
             // Call the service to get all users and return the result with a 200-OK status
             return Ok(await _userService.GetAllUsersAsync());
