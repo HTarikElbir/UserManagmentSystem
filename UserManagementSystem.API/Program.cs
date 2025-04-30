@@ -30,6 +30,7 @@ builder.Services.AddScoped<IValidator<UserAddDto>, UserAddDtoValidator>();
 
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IUserService, UserService>();
+builder.Services.AddScoped<IPasswordHasher, PasswordHasherService>();
 
 // Add MappingProfile 
 builder.Services.AddAutoMapper(typeof(UserProfile).Assembly);

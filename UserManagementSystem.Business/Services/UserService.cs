@@ -151,6 +151,9 @@ public class UserService : IUserService
             throw new ValidationException(validationResult.Errors);
         }
         
+        // Hash the password before saving
+        userAddDto.Password = _passwordHasher.HashPassword(userAddDto.Password);
+        
         // Map the DTO to the User entity
         var user = _mapper.Map<User>(userAddDto);
         
