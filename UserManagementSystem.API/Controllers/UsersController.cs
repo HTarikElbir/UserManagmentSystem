@@ -124,5 +124,24 @@ namespace UserManagementSystem.API.Controllers
             // Return the list of users
             return Ok(users);
         }
+        
+        // Endpoint to add new user
+        [HttpPost]
+        public async Task<IActionResult> AddUserAsync(UserAddDto userAddDto)
+        {
+            var result = await _userService.AddUserAsync(userAddDto);
+            
+            // Check if the result is true
+            if (result)
+            {
+                // If true, return 201 Created
+                return Created();
+            }
+            else
+            {
+                // If false, return 400 Bad Request
+                return BadRequest("User could not be added.");
+            }
+        }
     }
 }

@@ -134,7 +134,7 @@ public class UserService : IUserService
     }
     
      
-    public async Task AddUserAsync(UserAddDto userAddDto)
+    public async Task<bool> AddUserAsync(UserAddDto userAddDto)
     {
         // Validate the incoming DTO using FluentValidation
         var validationResult = await _validator.ValidateAsync(userAddDto);
@@ -150,5 +150,8 @@ public class UserService : IUserService
         
         // Save the new user to the repository
         await _userRepository.AddUserAsync(user);
+        
+        // Return true to indicate success
+        return true;
     }
 }

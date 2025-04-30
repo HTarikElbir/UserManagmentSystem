@@ -1,8 +1,10 @@
-using Microsoft.Build.Framework;
+using FluentValidation;
 using Microsoft.EntityFrameworkCore;
+using UserManagementSystem.Business.Dtos.User;
 using UserManagementSystem.Business.Interfaces;
 using UserManagementSystem.Business.MappingProfiles;
 using UserManagementSystem.Business.Services;
+using UserManagementSystem.Business.Validators;
 using UserManagementSystem.Data.Contexts;
 using UserManagementSystem.Data.Interfaces;
 using UserManagementSystem.Data.Repositories;
@@ -16,13 +18,15 @@ var connectionString = builder.Configuration.GetConnectionString("DefaultConnect
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-
-// Add controllers
+// Add controllers and FluentValidation
 builder.Services.AddControllers();
 
 // Add DbContext with SQLite configuration
 builder.Services.AddDbContext<ApplicationDbContext>(options => 
     options.UseSqlite(connectionString, b => b.MigrationsAssembly("UserManagementSystem.API"))); //SQLite Configuration
+
+// Add FluentValidation for DTOs
+builder.Services.AddScoped<IValidator<UserAddDto>, UserAddDtoValidator>();
 
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IUserService, UserService>();
