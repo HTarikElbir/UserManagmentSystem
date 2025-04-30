@@ -1,5 +1,4 @@
 using Microsoft.AspNetCore.Mvc;
-using UserManagementSystem.Business.Dtos;
 using UserManagementSystem.Business.Dtos.User;
 using UserManagementSystem.Business.Interfaces;
 namespace UserManagementSystem.API.Controllers
@@ -60,7 +59,7 @@ namespace UserManagementSystem.API.Controllers
             // Attempt to update the user
             bool updateSuccess = await _userService.UpdateUserAsync(userId, userUpdateDto);
     
-            // If update is successful, return 204 No Content
+            // If the update is successful, return 204 No Content
             if (updateSuccess)
             {
                 return NoContent();

@@ -13,11 +13,17 @@ public class UserService : IUserService
     private readonly IUserRepository _userRepository;
     private readonly IMapper _mapper;
     private readonly IValidator<UserAddDto> _validator;
-    public UserService(IUserRepository userRepository, IMapper mapper, IValidator<UserAddDto> validator)
+    private readonly IPasswordHasher _passwordHasher;
+    public UserService(
+        IUserRepository userRepository, 
+        IMapper mapper, 
+        IValidator<UserAddDto> validator, 
+        IPasswordHasher passwordHasher)
     {
         _userRepository = userRepository; 
         _mapper = mapper;
         _validator = validator;
+        _passwordHasher = passwordHasher;
     }
    
     
