@@ -24,6 +24,13 @@ public class UserProfile : Profile
         
         // UserAddDto -> User (For Add)
         CreateMap<UserAddDto, User>()
-            .ForMember(dest => dest.IsActive, opt => opt.MapFrom(src => false)); // Set IsActive to true by default
+            .ForMember(dest => dest.IsActive, opt => opt.MapFrom(src => false)) // Set IsActive to true by default
+            .ForMember(dest => dest.UserRoles,opt => opt.MapFrom(src => new List<UserRole> 
+            {
+                new UserRole
+                {
+                    RoleId = 2 // Default role ID for new users
+                }
+            }));
     }
 }

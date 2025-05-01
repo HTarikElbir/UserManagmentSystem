@@ -16,7 +16,7 @@ public class UserRepository : IUserRepository
     }
 
     // Returns a list of all users in the system.
-    public async Task<List<User>> GetAllUsers() => await _context.Users
+    public async Task<List<User>> GetAllUsersAsync() => await _context.Users
         .Include(u => u.UserRoles)
             .ThenInclude(ur => ur.Role)
         .AsNoTracking()
@@ -24,13 +24,13 @@ public class UserRepository : IUserRepository
     
     
     // Returns a user by their unique ID.
-    public async Task<User?> GetByIdUser(int userId) => await _context.Users
+    public async Task<User?> GetByIdUserAsync(int userId) => await _context.Users
         .Include(u=>u.UserRoles)
             .ThenInclude(ur=>ur.Role)
         .FirstOrDefaultAsync(u => u.UserId == userId);
     
     // Returns a user by their email address.
-    public async Task<User?> GetByEmail(string email) => await _context.Users.FirstOrDefaultAsync(u => u.Email == email);
+    public async Task<User?> GetByEmailAsync(string email) => await _context.Users.FirstOrDefaultAsync(u => u.Email == email);
     
     // Adds a new user to the database. 
     public async Task AddUserAsync(User user)
@@ -47,7 +47,7 @@ public class UserRepository : IUserRepository
     }
     
     // Deletes a user by ID if found.
-    public async  Task DeleteUserAsync(int userId)
+    public async Task DeleteUserAsync(int userId)
     {
         var user = await _context.Users.FindAsync(userId);
         if (user != null)
