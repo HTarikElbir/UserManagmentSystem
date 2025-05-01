@@ -1,3 +1,5 @@
+using Microsoft.EntityFrameworkCore;
+using UserManagementSystem.Data.Contexts;
 using UserManagementSystem.Data.Entities;
 using UserManagementSystem.Data.Interfaces;
 
@@ -5,10 +7,17 @@ namespace UserManagementSystem.Data.Repositories;
 
 public class RoleRepository : IRoleRepository
 {
-    public Task<List<Role>> GetAllRolesAsync()
+    private readonly ApplicationDbContext _context;
+    
+    public RoleRepository(ApplicationDbContext context)
     {
-        throw new NotImplementedException();
+        _context = context;
     }
+    
+    // Returns a list of all roles in the system.
+    public async Task<List<Role>> GetAllRolesAsync() => await  _context.Roles
+        .AsNoTracking()
+        .ToListAsync();
 
     public Task<Role> GetRoleByIdAsync(int roleId)
     {
