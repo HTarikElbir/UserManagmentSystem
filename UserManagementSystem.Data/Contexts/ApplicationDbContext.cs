@@ -21,6 +21,15 @@ public class ApplicationDbContext : DbContext
     {
         base.OnModelCreating(modelBuilder);
         
+        // // Configure User entity
+        // modelBuilder.Entity<User>()
+        //     .HasKey(u => u.UserId);
+        
+        // Configure User entity
+        modelBuilder.Entity<User>()
+            .HasIndex(u => u.Email)
+            .IsUnique();
+        
         // Many-to-many relationship between User And Role
         modelBuilder.Entity<UserRole>()
             .HasKey(ur => new { ur.UserId, ur.RoleId });
@@ -51,8 +60,8 @@ public class ApplicationDbContext : DbContext
             {
                 UserId = 1,
                 UserName = "aliveli",
-                Password = "aliveli",
-                Phone = "05333333333",
+                Password = "Ali123!!!",
+                Phone = "+905012345678",
                 Email = "aliveli@example.com",
                 Department = "IT",
                 IsActive = true
@@ -61,8 +70,8 @@ public class ApplicationDbContext : DbContext
             {
                 UserId = 2,
                 UserName = "aysefatma",
-                Password = "123456",
-                Phone = "0533333334",
+                Password = "Ayse123!!!",
+                Phone = "+905112345678",
                 Email = "aysefatma@example.com",
                 Department = "HR",
                 IsActive = true
