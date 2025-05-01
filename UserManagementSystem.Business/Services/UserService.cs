@@ -30,7 +30,7 @@ public class UserService : IUserService
     public async Task<List<UserDto>> GetAllUsersAsync()
     {
         // Fetch all users from the repository
-        var users = await _userRepository.GetAllUsers();
+        var users = await _userRepository.GetAllUsersAsync();
     
         // Map the users to UserDto objects, including their roles
         var userDtos = _mapper.Map<List<UserDto>>(users);
@@ -42,7 +42,7 @@ public class UserService : IUserService
     public async Task<UserDto?> GetUserByIdAsync(int userId)
     {
         // Fetch the user by ID from the repository
-        var user = await _userRepository.GetByIdUser(userId);
+        var user = await _userRepository.GetByIdUserAsync(userId);
 
         // If the user is not found, return null
         if (user == null)
@@ -59,7 +59,7 @@ public class UserService : IUserService
     public async Task<bool> UpdateUserAsync(int userId, UserUpdateDto userUpdateDto)
     {
         // Retrieve the user by their ID
-        var user = await _userRepository.GetByIdUser(userId);
+        var user = await _userRepository.GetByIdUserAsync(userId);
 
         // If the user does not exist, return false
         if (user == null)
@@ -80,7 +80,7 @@ public class UserService : IUserService
     public async Task<bool> DeleteUserAsync(int userId)
     {
         // Retrieve the user by their ID from the repository
-        var user = await _userRepository.GetByIdUser(userId);
+        var user = await _userRepository.GetByIdUserAsync(userId);
 
         // Check if the user exists
         if (user == null)
@@ -136,7 +136,7 @@ public class UserService : IUserService
     
     public Task<User?> GetUserByEmailAsync(string email)
     {
-        return _userRepository.GetByEmail(email);
+        return _userRepository.GetByEmailAsync(email);
     }
     
      
@@ -150,12 +150,23 @@ public class UserService : IUserService
             // Handle validation errors
             throw new ValidationException(validationResult.Errors);
         }
+        // Check if a user with the same email already exists
+        var existingUser = await _userRepository.GetByEmailAsync(userAddDto.Email);
+        
+        if (existingUser != null)
+        {
+            // Handle the case where the email is already in use
+            throw new Exception("A user with this email already exists.");
+        }
         
         // Hash the password before saving
-        userAddDto.Password = _passwordHasher.HashPassword(userAddDto.Password);
+        var hashPassword = _passwordHasher.HashPassword(userAddDto.Password);
         
         // Map the DTO to the User entity
         var user = _mapper.Map<User>(userAddDto);
+        
+        // Set the hashed password
+        user.Password = hashPassword;
         
         // Save the new user to the repository
         await _userRepository.AddUserAsync(user);
