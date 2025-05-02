@@ -19,4 +19,6 @@ public interface IRoleService
     // Get user by ID
     Task<RoleDto?> GetRoleByIdAsync(int roleId);
     
+    Task<RoleDto?> GetRoleByNameAsync(string roleName);
+    
 }

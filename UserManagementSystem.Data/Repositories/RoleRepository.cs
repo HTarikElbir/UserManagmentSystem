@@ -22,11 +22,11 @@ public class RoleRepository : IRoleRepository
     // Returns a role by id
     public async Task<Role?> GetRoleByIdAsync(int roleId) => await _context.Roles.FirstOrDefaultAsync(r => r.RoleId == roleId);
 
-    public Task<Role> GetRoleByNameAsync(string roleName)
-    {
-        throw new NotImplementedException();
-    }
-
+    // Returns a role by name
+    public async Task<Role?> GetRoleByNameAsync(string roleName) => await  _context.Roles
+        .AsNoTracking()
+        .FirstOrDefaultAsync(r => r.RoleName.ToLower() == roleName.ToLower());
+    
     public Task AddRoleAsync(Role role)
     {
         throw new NotImplementedException();

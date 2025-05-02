@@ -39,7 +39,5 @@ public class UserAddDtoValidator : AbstractValidator<UserAddDto>
             .Length(2, 30).WithMessage("Department must be between 2 and 30 characters")
             .Matches("^[a-zA-Z ]+$").WithMessage("Department name must contain only letters and spaces");
         
-        
-        
     }
 }

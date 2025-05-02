@@ -47,6 +47,11 @@ public class RoleService : IRoleService
         return roleDto;
     }
 
+    public Task<RoleDto?> GetRoleByNameAsync(string roleName)
+    {
+        throw new NotImplementedException();
+    }
+
     // Adds a new role
     public Task<bool> AddRoleAsync(RoleAddDto roleAddDto)
     {
@@ -58,7 +63,7 @@ public class RoleService : IRoleService
         throw new NotImplementedException();
     }
 
-    public Task<bool> DeleteRoleAsync(int roleId)
+    public async Task<bool> DeleteRoleAsync(int roleId)
     {
         throw new NotImplementedException();
     }

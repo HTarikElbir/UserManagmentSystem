@@ -13,7 +13,7 @@ namespace UserManagementSystem.Data.Interfaces
         Task<Role?> GetRoleByIdAsync(int roleId);
 
         // Returns a role by its unique name.
-        Task<Role> GetRoleByNameAsync(string roleName);
+        Task<Role?> GetRoleByNameAsync(string roleName);
 
         // Adds a new role to the system.
         Task AddRoleAsync(Role role);
