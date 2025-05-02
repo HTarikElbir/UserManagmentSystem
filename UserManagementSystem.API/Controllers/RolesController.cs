@@ -3,7 +3,7 @@ using UserManagementSystem.Business.Interfaces;
 
 namespace UserManagementSystem.API.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/roles")]
     [ApiController]
     public class RolesController : ControllerBase
     {
@@ -19,6 +19,28 @@ namespace UserManagementSystem.API.Controllers
         {
             // Return the list of roles with a 200-OK status
             return Ok(await _roleService.GetAllRolesAsync());
+        }
+        
+        [HttpGet("id/{roleId:int}")]
+        public async Task<IActionResult> GetRoleByIdAsync(int roleId)
+        {
+            // If the roleId is invalid, return a 400-BadRequest
+            if (roleId <= 0)
+            {
+                return BadRequest("Invalid role ID.");
+            }
+
+            // Call the service to get the role by ID
+            var result = await _roleService.GetRoleByIdAsync(roleId);
+            
+            // If the role is not found, return a 404-NotFound
+            if (result == null)
+            {
+                return NotFound("Role not found.");
+            }
+
+            // If the role is found, return the result with a 200-OK status
+            return Ok(result);
         }
     }
 }

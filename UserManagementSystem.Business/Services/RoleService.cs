@@ -29,7 +29,7 @@ public class RoleService : IRoleService
     }
     
     // Retrieve the role by ID
-    public async Task<RoleDto?> GetUserByIdAsync(int roleId)
+    public async Task<RoleDto?> GetRoleByIdAsync(int roleId)
     {
         
         var role = await _roleRepository.GetRoleByIdAsync(roleId);
@@ -62,11 +62,5 @@ public class RoleService : IRoleService
     {
         throw new NotImplementedException();
     }
-
-
-
-    public Task<RoleDto?> GetRoleByIdAsync(int roleId)
-    {
-        throw new NotImplementedException();
-    }
+    
 }
