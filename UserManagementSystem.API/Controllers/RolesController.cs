@@ -21,7 +21,7 @@ namespace UserManagementSystem.API.Controllers
             return Ok(await _roleService.GetAllRolesAsync());
         }
         
-        [HttpGet("id/{roleId:int}")]
+        [HttpGet("by-id/{roleId:int}")]
         public async Task<IActionResult> GetRoleByIdAsync(int roleId)
         {
             // If the roleId is invalid, return a 400-BadRequest
@@ -32,6 +32,28 @@ namespace UserManagementSystem.API.Controllers
 
             // Call the service to get the role by ID
             var result = await _roleService.GetRoleByIdAsync(roleId);
+            
+            // If the role is not found, return a 404-NotFound
+            if (result == null)
+            {
+                return NotFound("Role not found.");
+            }
+
+            // If the role is found, return the result with a 200-OK status
+            return Ok(result);
+        }
+        
+        [HttpGet("by-name/{roleName}")]
+        public async Task<IActionResult> GetRoleByNameAsync(string roleName)
+        {
+            // If the roleName is null or empty, return a 400-BadRequest
+            if (string.IsNullOrEmpty(roleName))
+            {
+                return BadRequest("Role name cannot be null or empty.");
+            }
+
+            // Call the service to get the role by name
+            var result = await _roleService.GetRoleByNameAsync(roleName);
             
             // If the role is not found, return a 404-NotFound
             if (result == null)
