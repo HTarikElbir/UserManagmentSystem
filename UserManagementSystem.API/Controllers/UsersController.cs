@@ -24,7 +24,7 @@ namespace UserManagementSystem.API.Controllers
         }
 
         // Endpoint to get a user by their ID
-        [HttpGet("id/{userId}")] 
+        [HttpGet("by-id/{userId}")] 
         public async Task<IActionResult> GetUserByIdAsync(int userId)
         {
             // If the userId is invalid (e.g., less than or equal to 0), return a 400-BadRequest
@@ -91,7 +91,7 @@ namespace UserManagementSystem.API.Controllers
         }
 
         // Retrieves users based on the specified department name.
-        [HttpGet("department/{departmentName}")]
+        [HttpGet("by-department/{departmentName}")]
         public async Task<IActionResult> GetUsersByDepartmentAsync(string? departmentName)
         {
             // Validate if the department name is provided.
@@ -108,7 +108,7 @@ namespace UserManagementSystem.API.Controllers
         }
 
         // Endpoint to get users by their role
-        [HttpGet("role/{roleName}")]
+        [HttpGet("by-role/{roleName}")]
         public async Task<IActionResult> GetUsersByRoleAsync(string? roleName)
         {
             // Check if roleName is null
