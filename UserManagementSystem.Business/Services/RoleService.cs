@@ -27,10 +27,24 @@ public class RoleService : IRoleService
         // Return the list of mapped RoleDto objects
         return roleDtos;
     }
-
-    public Task<RoleDto?> GetUserByIdAsync(int userId)
+    
+    // Retrieve the role by ID
+    public async Task<RoleDto?> GetUserByIdAsync(int roleId)
     {
-        throw new NotImplementedException();
+        
+        var role = await _roleRepository.GetRoleByIdAsync(roleId);
+        
+        // Check if the role is null
+        if (role == null)
+        {
+            return null;
+        }
+        
+        // Map the role to RoleDto object
+        var roleDto = _mapper.Map<RoleDto>(role);
+        
+        // Return the mapped RoleDto object
+        return roleDto;
     }
 
     // Adds a new role
