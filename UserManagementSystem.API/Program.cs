@@ -31,6 +31,8 @@ builder.Services.AddScoped<IValidator<UserAddDto>, UserAddDtoValidator>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IPasswordHasher, PasswordHasherService>();
+builder.Services.AddScoped<IRoleRepository, RoleRepository>();
+builder.Services.AddScoped<IRoleService, RoleService>();
 
 // Add MappingProfile 
 builder.Services.AddAutoMapper(typeof(UserProfile).Assembly);
