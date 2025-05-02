@@ -10,7 +10,7 @@ namespace UserManagementSystem.Data.Interfaces
         Task<List<Role>> GetAllRolesAsync();
 
         // Returns a role by its unique identifier.
-        Task<Role> GetRoleByIdAsync(int roleId);
+        Task<Role?> GetRoleByIdAsync(int roleId);
 
         // Returns a role by its unique name.
         Task<Role> GetRoleByNameAsync(string roleName);

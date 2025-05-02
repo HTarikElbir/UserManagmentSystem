@@ -18,11 +18,9 @@ public class RoleRepository : IRoleRepository
     public async Task<List<Role>> GetAllRolesAsync() => await  _context.Roles
         .AsNoTracking()
         .ToListAsync();
-
-    public Task<Role> GetRoleByIdAsync(int roleId)
-    {
-        throw new NotImplementedException();
-    }
+    
+    // Returns a role by id
+    public async Task<Role?> GetRoleByIdAsync(int roleId) => await _context.Roles.FirstOrDefaultAsync(r => r.RoleId == roleId);
 
     public Task<Role> GetRoleByNameAsync(string roleName)
     {
