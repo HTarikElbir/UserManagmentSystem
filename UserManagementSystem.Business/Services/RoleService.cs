@@ -1,6 +1,7 @@
 using AutoMapper;
 using UserManagementSystem.Business.Dtos;
 using UserManagementSystem.Business.Interfaces;
+using UserManagementSystem.Data.Entities;
 using UserManagementSystem.Data.Interfaces;
 
 namespace UserManagementSystem.Business.Services;
@@ -66,9 +67,27 @@ public class RoleService : IRoleService
     }
 
     // Adds a new role
-    public Task<bool> AddRoleAsync(RoleAddDto roleAddDto)
+    public async Task<bool> AddRoleAsync(RoleAddDto roleAddDto)
     {
-        throw new NotImplementedException();
+        // Add validation logic here if needed !!!
+        
+        // Retrieve the role by name from the repository
+        var existingRole = await _roleRepository.GetRoleByNameAsync(roleAddDto.RoleName);
+        
+        // Check if the role already exists
+        if (existingRole != null)
+        {
+            throw new Exception("Role already exists.");
+        }
+        
+        // Map the RoleAddDto to Role entity
+        var role = _mapper.Map<Role>(roleAddDto);
+        
+        // Add the role to the repository
+        await _roleRepository.AddRoleAsync(role);
+        
+        // Check if the role was added successfully
+        return true;
     }
 
     public Task<bool> UpdateRoleAsync(int roleId, RoleUpdateDto roleUpdateDto)
