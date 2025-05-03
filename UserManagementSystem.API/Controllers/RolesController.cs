@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
+using UserManagementSystem.Business.Dtos;
 using UserManagementSystem.Business.Interfaces;
 
 namespace UserManagementSystem.API.Controllers
@@ -63,6 +64,23 @@ namespace UserManagementSystem.API.Controllers
 
             // If the role is found, return the result with a 200-OK status
             return Ok(result);
+        }
+        
+        [HttpPost]
+        public async Task<IActionResult> AddRoleAsync(RoleAddDto roleAddDto)
+        {
+            var result = await _roleService.AddRoleAsync(roleAddDto);
+            
+            // If the role is successfully added, return a 201-Created status
+            if (result)
+            {
+                return Created();
+            }
+            else
+            {
+                // If the role could not be added, return a 400-BadRequest
+                return BadRequest("Role could not be added.");
+            }
         }
     }
 }
