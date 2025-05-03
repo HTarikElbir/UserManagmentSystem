@@ -27,9 +27,10 @@ public class RoleRepository : IRoleRepository
         .AsNoTracking()
         .FirstOrDefaultAsync(r => r.RoleName.ToLower() == roleName.ToLower());
     
-    public Task AddRoleAsync(Role role)
+    public async Task AddRoleAsync(Role role)
     {
-        throw new NotImplementedException();
+        await _context.Roles.AddAsync(role); 
+        await _context.SaveChangesAsync();
     }
 
     public Task UpdateRoleAsync(Role role)

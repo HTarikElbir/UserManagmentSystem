@@ -35,13 +35,13 @@ public class UserRepository : IUserRepository
     // Adds a new user to the database. 
     public async Task AddUserAsync(User user)
     { 
-        _context.Users.Add(user);
+        await _context.Users.AddAsync(user);
         await _context.SaveChangesAsync();
     }
     
     // Updates an existing user's data.
     public async Task UpdateUserAsync(User user)
-    {
+    {   
         _context.Users.Update(user); 
         await _context.SaveChangesAsync();
     }
