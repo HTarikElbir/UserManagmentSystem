@@ -14,6 +14,8 @@ public class UserService : IUserService
     private readonly IMapper _mapper;
     private readonly IValidator<UserAddDto> _validator;
     private readonly IPasswordHasher _passwordHasher;
+    
+    // Initializes the dependencies of the UserService class.
     public UserService(
         IUserRepository userRepository, 
         IMapper mapper, 
@@ -26,128 +28,104 @@ public class UserService : IUserService
         _passwordHasher = passwordHasher;
     }
    
-    
+    // Retrieves all users and maps them to a list of UserDto objects.
     public async Task<List<UserDto>> GetAllUsersAsync()
     {
-        // Fetch all users from the repository
         var users = await _userRepository.GetAllUsersAsync();
-    
-        // Map the users to UserDto objects, including their roles
+        
         var userDtos = _mapper.Map<List<UserDto>>(users);
         
-        // Return the list of mapped UserDto objects
         return userDtos;
     }
-
+    
+    // Retrieves a user by their ID and maps it to a UserDto object.
     public async Task<UserDto?> GetUserByIdAsync(int userId)
     {
-        // Fetch the user by ID from the repository
         var user = await _userRepository.GetByIdUserAsync(userId);
-
-        // If the user is not found, return null
+        
         if (user == null)
             return null;
-    
-        // Map the user to a UserDto object, including their roles
+        
         var userDto = _mapper.Map<UserDto>(user);
-
-        // Return the mapped UserDto object
+        
         return userDto;
     }
 
     // Updates the user entity with new information
     public async Task<bool> UpdateUserAsync(int userId, UserUpdateDto userUpdateDto)
     {
-        // Retrieve the user by their ID
         var user = await _userRepository.GetByIdUserAsync(userId);
-
-        // If the user does not exist, return false
+        
         if (user == null)
         {
             return false;
         }
-
-        // Update user properties with the new values
+        
         _mapper.Map(userUpdateDto, user);
-    
-        // Save the updated user entity
+        
         await _userRepository.UpdateUserAsync(user);
-    
-        // Return true to indicate the update was successful
+        
         return true;
     }
 
+    // Deletes a user by their ID.
     public async Task<bool> DeleteUserAsync(int userId)
     {
-        // Retrieve the user by their ID from the repository
         var user = await _userRepository.GetByIdUserAsync(userId);
-
-        // Check if the user exists
+        
         if (user == null)
         {
-            // Return false if the user was not found
             return false;
         }
-
-        // Delete the user through the repository
+        
         await _userRepository.DeleteUserAsync(userId);
         
-        // Return true indicating successful deletion
         return true;
     }
 
-   
+    // Retrieves users by department name, maps them to UserDto objects, and returns the list.
     public async Task<List<UserDto>> GetUsersByDepartmentAsync(string departmentName)
     {
-        // Retrieve users from the data layer
         var users = await _userRepository.GetUsersByDepartmentAsync(departmentName);
-
-        // Check if any users were found
+        
         if (users == null || users.Count == 0)
         {
-            // Throw an exception if no users are returned
             throw new Exception("No users found for the specified department.");
         }
         
-        // Map the list of User entities to a list of UserDto objects
         var userDtos = _mapper.Map<List<UserDto>>(users);
         
-        // Return the mapped DTOs
         return userDtos;
     }
-
+    
+    // Retrieves users by role name, maps them to UserDto objects, and returns the list.
     public async Task<List<UserDto>> GetUsersByRoleAsync(string roleName)
     {
-        // Fetch users by role from repository
         var users = await _userRepository.GetUsersByRoleAsync(roleName);
-
-        // Check if no users found for the specified role
+        
         if (users == null || users.Count == 0)
         {
             throw new Exception("No users found for the specified role.");
         }
-
-        // Map users to UserDto
+        
         var userDtos = _mapper.Map<List<UserDto>>(users);
-    
-        // Return the list of UserDto
+        
         return userDtos;
     }
     
+    // Retrieves a user by their email address.
     public Task<User?> GetUserByEmailAsync(string email)
     {
         return _userRepository.GetByEmailAsync(email);
     }
     
-     
+    // Adds a new user to the system after validating the input and hashing the password.
     public async Task<bool> AddUserAsync(UserAddDto userAddDto)
     {
-        // Validate the incoming DTO using FluentValidation
         var validationResult = await _validator.ValidateAsync(userAddDto);
         
         if (!validationResult.IsValid)
         {
-            // Handle validation errors
             throw new ValidationException(validationResult.Errors);
         }
         // Check if a user with the same email already exists
@@ -155,23 +133,17 @@ public class UserService : IUserService
         
         if (existingUser != null)
         {
-            // Handle the case where the email is already in use
             throw new Exception("A user with this email already exists.");
         }
         
-        // Hash the password before saving
         var hashPassword = _passwordHasher.HashPassword(userAddDto.Password);
         
-        // Map the DTO to the User entity
         var user = _mapper.Map<User>(userAddDto);
         
-        // Set the hashed password
         user.Password = hashPassword;
         
-        // Save the new user to the repository
         await _userRepository.AddUserAsync(user);
         
-        // Return true to indicate success
         return true;
     }
 }
