@@ -15,70 +15,62 @@ namespace UserManagementSystem.API.Controllers
             _roleService = roleService;
         }
         
-        [HttpGet]
+        // Endpoint to get all roles
         public async Task<IActionResult> GetAllRolesAsync()
         {
-            // Return the list of roles with a 200-OK status
+            
             return Ok(await _roleService.GetAllRolesAsync());
         }
         
+        // Endpoint to get a role by their ID
         [HttpGet("by-id/{roleId:int}")]
         public async Task<IActionResult> GetRoleByIdAsync(int roleId)
         {
-            // If the roleId is invalid, return a 400-BadRequest
             if (roleId <= 0)
             {
                 return BadRequest("Invalid role ID.");
             }
-
-            // Call the service to get the role by ID
+            
             var result = await _roleService.GetRoleByIdAsync(roleId);
             
-            // If the role is not found, return a 404-NotFound
             if (result == null)
             {
                 return NotFound("Role not found.");
             }
-
-            // If the role is found, return the result with a 200-OK status
             return Ok(result);
         }
         
+        // Endpoint to get role by name
         [HttpGet("by-name/{roleName}")]
         public async Task<IActionResult> GetRoleByNameAsync(string roleName)
         {
-            // If the roleName is null or empty, return a 400-BadRequest
             if (string.IsNullOrEmpty(roleName))
             {
                 return BadRequest("Role name cannot be null or empty.");
             }
-
-            // Call the service to get the role by name
+            
             var result = await _roleService.GetRoleByNameAsync(roleName);
             
-            // If the role is not found, return a 404-NotFound
             if (result == null)
             {
                 return NotFound("Role not found.");
             }
-
-            // If the role is found, return the result with a 200-OK status
+            
             return Ok(result);
         }
         
+        // Endpoint to add a new role
         [HttpPost]
         public async Task<IActionResult> AddRoleAsync(RoleAddDto roleAddDto)
         {
             var result = await _roleService.AddRoleAsync(roleAddDto);
             
-            // If the role is successfully added, return a 201-Created status
             if (result)
             {
                 return Created();
             }
             else
             {
-                // If the role could not be added, return a 400-BadRequest
                 return BadRequest("Role could not be added.");
             }
         }

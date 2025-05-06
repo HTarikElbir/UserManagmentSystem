@@ -19,7 +19,6 @@ namespace UserManagementSystem.API.Controllers
         [HttpGet] 
         public async Task<IActionResult> GetAllUsersAsync()
         {
-            // Call the service to get all users and return the result with a 200-OK status
             return Ok(await _userService.GetAllUsersAsync());
         }
 
@@ -27,22 +26,18 @@ namespace UserManagementSystem.API.Controllers
         [HttpGet("by-id/{userId}")] 
         public async Task<IActionResult> GetUserByIdAsync(int userId)
         {
-            // If the userId is invalid (e.g., less than or equal to 0), return a 400-BadRequest
             if (userId <= 0)
             {
                 return BadRequest("Invalid user ID."); 
             }
-
-            // Call the service to get the user by ID
+            
             var result = await _userService.GetUserByIdAsync(userId);
             
-            // If the user is not found, return a 404-NotFound
             if (result == null)
             {
                 return NotFound("User not found.");
             }
-
-            // If the user is found, return the result with a 200-OK status
+            
             return Ok(result);
         }
 
@@ -50,60 +45,51 @@ namespace UserManagementSystem.API.Controllers
         // Updates a user by their ID with the provided updated data
         public async Task<IActionResult> UpdateUserAsync(int userId, [FromBody] UserUpdateDto userUpdateDto)
         {
-            // Check if the incoming model is valid
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
-    
-            // Attempt to update the user
+            
             bool updateSuccess = await _userService.UpdateUserAsync(userId, userUpdateDto);
-    
-            // If the update is successful, return 204 No Content
+            
             if (updateSuccess)
             {
                 return NoContent();
             }
             else
-                // If user not found, return 404 Not Found
                 return NotFound();
         }
 
-        [HttpDelete("{userId:int}")] // HTTP DELETE endpoint for user ID
+        // Endpoint to delete a user by ID
+        [HttpDelete("{userId:int}")] 
         public async Task<IActionResult> DeleteUserAsync(int userId)
         {
-            // Validate user ID
             if (userId <= 0)
             {
                 return BadRequest("Invalid user ID.");
             }
-
-            // Call business logic to delete user
+            
             bool deleteSuccess = await _userService.DeleteUserAsync(userId);
-
-            // Return result based on deletion success
+            
             if (deleteSuccess)
             {
-                return NoContent(); // 204-Success (No Content)
+                return NoContent(); 
             }
             else
-                return NotFound(); // 404 Not Found
+                return NotFound(); 
         }
 
-        // Retrieves users based on the specified department name.
+        // Endpoint to retrieve users based on the specified department name.
         [HttpGet("by-department/{departmentName}")]
         public async Task<IActionResult> GetUsersByDepartmentAsync(string? departmentName)
         {
-            // Validate if the department name is provided.
             if (departmentName == null)
             {
                 return BadRequest("Invalid department name.");
             }
-
-            // Get users belonging to the specified department.
+            
             var users = await _userService.GetUsersByDepartmentAsync(departmentName);
-    
-            // Return the list of users with HTTP 200 OK.
+            
             return Ok(users);
         }
 
@@ -111,16 +97,13 @@ namespace UserManagementSystem.API.Controllers
         [HttpGet("by-role/{roleName}")]
         public async Task<IActionResult> GetUsersByRoleAsync(string? roleName)
         {
-            // Check if roleName is null
             if (roleName == null)
             {
                 return BadRequest("Invalid role name.");
             }
-
-            // Get users by role from service
+            
             var users = await _userService.GetUsersByRoleAsync(roleName);
-    
-            // Return the list of users
+            
             return Ok(users);
         }
         
@@ -130,15 +113,13 @@ namespace UserManagementSystem.API.Controllers
         {
             var result = await _userService.AddUserAsync(userAddDto);
             
-            // Check if the result is true
             if (result)
             {
-                // If true, return 201 Created
+               
                 return Created();
             }
             else
             {
-                // If false, return 400 Bad Request
                 return BadRequest("User could not be added.");
             }
         }
