@@ -66,6 +66,7 @@ public class RoleService : IRoleService
     {
         // Add validation logic here if needed !!!
         var validationResult = await _validator.ValidateAsync(roleAddDto);
+        
         if (!validationResult.IsValid)
         {
             throw new Exception("Validation failed");
@@ -82,7 +83,7 @@ public class RoleService : IRoleService
     {
         throw new NotImplementedException();
     }
-
+    
     // Deletes a role by its ID
     public async Task<bool> DeleteRoleAsync(int roleId)
     {

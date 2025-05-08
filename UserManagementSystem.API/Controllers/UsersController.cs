@@ -69,7 +69,7 @@ namespace UserManagementSystem.API.Controllers
                 return BadRequest("Invalid user ID.");
             }
             
-            bool deleteSuccess = await _userService.DeleteUserAsync(userId);
+            var deleteSuccess = await _userService.DeleteUserAsync(userId);
             
             if (deleteSuccess)
             {
@@ -115,7 +115,6 @@ namespace UserManagementSystem.API.Controllers
             
             if (result)
             {
-               
                 return Created();
             }
             else

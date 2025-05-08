@@ -136,11 +136,9 @@ public class UserService : IUserService
             throw new Exception("A user with this email already exists.");
         }
         
-        var hashPassword = _passwordHasher.HashPassword(userAddDto.Password);
-        
         var user = _mapper.Map<User>(userAddDto);
         
-        user.Password = hashPassword;
+        user.Password = _passwordHasher.HashPassword(userAddDto.Password);
         
         await _userRepository.AddUserAsync(user);
         

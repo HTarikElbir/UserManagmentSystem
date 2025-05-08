@@ -4,7 +4,7 @@ using UserManagementSystem.Data.Interfaces;
 
 namespace UserManagementSystem.Business.Validators;
 
-public class RoleAddDtoValidator : AbstractValidator<RoleDto>
+public class RoleAddDtoValidator : AbstractValidator<RoleAddDto>
 {
     private readonly IRoleRepository _roleRepository;
 

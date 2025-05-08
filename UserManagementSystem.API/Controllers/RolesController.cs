@@ -16,6 +16,7 @@ namespace UserManagementSystem.API.Controllers
         }
         
         // Endpoint to get all roles
+        [HttpGet]
         public async Task<IActionResult> GetAllRolesAsync()
         {
             
@@ -72,6 +73,27 @@ namespace UserManagementSystem.API.Controllers
             else
             {
                 return BadRequest("Role could not be added.");
+            }
+        }
+        
+        // Endpoint to delete a role by ID
+        [HttpDelete("{roleId:int}")]
+        public async Task<IActionResult> DeleteRoleAsync(int roleId)
+        {
+            if (roleId <= 0)
+            {
+                return BadRequest("Invalid role ID.");
+            }
+
+            var result = await _roleService.DeleteRoleAsync(roleId);
+
+            if (result)
+            {
+                return NoContent();
+            }
+            else
+            {
+                return NotFound("Role not found.");
             }
         }
     }

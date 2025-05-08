@@ -27,6 +27,7 @@ public class RoleRepository : IRoleRepository
         .AsNoTracking()
         .FirstOrDefaultAsync(r => r.RoleName.ToLower() == roleName.ToLower());
     
+    // Adds a new role to the database. 
     public async Task AddRoleAsync(Role role)
     {
         await _context.Roles.AddAsync(role); 
@@ -38,8 +39,12 @@ public class RoleRepository : IRoleRepository
         throw new NotImplementedException();
     }
 
-    public Task DeleteRoleAsync(int roleId)
+    // Deletes a role by ID if found.
+    public async Task DeleteRoleAsync(int roleId)
     {
-        throw new NotImplementedException();
+        var role = await _context.Roles.FindAsync(roleId);
+        
+        _context.Roles.Remove(role!); 
+        await _context.SaveChangesAsync();
     }
 }

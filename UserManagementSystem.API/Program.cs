@@ -1,5 +1,6 @@
 using FluentValidation;
 using Microsoft.EntityFrameworkCore;
+using UserManagementSystem.Business.Dtos;
 using UserManagementSystem.Business.Dtos.User;
 using UserManagementSystem.Business.Interfaces;
 using UserManagementSystem.Business.MappingProfiles;
@@ -27,6 +28,7 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
 
 // Add FluentValidation for DTOs
 builder.Services.AddScoped<IValidator<UserAddDto>, UserAddDtoValidator>();
+builder.Services.AddScoped<IValidator<RoleAddDto>, RoleAddDtoValidator>();
 
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IUserService, UserService>();
