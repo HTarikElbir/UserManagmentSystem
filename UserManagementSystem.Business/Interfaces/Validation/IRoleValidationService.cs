@@ -1,4 +1,6 @@
 
+using UserManagementSystem.Business.Dtos.Role;
+
 namespace UserManagementSystem.Business.Interfaces.Validation;
 
 
@@ -6,4 +8,5 @@ namespace UserManagementSystem.Business.Interfaces.Validation;
 public interface IRoleValidationService
 {
     Task ValidateRoleExistAsync(int roleId);
+    Task ValidateUpdateRequestAsync(int roleId, RoleUpdateDto roleUpdateDto);
 }

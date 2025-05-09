@@ -1,5 +1,6 @@
 using AutoMapper;
 using UserManagementSystem.Business.Dtos;
+using UserManagementSystem.Business.Dtos.Role;
 using UserManagementSystem.Data.Entities;
 
 namespace UserManagementSystem.Business.MappingProfiles;
@@ -15,6 +16,11 @@ public class RoleProfile : Profile
         
         // RoleAddDto -> Role
         CreateMap<RoleAddDto, Role>()
+            .ForMember(dest => dest.RoleName, opt => opt.MapFrom(src => src.RoleName));
+        
+        // RoleUpdateDto -> Role (For Update)
+        CreateMap<RoleUpdateDto, Role>()
+            .ForMember(dest => dest.RoleId, opt => opt.Ignore())
             .ForMember(dest => dest.RoleName, opt => opt.MapFrom(src => src.RoleName));
     }
 }

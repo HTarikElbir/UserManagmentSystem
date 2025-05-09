@@ -1,4 +1,5 @@
 using UserManagementSystem.Business.Dtos;
+using UserManagementSystem.Business.Dtos.Role;
 
 namespace UserManagementSystem.Business.Interfaces;
 

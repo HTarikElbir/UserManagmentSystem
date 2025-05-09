@@ -1,6 +1,7 @@
 using AutoMapper;
 using FluentValidation;
 using UserManagementSystem.Business.Dtos;
+using UserManagementSystem.Business.Dtos.Role;
 using UserManagementSystem.Business.Interfaces;
 using UserManagementSystem.Business.Interfaces.Validation;
 using UserManagementSystem.Data.Entities;
@@ -13,17 +14,18 @@ public class RoleService : IRoleService
 {
     private readonly IRoleRepository _roleRepository;
     private readonly IMapper _mapper;
-    private readonly IValidator<RoleAddDto> _validator;
+    private readonly IValidator<RoleAddDto> _addValidator;
     private readonly IRoleValidationService _roleValidationService;
 
     public RoleService(IRoleRepository roleRepository, 
         IMapper mapper, 
-        IValidator<RoleAddDto> validator
-        , IRoleValidationService roleValidationService)
+        IValidator<RoleAddDto> addValidator,
+        IValidator<RoleUpdateDto> updateValidator,
+        IRoleValidationService roleValidationService)
     {
         _roleRepository = roleRepository;
         _mapper = mapper;
-        _validator = validator;
+        _addValidator = addValidator;
         _roleValidationService = roleValidationService;
     }
     
@@ -64,7 +66,7 @@ public class RoleService : IRoleService
     public async Task<bool> AddRoleAsync(RoleAddDto roleAddDto)
     {
         // Add validation logic here if needed !!!
-        var validationResult = await _validator.ValidateAsync(roleAddDto);
+        var validationResult = await _addValidator.ValidateAsync(roleAddDto);
         
         if (!validationResult.IsValid)
         {
@@ -81,7 +83,7 @@ public class RoleService : IRoleService
     // Updates an existing role
     public async Task<bool> UpdateRoleAsync(int roleId, RoleUpdateDto roleUpdateDto)
     {
-        await _roleValidationService.ValidateRoleExistAsync(roleId);
+        await _roleValidationService.ValidateUpdateRequestAsync(roleId, roleUpdateDto);
         
         var role = await _roleRepository.GetRoleByIdAsync(roleId);
         
