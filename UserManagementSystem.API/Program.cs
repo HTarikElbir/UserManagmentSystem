@@ -1,22 +1,7 @@
-using FluentValidation;
-using Microsoft.EntityFrameworkCore;
-using UserManagementSystem.Business.Dtos;
-using UserManagementSystem.Business.Dtos.Role;
-using UserManagementSystem.Business.Dtos.User;
-using UserManagementSystem.Business.Interfaces;
-using UserManagementSystem.Business.Interfaces.Validation;
-using UserManagementSystem.Business.MappingProfiles;
-using UserManagementSystem.Business.Services;
-using UserManagementSystem.Business.Services.Validation;
-using UserManagementSystem.Business.Validators;
-using UserManagementSystem.Data.Contexts;
-using UserManagementSystem.Data.Interfaces;
-using UserManagementSystem.Data.Repositories;
+using UserManagementSystem.Business;
+using UserManagementSystem.Data;
 
 var builder = WebApplication.CreateBuilder(args);
-
-// Connection String
-var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 
 // Add services to the container.
 builder.Services.AddEndpointsApiExplorer();
@@ -25,25 +10,12 @@ builder.Services.AddSwaggerGen();
 // Add controllers and FluentValidation
 builder.Services.AddControllers();
 
-// Add DbContext with SQLite configuration
-builder.Services.AddDbContext<ApplicationDbContext>(options => 
-    options.UseSqlite(connectionString, b => b.MigrationsAssembly("UserManagementSystem.API"))); //SQLite Configuration
+// Connection String
+var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 
-// Add FluentValidation for DTOs
-builder.Services.AddScoped<IValidator<UserAddDto>, UserAddDtoValidator>();
-builder.Services.AddScoped<IValidator<RoleAddDto>, RoleAddDtoValidator>();
-builder.Services.AddScoped<IValidator<RoleUpdateDto>, RoleUpdateDtoValidator>();
-
-builder.Services.AddScoped<IUserRepository, UserRepository>();
-builder.Services.AddScoped<IUserService, UserService>();
-builder.Services.AddScoped<IPasswordHasher, PasswordHasherService>();
-builder.Services.AddScoped<IRoleRepository, RoleRepository>();
-builder.Services.AddScoped<IRoleService, RoleService>();
-builder.Services.AddScoped<IRoleValidationService, RoleValidationService>();
-
-// Add MappingProfile 
-builder.Services.AddAutoMapper(typeof(UserProfile).Assembly);
-builder.Services.AddAutoMapper(typeof(RoleProfile).Assembly);
+// Add layer services
+builder.Services.AddDataServices(connectionString);
+builder.Services.AddBusinessServices();
 
 var app = builder.Build();
 
