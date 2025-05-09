@@ -20,7 +20,6 @@ namespace UserManagementSystem.API.Controllers
         [HttpGet]
         public async Task<IActionResult> GetAllRolesAsync()
         {
-            
             return Ok(await _roleService.GetAllRolesAsync());
         }
         
