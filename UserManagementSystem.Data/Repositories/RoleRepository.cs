@@ -33,10 +33,12 @@ public class RoleRepository : IRoleRepository
         await _context.Roles.AddAsync(role); 
         await _context.SaveChangesAsync();
     }
-
-    public Task UpdateRoleAsync(Role role)
+    
+    // Updates an existing role's data.
+    public async Task UpdateRoleAsync(Role role)
     {
-        throw new NotImplementedException();
+        _context.Roles.Update(role);
+        await _context.SaveChangesAsync();
     }
 
     // Deletes a role by ID if found.
