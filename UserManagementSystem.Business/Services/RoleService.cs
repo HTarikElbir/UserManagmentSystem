@@ -2,6 +2,7 @@ using AutoMapper;
 using FluentValidation;
 using UserManagementSystem.Business.Dtos;
 using UserManagementSystem.Business.Interfaces;
+using UserManagementSystem.Business.Interfaces.Validation;
 using UserManagementSystem.Data.Entities;
 using UserManagementSystem.Data.Interfaces;
 
@@ -13,12 +14,17 @@ public class RoleService : IRoleService
     private readonly IRoleRepository _roleRepository;
     private readonly IMapper _mapper;
     private readonly IValidator<RoleAddDto> _validator;
+    private readonly IRoleValidationService _roleValidationService;
 
-    public RoleService(IRoleRepository roleRepository, IMapper mapper, IValidator<RoleAddDto> validator)
+    public RoleService(IRoleRepository roleRepository, 
+        IMapper mapper, 
+        IValidator<RoleAddDto> validator
+        , IRoleValidationService roleValidationService)
     {
         _roleRepository = roleRepository;
         _mapper = mapper;
         _validator = validator;
+        _roleValidationService = roleValidationService;
     }
     
     // Retrieves all roles
@@ -79,10 +85,20 @@ public class RoleService : IRoleService
         return true;
     }
 
-    public Task<bool> UpdateRoleAsync(int roleId, RoleUpdateDto roleUpdateDto)
-    {
-        throw new NotImplementedException();
-    }
+    // public async Task<bool> UpdateRoleAsync(int roleId, RoleUpdateDto roleUpdateDto)
+    // {
+    //     var role = await _roleRepository.GetRoleByIdAsync(roleId);
+    //     if (role == null)
+    //     {
+    //         return false;
+    //     }
+    //     
+    //     _mapper.Map(roleUpdateDto, role);
+    //     
+    //     await _roleRepository.UpdateRoleAsync(role);
+    //     
+    //     return true;
+    // }
     
     // Deletes a role by its ID
     public async Task<bool> DeleteRoleAsync(int roleId)
