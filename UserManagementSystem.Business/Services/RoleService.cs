@@ -40,12 +40,9 @@ public class RoleService : IRoleService
     // Retrieve the role by ID
     public async Task<RoleDto?> GetRoleByIdAsync(int roleId)
     {
-        var role = await _roleRepository.GetRoleByIdAsync(roleId);
+        await _roleValidationService.ValidateRoleExistAsync(roleId);
         
-        if (role == null)
-        {
-            return null;
-        }
+        var role = await _roleRepository.GetRoleByIdAsync(roleId);
         
         var roleDto = _mapper.Map<RoleDto>(role);
         
@@ -55,12 +52,8 @@ public class RoleService : IRoleService
     // Retrieve the role by name
     public async Task<RoleDto?> GetRoleByNameAsync(string roleName)
     {
-        var role = await _roleRepository.GetRoleByNameAsync(roleName);
         
-        if (role == null)
-        {
-            return null;
-        }
+        var role = await _roleRepository.GetRoleByNameAsync(roleName);
         
         var roleDto = _mapper.Map<RoleDto>(role);
         
@@ -84,31 +77,25 @@ public class RoleService : IRoleService
         
         return true;
     }
-
-    // public async Task<bool> UpdateRoleAsync(int roleId, RoleUpdateDto roleUpdateDto)
-    // {
-    //     var role = await _roleRepository.GetRoleByIdAsync(roleId);
-    //     if (role == null)
-    //     {
-    //         return false;
-    //     }
-    //     
-    //     _mapper.Map(roleUpdateDto, role);
-    //     
-    //     await _roleRepository.UpdateRoleAsync(role);
-    //     
-    //     return true;
-    // }
+    
+    // Updates an existing role
+    public async Task<bool> UpdateRoleAsync(int roleId, RoleUpdateDto roleUpdateDto)
+    {
+        await _roleValidationService.ValidateRoleExistAsync(roleId);
+        
+        var role = await _roleRepository.GetRoleByIdAsync(roleId);
+        
+        _mapper.Map(roleUpdateDto, role);
+        
+        await _roleRepository.UpdateRoleAsync(role!);
+        
+        return true;
+    }
     
     // Deletes a role by its ID
     public async Task<bool> DeleteRoleAsync(int roleId)
     {
-        var role = await _roleRepository.GetRoleByIdAsync(roleId);
-        
-        if (role == null)
-        {
-            return false;
-        }
+        await _roleValidationService.ValidateRoleExistAsync(roleId);
         
         await _roleRepository.DeleteRoleAsync(roleId);  
         
