@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using UserManagementSystem.Business.Dtos;
+using UserManagementSystem.Business.Dtos.Role;
 using UserManagementSystem.Business.Interfaces;
 
 namespace UserManagementSystem.API.Controllers
@@ -94,6 +95,27 @@ namespace UserManagementSystem.API.Controllers
             else
             {
                 return NotFound("Role not found.");
+            }
+        }
+        
+        // Endpoint to update a role by ID
+        [HttpPut("{roleId:int}")]
+        public async Task<IActionResult> UpdateRoleAsync(int roleId, [FromBody] RoleUpdateDto roleUpdateDto)
+        {
+            if (roleId <= 0)
+            {
+                return BadRequest("Invalid role ID.");
+            }
+            
+            var result = await _roleService.UpdateRoleAsync(roleId, roleUpdateDto);
+
+            if (result)
+            {
+                return NoContent();
+            }
+            else
+            {
+                return NotFound();
             }
         }
     }

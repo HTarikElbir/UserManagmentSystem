@@ -36,7 +36,7 @@ public class RoleValidationService : IRoleValidationService
 
         if (!validationResult.IsValid)
         {
-            throw new Exception("Validation failed");
+            throw new ValidationException(validationResult.Errors);
         }
 
         await ValidateRoleExistAsync(roleId);
@@ -48,7 +48,7 @@ public class RoleValidationService : IRoleValidationService
 
         if (!validationResult.IsValid)
         {
-            throw new Exception("Validation failed");
+            throw new ValidationException(validationResult.Errors);
         }
 
         var existingRole = await _roleRepository.GetRoleByNameAsync(roleAddDto.RoleName);
