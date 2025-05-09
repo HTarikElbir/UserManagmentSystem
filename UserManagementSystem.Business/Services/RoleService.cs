@@ -14,18 +14,14 @@ public class RoleService : IRoleService
 {
     private readonly IRoleRepository _roleRepository;
     private readonly IMapper _mapper;
-    private readonly IValidator<RoleAddDto> _addValidator;
     private readonly IRoleValidationService _roleValidationService;
 
     public RoleService(IRoleRepository roleRepository, 
         IMapper mapper, 
-        IValidator<RoleAddDto> addValidator,
-        IValidator<RoleUpdateDto> updateValidator,
         IRoleValidationService roleValidationService)
     {
         _roleRepository = roleRepository;
         _mapper = mapper;
-        _addValidator = addValidator;
         _roleValidationService = roleValidationService;
     }
     
@@ -54,7 +50,6 @@ public class RoleService : IRoleService
     // Retrieve the role by name
     public async Task<RoleDto?> GetRoleByNameAsync(string roleName)
     {
-        
         var role = await _roleRepository.GetRoleByNameAsync(roleName);
         
         var roleDto = _mapper.Map<RoleDto>(role);
@@ -65,13 +60,7 @@ public class RoleService : IRoleService
     // Adds a new role
     public async Task<bool> AddRoleAsync(RoleAddDto roleAddDto)
     {
-        // Add validation logic here if needed !!!
-        var validationResult = await _addValidator.ValidateAsync(roleAddDto);
-        
-        if (!validationResult.IsValid)
-        {
-            throw new Exception("Validation failed");
-        }
+        await _roleValidationService.ValidateAddRequestAsync(roleAddDto);
         
         var role = _mapper.Map<Role>(roleAddDto);
         

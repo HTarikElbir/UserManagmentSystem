@@ -4,8 +4,10 @@ using UserManagementSystem.Business.Dtos;
 using UserManagementSystem.Business.Dtos.Role;
 using UserManagementSystem.Business.Dtos.User;
 using UserManagementSystem.Business.Interfaces;
+using UserManagementSystem.Business.Interfaces.Validation;
 using UserManagementSystem.Business.MappingProfiles;
 using UserManagementSystem.Business.Services;
+using UserManagementSystem.Business.Services.Validation;
 using UserManagementSystem.Business.Validators;
 using UserManagementSystem.Data.Contexts;
 using UserManagementSystem.Data.Interfaces;
@@ -37,6 +39,7 @@ builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IPasswordHasher, PasswordHasherService>();
 builder.Services.AddScoped<IRoleRepository, RoleRepository>();
 builder.Services.AddScoped<IRoleService, RoleService>();
+builder.Services.AddScoped<IRoleValidationService, RoleValidationService>();
 
 // Add MappingProfile 
 builder.Services.AddAutoMapper(typeof(UserProfile).Assembly);

@@ -1,4 +1,5 @@
 using FluentValidation;
+using UserManagementSystem.Business.Dtos;
 using UserManagementSystem.Business.Dtos.Role;
 using UserManagementSystem.Business.Interfaces.Validation;
 using UserManagementSystem.Data.Interfaces;
@@ -9,11 +10,13 @@ public class RoleValidationService : IRoleValidationService
 {
     private readonly IRoleRepository _roleRepository;
     private readonly IValidator<RoleUpdateDto> _updateValidator;  
+    private readonly IValidator<RoleAddDto> _addValidator;
     
-    public RoleValidationService(IRoleRepository roleRepository, IValidator<RoleUpdateDto> updateValidator )
+    public RoleValidationService(IRoleRepository roleRepository, IValidator<RoleUpdateDto> updateValidator, IValidator<RoleAddDto> addValidator )
     {
         _roleRepository = roleRepository;
         _updateValidator = updateValidator;
+        _addValidator = addValidator;
     }
     // Validates if a role exists by its ID
     public async Task ValidateRoleExistAsync(int roleId)
@@ -37,5 +40,21 @@ public class RoleValidationService : IRoleValidationService
         }
 
         await ValidateRoleExistAsync(roleId);
+    }
+
+    public async Task ValidateAddRequestAsync(RoleAddDto roleAddDto)
+    {
+        var validationResult = await _addValidator.ValidateAsync(roleAddDto);
+
+        if (!validationResult.IsValid)
+        {
+            throw new Exception("Validation failed");
+        }
+
+        var existingRole = await _roleRepository.GetRoleByNameAsync(roleAddDto.RoleName);
+        if (existingRole != null)
+        {
+            throw new Exception($"Role with name {roleAddDto.RoleName} already exists.");
+        }
     }
 }
