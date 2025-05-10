@@ -21,6 +21,7 @@ public class UserValidationService : IUserValidationService
         _addValidator = addValidator;
     }
     
+    // Validates if a user exists by their ID.
     public async Task ValidateUserExistAsync(int userId)
     {
         var user = await _userRepository.GetByIdUserAsync(userId);
@@ -30,7 +31,30 @@ public class UserValidationService : IUserValidationService
             throw new Exception($"User with ID {userId} does not exist.");
         }
     }
-
+    
+    // Validates if a user exists by their Role.
+    public async Task ValidateUserExistByRoleAsync(string roleName)
+    {
+        var users = await _userRepository.GetUsersByRoleAsync(roleName);
+        
+        if (users == null || users.Count == 0)
+        {
+            throw new Exception("No users found for the specified role.");
+        }
+    }
+    
+    // Validates if a user exists by their Department.
+    public async Task ValidateUserExistByDepartmentAsync(string departmentName)
+    {
+        var users = await _userRepository.GetUsersByDepartmentAsync(departmentName);
+        
+        if (users == null || users.Count == 0)
+        {
+            throw new Exception("No users found for the specified department.");
+        }
+    }
+    
+    // Validates for updating a user.
     public async Task ValidateUpdateRequestAsync(int userId, UserUpdateDto userUpdateDto)
     {
         var validationResult = await _updateValidator.ValidateAsync(userUpdateDto);
@@ -43,6 +67,7 @@ public class UserValidationService : IUserValidationService
         await ValidateUserExistAsync(userId);
     }
 
+    // Validates for adding a new user.
     public async Task ValidateAddRequestAsync(UserAddDto userAddDto)
     {
         var validationResult = await _addValidator.ValidateAsync(userAddDto);

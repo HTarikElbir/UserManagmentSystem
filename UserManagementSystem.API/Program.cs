@@ -14,7 +14,7 @@ builder.Services.AddControllers();
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 
 // Add layer services
-builder.Services.AddDataServices(connectionString);
+builder.Services.AddDataServices(connectionString!);
 builder.Services.AddBusinessServices();
 
 var app = builder.Build();
