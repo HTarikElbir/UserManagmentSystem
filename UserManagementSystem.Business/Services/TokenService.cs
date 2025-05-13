@@ -1,7 +1,6 @@
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using UserManagementSystem.Business.Interfaces;
@@ -19,13 +18,14 @@ public class TokenService: ITokenService
         _jwtSettings = jwtSettings.Value;
     }
     
+    // Creates a JWT token for the user
     public string CreateToken(User user)
     {
         var claims = GetUserClaims(user);
         return GenerateToken(claims);
     }
     
-
+    // Extracts claims from the user object
     private List<Claim> GetUserClaims(User user)
     {
         var claims = new List<Claim>
@@ -41,7 +41,8 @@ public class TokenService: ITokenService
         
         return claims;
     }
-
+    
+    // Generates a JWT token 
     private string GenerateToken(IEnumerable<Claim> claims)
     {
         var key = _jwtSettings.SecretKey;
