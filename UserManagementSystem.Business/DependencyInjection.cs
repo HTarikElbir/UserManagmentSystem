@@ -9,8 +9,8 @@ using UserManagementSystem.Business.MappingProfiles;
 using UserManagementSystem.Business.Services;
 using UserManagementSystem.Business.Services.Validation;
 using UserManagementSystem.Business.Validators;
-using UserManagementSystem.Data.Interfaces;
-using UserManagementSystem.Data.Repositories;
+
+
 
 namespace UserManagementSystem.Business;
 

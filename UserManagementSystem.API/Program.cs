@@ -1,4 +1,5 @@
 using UserManagementSystem.Business;
+using UserManagementSystem.Business.Settings;
 using UserManagementSystem.Data;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -12,6 +13,10 @@ builder.Services.AddControllers();
 
 // Connection String
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+
+// Configure JWT settings
+builder.Services.Configure<JwtSettings>(
+    builder.Configuration.GetSection("JwtSettings"));
 
 // Add layer services
 builder.Services.AddDataServices(connectionString!);
