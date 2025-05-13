@@ -4,5 +4,5 @@ namespace UserManagementSystem.Data.Interfaces;
 
 public interface IAuthRepository
 {
-    Task<User?> Authenticate(string username, string password);
+    Task<User?> GetUserByUsernameAsync(string username);
 }

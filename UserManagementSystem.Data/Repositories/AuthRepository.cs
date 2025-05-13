@@ -15,9 +15,9 @@ public class AuthRepository: IAuthRepository
     }
     
     // This method checks if the user exists in the database and verifies the password.
-    public async Task<User?> Authenticate(string username, string password)
+    public async Task<User?> GetUserByUsernameAsync(string username)
     {
         return await _context.Users
-            .FirstOrDefaultAsync(u => u.UserName == username && u.Password == password);
+            .FirstOrDefaultAsync(u => u.UserName == username);
     }
 }
