@@ -23,13 +23,13 @@ public class AuthService: IAuthService
     // This method handles user login by validating the provided credentials and generating a token.
     public async Task<string> LoginAsync(LoginDto loginDto)
     {
-        var user = await _authRepository.GetUserByUsernameAsync(loginDto.UserName);
+        await _authValidationService.ValidateCredentialsAsync(loginDto.UserName, loginDto.Password);
         
+        var user = await _authRepository.GetUserByUsernameAsync(loginDto.UserName);
+
         await _authValidationService.ValidateExistingUserAsync(loginDto.UserName);
         
-        _authValidationService.ValidatePassword(loginDto.Password, user!.Password);
-
-        var token = _tokenService.CreateToken(user);
+        var token = _tokenService.CreateToken(user!);
         
         if (string.IsNullOrEmpty(token))
         {

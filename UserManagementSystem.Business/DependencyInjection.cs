@@ -10,8 +10,6 @@ using UserManagementSystem.Business.Services;
 using UserManagementSystem.Business.Services.Validation;
 using UserManagementSystem.Business.Validators;
 
-
-
 namespace UserManagementSystem.Business;
 
 public static class DependencyInjection
@@ -33,6 +31,7 @@ public static class DependencyInjection
         // Add Validation Services
         services.AddScoped<IUserValidationService, UserValidationService>();
         services.AddScoped<IRoleValidationService, RoleValidationService>();
+        services.AddScoped<IAuthValidationService, AuthValidationService>();
 
         // Add Password Hasher Service
         services.AddScoped<IPasswordHasher, PasswordHasherService>();

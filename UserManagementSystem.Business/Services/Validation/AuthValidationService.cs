@@ -24,9 +24,13 @@ public class AuthValidationService : IAuthValidationService
             throw new Exception("Invalid username");
     }
 
-    public void ValidatePassword(string password, string hashedPassword)
+    public async Task ValidateCredentialsAsync(string username, string password)
     {
-        if(!_passwordHasher.VerifyPassword(password, hashedPassword))
-            throw new Exception("Invalid password");
+        var user = await _authRepository.GetUserByUsernameAsync(username);
+
+        if (user == null || !_passwordHasher.VerifyPassword(password, user.Password))
+        {
+            throw new Exception("Invalid username or password");
+        }
     }
 }
