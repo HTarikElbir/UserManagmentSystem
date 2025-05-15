@@ -14,7 +14,8 @@ namespace UserManagementSystem.API.Controllers
         {
             _authService = authService;
         }
-
+        
+        // Endpoint for user login
         [HttpPost("login")]
         public async Task<IActionResult> LoginAsync([FromBody] LoginDto loginDto)
         {

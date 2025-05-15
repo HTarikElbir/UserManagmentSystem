@@ -38,4 +38,17 @@ public class AuthService: IAuthService
         
         return token;
     }
+
+    public async Task<string> ResetPasswordAsync(ResetPasswordDto resetPasswordDto)
+    {
+        var user = await _authRepository.GetUserByEmailAsync(resetPasswordDto.Email);
+        if (user == null)
+        {
+            throw new Exception("User not found");
+        }
+        
+        var token = _tokenService.CreateResetPasswordToken(resetPasswordDto.Email);
+        
+        return token;
+    }
 }

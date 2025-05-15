@@ -20,4 +20,26 @@ public class AuthRepository: IAuthRepository
         return await _context.Users
             .FirstOrDefaultAsync(u => u.UserName == username);
     }
+
+    public Task<User?> GetUserByEmailAsync(string email)
+    {
+        return _context.Users
+            .FirstOrDefaultAsync(u => u.Email == email);
+    }
+
+    public async Task<bool> ResetPasswordAsync(int userId, string password)
+    {
+        var user = await _context.Users.FindAsync(userId);
+        
+        user!.Password = password;
+        await _context.SaveChangesAsync();
+        
+        return true;
+    }
+
+    public Task<User?> GetUserByIdAsync(int userId)
+    {
+        return _context.Users
+            .FirstOrDefaultAsync(u => u.UserId == userId);
+    }
 }

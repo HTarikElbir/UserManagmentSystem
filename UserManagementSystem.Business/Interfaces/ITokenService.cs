@@ -5,4 +5,6 @@ namespace UserManagementSystem.Business.Interfaces;
 public interface ITokenService
 {
     string CreateToken(User user);
+    
+    string CreateResetPasswordToken(string email);
 }
