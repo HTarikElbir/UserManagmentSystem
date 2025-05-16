@@ -36,8 +36,8 @@ namespace UserManagementSystem.API.Controllers
         }
         
         // Endpoint for user password
-        [HttpPost("reset-password")]
-        public async Task<IActionResult> ForgotPassword([FromBody] RequestResetPasswordDto request)
+        [HttpPost("forgot-password")]
+        public async Task<IActionResult> ForgotPasswordAsync([FromBody] RequestResetPasswordDto request)
         {
             if(!ModelState.IsValid)
                 return BadRequest(ModelState);

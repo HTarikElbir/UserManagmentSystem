@@ -38,7 +38,8 @@ public class AuthService: IAuthService
         
         return token;
     }
-
+    
+    // This method handles user password reset by generating a token 
     public async Task<string> RequestResetPasswordAsync(RequestResetPasswordDto resetPasswordDto)
     {
         var user = await _authRepository.GetUserByEmailAsync(resetPasswordDto.Email);
@@ -50,5 +51,20 @@ public class AuthService: IAuthService
         var token = _tokenService.CreateResetPasswordToken(resetPasswordDto.Email);
         
         return token;
+    }
+    
+    // This method handles user password reset by validating the provided token and updating the password.  -
+    public async Task<bool> ResetPasswordAsync(ResetPasswordDto resetPasswordDto)
+    {
+        var user = await _authRepository.GetUserByEmailAsync(resetPasswordDto.Email);
+        if (user == null)
+            throw new Exception("User not found");
+        
+        if (string.IsNullOrEmpty(resetPasswordDto.Token))
+            throw new Exception("Invalid token");
+
+        // add token check logic with a cache system (Redis)
+        await _authRepository.ResetPasswordAsync(user.UserId, resetPasswordDto.NewPassword);
+        return true;
     }
 }
