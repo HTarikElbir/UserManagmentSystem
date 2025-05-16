@@ -34,5 +34,20 @@ namespace UserManagementSystem.API.Controllers
                 return Unauthorized($"{ex.Message}");
             }
         }
+        
+        // Endpoint for user password
+        [HttpPost("reset-password")]
+        public async Task<IActionResult> ForgotPassword([FromBody] RequestResetPasswordDto request)
+        {
+            if(!ModelState.IsValid)
+                return BadRequest(ModelState);
+            
+            var token = await _authService.RequestResetPasswordAsync(request);
+            
+            if(String.IsNullOrEmpty(token))
+                return BadRequest("Invalid token.");
+            
+            return Ok( new {Token = token});
+        }
     }
 }

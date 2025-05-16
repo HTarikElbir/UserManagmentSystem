@@ -15,8 +15,11 @@ builder.Services.AddControllers();
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 
 // Configure JWT settings
-builder.Services.Configure<JwtSettings>(
-    builder.Configuration.GetSection("JwtSettings"));
+builder.Services.AddOptions<JwtSettings>()
+    .BindConfiguration(nameof(JwtSettings));
+
+//add jwt bearer settings
+
 
 // Add layer services
 builder.Services.AddDataServices(connectionString!);

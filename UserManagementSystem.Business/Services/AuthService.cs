@@ -39,7 +39,7 @@ public class AuthService: IAuthService
         return token;
     }
 
-    public async Task<string> ResetPasswordAsync(ResetPasswordDto resetPasswordDto)
+    public async Task<string> RequestResetPasswordAsync(RequestResetPasswordDto resetPasswordDto)
     {
         var user = await _authRepository.GetUserByEmailAsync(resetPasswordDto.Email);
         if (user == null)

@@ -13,11 +13,10 @@ namespace UserManagementSystem.Business.Services;
 public class TokenService : ITokenService
 {
     private readonly JwtSettings _jwtSettings;
-    private readonly IUserRepository _userRepository;
-
-    public TokenService(IOptions<JwtSettings> jwtSettings, IUserRepository userRepository )
+    
+    
+    public TokenService(IOptions<JwtSettings> jwtSettings)
     {
-        _userRepository = userRepository;
         _jwtSettings = jwtSettings.Value;
     }
     
