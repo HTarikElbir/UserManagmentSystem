@@ -21,6 +21,12 @@ builder.Services.AddOptions<JwtSettings>()
 //add jwt bearer settings
 
 
+builder.Services.AddStackExchangeRedisCache(options =>
+{
+    options.Configuration = builder.Configuration.GetSection("Redis")["ConnectionString"];
+    options.InstanceName = "UserManagementSystem";
+});
+
 // Add layer services
 builder.Services.AddDataServices(connectionString!);
 builder.Services.AddBusinessServices();

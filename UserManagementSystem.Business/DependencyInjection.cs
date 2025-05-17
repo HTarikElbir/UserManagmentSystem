@@ -27,6 +27,7 @@ public static class DependencyInjection
         services.AddScoped<IRoleService, RoleService>();
         services.AddScoped<IAuthService, AuthService>();
         services.AddScoped<ITokenService, TokenService>();
+        services.AddScoped<ITokenCacheService, TokenCacheService>();
 
         // Add Validation Services
         services.AddScoped<IUserValidationService, UserValidationService>();
