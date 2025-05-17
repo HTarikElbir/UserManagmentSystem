@@ -21,14 +21,16 @@ public class ApplicationDbContext : DbContext
     {
         base.OnModelCreating(modelBuilder);
         
-        // // Configure User entity
-        // modelBuilder.Entity<User>()
-        //     .HasKey(u => u.UserId);
-        
         // Configure User entity
         modelBuilder.Entity<User>()
             .HasIndex(u => u.Email)
-            .IsUnique();
+            .IsUnique()
+            .HasDatabaseName("IX_User_Email_CaseSensitive");
+        
+        modelBuilder.Entity<User>()
+            .HasIndex(u => u.UserName)
+            .IsUnique()
+            .HasDatabaseName("IX_User_UserName_CaseSensitive");
         
         // Many-to-many relationship between User And Role
         modelBuilder.Entity<UserRole>()
@@ -50,8 +52,8 @@ public class ApplicationDbContext : DbContext
         
         // Seed Roles
         modelBuilder.Entity<Role>().HasData(
-            new Role { RoleId = 1, RoleName = "Admin" },
-            new Role { RoleId = 2, RoleName = "User" }
+            new Role { RoleId = 1, RoleName = "Admin", Description = "System administrator role. Has all permissions."},
+            new Role { RoleId = 2, RoleName = "User", Description = "Regular user role" }
         );
 
         // Seed Users

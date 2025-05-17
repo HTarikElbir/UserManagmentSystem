@@ -8,4 +8,4 @@ public class UserRole
     
     public int RoleId { get; set; }  // Foreign key to Role
     public Role Role { get; set; } = null!;
-}
+} 
