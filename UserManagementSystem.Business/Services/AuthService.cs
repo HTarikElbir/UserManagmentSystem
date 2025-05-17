@@ -10,14 +10,17 @@ public class AuthService: IAuthService
     private readonly IAuthRepository _authRepository;
     private readonly ITokenService _tokenService;
     private readonly IAuthValidationService _authValidationService;
+    private readonly ITokenCacheService _tokenCacheService;
 
     public AuthService(IAuthRepository authRepository, 
         ITokenService tokenService, 
-        IAuthValidationService authValidationService)
+        IAuthValidationService authValidationService,
+        ITokenCacheService tokenCacheService)
     {
         _authRepository = authRepository;
         _tokenService = tokenService;
         _authValidationService = authValidationService;
+        _tokenCacheService = tokenCacheService;
     }
 
     // This method handles user login by validating the provided credentials and generating a token.
@@ -36,6 +39,8 @@ public class AuthService: IAuthService
             throw new Exception("Token generation failed");
         }
         
+        await _tokenCacheService.SetTokenAsync($"user:{user!.UserId}:login_token", token, TimeSpan.FromMinutes(60));
+        
         return token;
     }
     
@@ -50,6 +55,8 @@ public class AuthService: IAuthService
         
         var token = _tokenService.CreateResetPasswordToken(resetPasswordDto.Email);
         
+        await _tokenCacheService.SetTokenAsync($"user:{user!.UserId}:reset_token", token, TimeSpan.FromMinutes(15));
+
         return token;
     }
     
@@ -62,9 +69,14 @@ public class AuthService: IAuthService
         
         if (string.IsNullOrEmpty(resetPasswordDto.Token))
             throw new Exception("Invalid token");
-
+        
+        var result = await _tokenService.ValidateToken(resetPasswordDto.Token, user.UserId);
+        if (!result)
+            throw new Exception("Something went wrong. Please try again.");
+        
         // add token check logic with a cache system (Redis)
         await _authRepository.ResetPasswordAsync(user.UserId, resetPasswordDto.NewPassword);
+        
         return true;
     }
 }

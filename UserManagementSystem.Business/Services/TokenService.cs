@@ -13,11 +13,12 @@ namespace UserManagementSystem.Business.Services;
 public class TokenService : ITokenService
 {
     private readonly JwtSettings _jwtSettings;
+    private readonly ITokenCacheService _tokenCacheService;
     
-    
-    public TokenService(IOptions<JwtSettings> jwtSettings)
+    public TokenService(IOptions<JwtSettings> jwtSettings, ITokenCacheService tokenCacheService)
     {
         _jwtSettings = jwtSettings.Value;
+        _tokenCacheService = tokenCacheService;
     }
     
     // Creates a JWT token for the user
@@ -32,6 +33,14 @@ public class TokenService : ITokenService
     {
         var claims = GetResetPasswordClaims(email);
         return  GenerateResetPasswordToken(claims);
+    }
+
+    // Validates tokens
+    public async Task<bool> ValidateToken(string token, int userId )
+    {
+        var cachedToken = await _tokenCacheService.GetTokenAsync($"user:{userId}:login_token");
+
+        return !string.IsNullOrEmpty(cachedToken) && string.Equals(cachedToken, token, StringComparison.Ordinal);
     }
 
     // Extracts claims from the user object

@@ -23,7 +23,7 @@ builder.Services.AddOptions<JwtSettings>()
 
 builder.Services.AddStackExchangeRedisCache(options =>
 {
-    options.Configuration = builder.Configuration.GetSection("Redis")["ConnectionString"];
+    options.Configuration = "localhost:6379";
     options.InstanceName = "UserManagementSystem";
 });
 
