@@ -49,5 +49,19 @@ namespace UserManagementSystem.API.Controllers
             
             return Ok( new {Token = token});
         }
+
+        [HttpPost("reset-password")]
+        public async Task<IActionResult> ResetPasswordAsync([FromBody] ResetPasswordDto resetPasswordDto)
+        {
+            if(!ModelState.IsValid)
+                return BadRequest(ModelState);
+            
+            var result = await _authService.ResetPasswordAsync(resetPasswordDto);
+            
+            if(result)
+                return Ok();
+            else
+                return BadRequest();
+        }
     }
 }

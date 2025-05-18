@@ -1,6 +1,7 @@
 using FluentValidation;
 using Microsoft.Extensions.DependencyInjection;
 using UserManagementSystem.Business.Dtos;
+using UserManagementSystem.Business.Dtos.Auth;
 using UserManagementSystem.Business.Dtos.Role;
 using UserManagementSystem.Business.Dtos.User;
 using UserManagementSystem.Business.Interfaces;
@@ -21,6 +22,7 @@ public static class DependencyInjection
         services.AddScoped<IValidator<UserUpdateDto>, UserUpdateDtoValidator>();
         services.AddScoped<IValidator<RoleAddDto>, RoleAddDtoValidator>();
         services.AddScoped<IValidator<RoleUpdateDto>, RoleUpdateDtoValidator>();
+        services.AddScoped<IValidator<ResetPasswordDto>, ResetPasswordDtoValidator>();
         
         // Add Services
         services.AddScoped<IUserService, UserService>();
