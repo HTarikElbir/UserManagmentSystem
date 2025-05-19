@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using UserManagementSystem.Data.Contexts;
 using UserManagementSystem.Data.Entities;
+using UserManagementSystem.Data.Extensions;
 using UserManagementSystem.Data.Interfaces;
 
 namespace UserManagementSystem.Data.Repositories;
@@ -16,10 +17,11 @@ public class UserRepository : IUserRepository
     }
 
     // Returns a list of all users in the system.
-    public async Task<List<User>> GetAllUsersAsync() => await _context.Users
+    public async Task<List<User>> GetAllUsersAsync(int page, int pageSize) => await _context.Users
         .Include(u => u.UserRoles)
             .ThenInclude(ur => ur.Role)
         .AsNoTracking()
+        .Paginate(page,pageSize)
         .ToListAsync();
     
     
@@ -57,7 +59,7 @@ public class UserRepository : IUserRepository
         
     }
     
-    public async Task<List<User>> GetUsersByDepartmentAsync(string department)
+    public async Task<List<User>> GetUsersByDepartmentAsync(string department,int page, int pageSize)
     {
         // // Returns a list of users that belong to the specified department.
         return await _context.Users
@@ -65,16 +67,18 @@ public class UserRepository : IUserRepository
             .Include(u => u.UserRoles)
                 .ThenInclude(ur => ur.Role)
             .AsNoTracking()
+            .Paginate(page,pageSize)
             .ToListAsync();
     }
     
-    public async Task<List<User>> GetUsersByRoleAsync(string roleName)
+    public async Task<List<User>> GetUsersByRoleAsync(string roleName,int page, int pageSize)
     {
         // Returns a list of users who have the specified role.
         // It checks if the role name associated with each user's UserRoles matches the given role name.
         return await _context.Users
             .Where(u => u.UserRoles.Any(ur => ur.Role.RoleName.ToLower() == roleName.ToLower()))
             .AsNoTracking()
+            .Paginate(page,pageSize)
             .ToListAsync();
     }
 }

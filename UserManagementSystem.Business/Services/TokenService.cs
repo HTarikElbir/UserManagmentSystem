@@ -38,7 +38,7 @@ public class TokenService : ITokenService
     // Validates tokens
     public async Task<bool> ValidateToken(string token, int userId )
     {
-        var cachedToken = await _tokenCacheService.GetTokenAsync($"user:{userId}:reset_token");
+        var cachedToken = await _tokenCacheService.GetTokenAsync($"user:{userId}:login_token");
 
         return !string.IsNullOrEmpty(cachedToken) && string.Equals(cachedToken, token, StringComparison.Ordinal);
     }
@@ -114,8 +114,9 @@ public class TokenService : ITokenService
         );
 
         return new JwtSecurityTokenHandler().WriteToken(token);
-
     }
+    
+    
 }
     
    

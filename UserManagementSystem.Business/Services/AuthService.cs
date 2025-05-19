@@ -39,12 +39,27 @@ public class AuthService: IAuthService
         {
             throw new Exception("Token generation failed");
         }
+        //await _tokenCacheService.RemoveTokenAsync($"user:{user!.UserId}:login_token");
         
         await _tokenCacheService.SetTokenAsync($"user:{user!.UserId}:login_token", token, TimeSpan.FromMinutes(60));
         
         return token;
     }
     
+    public async Task<bool> LogoutAsync(LogoutDto logoutDto)
+    {
+        await _authValidationService.ValidateExistingEmailAsync(logoutDto.Email);
+        
+        var user = await _authRepository.GetUserByEmailAsync(logoutDto.Email);
+        
+        if (!await _tokenService.ValidateToken(logoutDto.Token, user!.UserId))
+            throw new Exception("Token is invalid or expired.");
+        
+        await _tokenCacheService.RemoveTokenAsync(($"user:{user!.UserId}:login_token"));
+        
+        return true;
+    }
+
     // This method handles user password reset by generating a token 
     public async Task<string> RequestResetPasswordAsync(RequestResetPasswordDto resetPasswordDto)
     {

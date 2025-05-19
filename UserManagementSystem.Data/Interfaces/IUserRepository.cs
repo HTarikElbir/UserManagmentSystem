@@ -7,13 +7,13 @@ namespace UserManagementSystem.Data.Interfaces
     public interface IUserRepository
     {
         // Returns a list of all users.
-        Task<List<User>> GetAllUsersAsync();
+        Task<List<User>> GetAllUsersAsync(int page, int pageSize);
         
         // Returns users that belong to a specific department.
-        Task<List<User>> GetUsersByDepartmentAsync(string department);
+        Task<List<User>> GetUsersByDepartmentAsync(string department,int page, int pageSize);
 
         // Returns users that have a specific role.
-        Task<List<User>> GetUsersByRoleAsync(string roleName);
+        Task<List<User>> GetUsersByRoleAsync(string roleName,int page, int pageSize);
 
         // Returns a user by their unique ID.
         Task<User?> GetByIdUserAsync(int userId);

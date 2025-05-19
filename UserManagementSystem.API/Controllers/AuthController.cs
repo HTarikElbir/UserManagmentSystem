@@ -63,5 +63,23 @@ namespace UserManagementSystem.API.Controllers
             else
                 return BadRequest();
         }
+
+        [HttpDelete("logout")]
+        public async Task<IActionResult> LogoutAsync(LogoutDto logoutDto)
+        { 
+            if(!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            //token = token.Replace("Bearer ", "");
+
+            var result = await _authService.LogoutAsync(logoutDto);
+    
+            if (result)
+            {
+                return Ok(new { message = "Successfully logged out" });
+            }
+    
+            return BadRequest("Logout failed");
+        }
     }
 }
