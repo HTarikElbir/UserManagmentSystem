@@ -29,9 +29,9 @@ public class UserService : IUserService
     }
    
     // Retrieves all users and maps them to a list of UserDto objects.
-    public async Task<List<UserDto>> GetAllUsersAsync()
+    public async Task<List<UserDto>> GetAllUsersAsync(int page = 1, int pageSize = 10)
     {
-        var users = await _userRepository.GetAllUsersAsync();
+        var users = await _userRepository.GetAllUsersAsync(page, pageSize);
         
         var userDtos = _mapper.Map<List<UserDto>>(users);
         
@@ -75,11 +75,11 @@ public class UserService : IUserService
     }
 
     // Retrieves users by department name, maps them to UserDto objects, and returns the list.
-    public async Task<List<UserDto>> GetUsersByDepartmentAsync(string departmentName)
+    public async Task<List<UserDto>> GetUsersByDepartmentAsync(string departmentName, int page = 1, int pageSize = 10)
     {
-        await _validator.ValidateUserExistByDepartmentAsync(departmentName);
+        await _validator.ValidateUserExistByDepartmentAsync(departmentName, page, pageSize);
         
-        var users = await _userRepository.GetUsersByDepartmentAsync(departmentName);
+        var users = await _userRepository.GetUsersByDepartmentAsync(departmentName, page, pageSize);;
         
         var userDtos = _mapper.Map<List<UserDto>>(users);
         
@@ -87,11 +87,11 @@ public class UserService : IUserService
     }
     
     // Retrieves users by role name, maps them to UserDto objects, and returns the list.
-    public async Task<List<UserDto>> GetUsersByRoleAsync(string roleName)
+    public async Task<List<UserDto>> GetUsersByRoleAsync(string roleName, int page = 1, int pageSize = 10)
     {
-        await _validator.ValidateUserExistByRoleAsync(roleName);
+        await _validator.ValidateUserExistByRoleAsync(roleName, page, pageSize);
         
-        var users = await _userRepository.GetUsersByRoleAsync(roleName);
+        var users = await _userRepository.GetUsersByRoleAsync(roleName, page, pageSize);
         
         var userDtos = _mapper.Map<List<UserDto>>(users);
         

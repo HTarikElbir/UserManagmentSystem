@@ -33,9 +33,9 @@ public class UserValidationService : IUserValidationService
     }
     
     // Validates if a user exists by their Role.
-    public async Task ValidateUserExistByRoleAsync(string roleName)
+    public async Task ValidateUserExistByRoleAsync(string roleName, int page = 1, int pageSize = 10)
     {
-        var users = await _userRepository.GetUsersByRoleAsync(roleName);
+        var users = await _userRepository.GetUsersByRoleAsync(roleName, page, pageSize);
         
         if (users == null || users.Count == 0)
         {
@@ -44,9 +44,9 @@ public class UserValidationService : IUserValidationService
     }
     
     // Validates if a user exists by their Department.
-    public async Task ValidateUserExistByDepartmentAsync(string departmentName)
+    public async Task ValidateUserExistByDepartmentAsync(string departmentName, int page = 1, int pageSize = 10)
     {
-        var users = await _userRepository.GetUsersByDepartmentAsync(departmentName);
+        var users = await _userRepository.GetUsersByDepartmentAsync(departmentName, page, pageSize);
         
         if (users == null || users.Count == 0)
         {

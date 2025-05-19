@@ -17,13 +17,13 @@ public interface IUserService
     Task<bool> DeleteUserAsync(int userId);
     
     // Get all users
-    Task<List<UserDto>> GetAllUsersAsync();
+    Task<List<UserDto>> GetAllUsersAsync(int page, int pageSize);
     
     // Get users by Department 
-    Task<List<UserDto>> GetUsersByDepartmentAsync(string departmentName);
+    Task<List<UserDto>> GetUsersByDepartmentAsync(string departmentName, int page, int pageSize);
     
     // Get users by Role
-    Task<List<UserDto>> GetUsersByRoleAsync(string roleName);
+    Task<List<UserDto>> GetUsersByRoleAsync(string roleName, int page, int pageSize);
     
     // Get user by ID
     Task<UserDto?> GetUserByIdAsync(int userId);
