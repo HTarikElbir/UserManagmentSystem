@@ -18,9 +18,9 @@ namespace UserManagementSystem.API.Controllers
         
         // Endpoint to get all roles
         [HttpGet]
-        public async Task<IActionResult> GetAllRolesAsync()
+        public async Task<IActionResult> GetAllRolesAsync(int page = 1, int pageSize = 10)
         {
-            return Ok(await _roleService.GetAllRolesAsync());
+            return Ok(await _roleService.GetAllRolesAsync(page, pageSize));
         }
         
         // Endpoint to get a role by their ID

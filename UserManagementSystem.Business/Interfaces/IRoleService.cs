@@ -15,7 +15,7 @@ public interface IRoleService
     Task<bool> DeleteRoleAsync(int roleId);
     
     // Get all users
-    Task<List<RoleDto>> GetAllRolesAsync();
+    Task<List<RoleDto>> GetAllRolesAsync(int page, int pageSize);
     
     // Get user by ID
     Task<RoleDto?> GetRoleByIdAsync(int roleId);

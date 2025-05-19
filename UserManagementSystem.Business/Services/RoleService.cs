@@ -26,9 +26,9 @@ public class RoleService : IRoleService
     }
     
     // Retrieves all roles
-    public async Task<List<RoleDto>> GetAllRolesAsync()
+    public async Task<List<RoleDto>> GetAllRolesAsync(int page = 1, int pageSize = 10)
     {
-        var roles = await _roleRepository.GetAllRolesAsync();
+        var roles = await _roleRepository.GetAllRolesAsync(page, pageSize);
         
         var roleDtos = _mapper.Map<List<RoleDto>>(roles);
         
