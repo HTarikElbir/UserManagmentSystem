@@ -17,9 +17,9 @@ namespace UserManagementSystem.API.Controllers
 
         // Endpoint to get all users
         [HttpGet] 
-        public async Task<IActionResult> GetAllUsersAsync()
+        public async Task<IActionResult> GetAllUsersAsync(int page = 1, int pageSize = 10)
         {
-            return Ok(await _userService.GetAllUsersAsync());
+            return Ok(await _userService.GetAllUsersAsync(page, pageSize));
         }
 
         // Endpoint to get a user by their ID
@@ -81,28 +81,28 @@ namespace UserManagementSystem.API.Controllers
 
         // Endpoint to retrieve users based on the specified department name.
         [HttpGet("by-department/{departmentName}")]
-        public async Task<IActionResult> GetUsersByDepartmentAsync(string? departmentName)
+        public async Task<IActionResult> GetUsersByDepartmentAsync(string? departmentName, int page = 1, int pageSize = 10)
         {
             if (departmentName == null)
             {
                 return BadRequest("Invalid department name.");
             }
             
-            var users = await _userService.GetUsersByDepartmentAsync(departmentName);
+            var users = await _userService.GetUsersByDepartmentAsync(departmentName, page, pageSize);
             
             return Ok(users);
         }
 
         // Endpoint to get users by their role
         [HttpGet("by-role/{roleName}")]
-        public async Task<IActionResult> GetUsersByRoleAsync(string? roleName)
+        public async Task<IActionResult> GetUsersByRoleAsync(string? roleName, int page = 1, int pageSize = 10)
         {
             if (roleName == null)
             {
                 return BadRequest("Invalid role name.");
             }
             
-            var users = await _userService.GetUsersByRoleAsync(roleName);
+            var users = await _userService.GetUsersByRoleAsync(roleName, page, pageSize);
             
             return Ok(users);
         }
