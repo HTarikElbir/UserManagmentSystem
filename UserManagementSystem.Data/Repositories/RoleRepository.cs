@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using UserManagementSystem.Data.Contexts;
 using UserManagementSystem.Data.Entities;
+using UserManagementSystem.Data.Extensions;
 using UserManagementSystem.Data.Interfaces;
 
 namespace UserManagementSystem.Data.Repositories;
@@ -15,8 +16,9 @@ public class RoleRepository : IRoleRepository
     }
     
     // Returns a list of all roles in the system.
-    public async Task<List<Role>> GetAllRolesAsync() => await  _context.Roles
+    public async Task<List<Role>> GetAllRolesAsync(int page = 1, int pageSize = 10) => await  _context.Roles
         .AsNoTracking()
+        .Paginate(page,pageSize)
         .ToListAsync();
     
     // Returns a role by id

@@ -7,7 +7,7 @@ namespace UserManagementSystem.Data.Interfaces
     public interface IRoleRepository
     {
         // Returns a list of all roles in the system.
-        Task<List<Role>> GetAllRolesAsync();
+        Task<List<Role>> GetAllRolesAsync(int page, int pageSize);
 
         // Returns a role by its unique identifier.
         Task<Role?> GetRoleByIdAsync(int roleId);
