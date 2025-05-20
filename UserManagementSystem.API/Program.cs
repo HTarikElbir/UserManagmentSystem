@@ -1,3 +1,6 @@
+using System.Text;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
 using UserManagementSystem.API.Extensions;
 using UserManagementSystem.Business;
 using UserManagementSystem.Business.Settings;
@@ -19,8 +22,25 @@ var connectionString = builder.Configuration.GetConnectionString("DefaultConnect
 builder.Services.AddOptions<JwtSettings>()
     .BindConfiguration(nameof(JwtSettings));
 
-//add jwt bearer settings
-
+// Authentication 
+builder.Services.AddAuthentication(options =>
+{
+    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+}).AddJwtBearer(options =>
+{
+    options.TokenValidationParameters = new TokenValidationParameters
+    {
+        ValidateIssuer = true,
+        ValidateAudience = true,
+        ValidateLifetime = true,
+        ValidateIssuerSigningKey = true,
+        ValidIssuer = builder.Configuration["JwtSettings:Issuer"],
+        ValidAudience = builder.Configuration["JwtSettings:Audience"],
+        IssuerSigningKey =
+            new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["JwtSettings:SecretKey"]!))
+    };
+});
 
 builder.Services.AddStackExchangeRedisCache(options =>
 {
@@ -41,9 +61,10 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-// Add global exception middleware
+// Add middlewares
 app.UseGlobalExceptionMiddleware();
-
+app.UseAuthentication();          
+app.UseAuthorization();  
 app.UseHttpsRedirection();
 
 app.MapControllers();
