@@ -41,7 +41,7 @@ namespace UserManagementSystem.API.Controllers
             return Ok(result);
         }
         
-        // Endpoint to get role by name
+        // Endpoint to get a role by name
         [HttpGet("by-name/{roleName}")]
         public async Task<IActionResult> GetRoleByNameAsync(string roleName)
         {

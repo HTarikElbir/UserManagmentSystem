@@ -1,3 +1,4 @@
+using UserManagementSystem.API.Extensions;
 using UserManagementSystem.Business;
 using UserManagementSystem.Business.Settings;
 using UserManagementSystem.Data;
@@ -39,6 +40,9 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+
+// Add global exception middleware
+app.UseGlobalExceptionMiddleware();
 
 app.UseHttpsRedirection();
 
