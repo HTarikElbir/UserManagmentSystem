@@ -1,8 +1,10 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using UserManagementSystem.Business.Dtos.User;
 using UserManagementSystem.Business.Interfaces;
 namespace UserManagementSystem.API.Controllers
 {
+    [Authorize]
     [Route("api/users")] 
     [ApiController] 
     public class UsersController : ControllerBase
@@ -15,13 +17,16 @@ namespace UserManagementSystem.API.Controllers
             _userService = userService;
         }
 
+        
         // Endpoint to get all users
+        [Authorize(Roles = "Admin")]
         [HttpGet] 
         public async Task<IActionResult> GetAllUsersAsync(int page = 1, int pageSize = 10)
         {
             return Ok(await _userService.GetAllUsersAsync(page, pageSize));
         }
-
+        
+        [Authorize(Roles = "User")]
         // Endpoint to get a user by their ID
         [HttpGet("by-id/{userId}")] 
         public async Task<IActionResult> GetUserByIdAsync(int userId)
@@ -40,7 +45,8 @@ namespace UserManagementSystem.API.Controllers
             
             return Ok(result);
         }
-
+        
+        [Authorize(Roles = "Admin,User")]
         [HttpPut("{userId:int}")]
         // Updates a user by their ID with the provided updated data
         public async Task<IActionResult> UpdateUserAsync(int userId, [FromBody] UserUpdateDto userUpdateDto)
@@ -59,8 +65,9 @@ namespace UserManagementSystem.API.Controllers
             else
                 return NotFound();
         }
-
+        
         // Endpoint to delete a user by ID
+        [Authorize(Roles = "Admin")]
         [HttpDelete("{userId:int}")] 
         public async Task<IActionResult> DeleteUserAsync(int userId)
         {
@@ -80,6 +87,7 @@ namespace UserManagementSystem.API.Controllers
         }
 
         // Endpoint to retrieve users based on the specified department name.
+        [Authorize(Roles = "Admin")]
         [HttpGet("by-department/{departmentName}")]
         public async Task<IActionResult> GetUsersByDepartmentAsync(string? departmentName, int page = 1, int pageSize = 10)
         {
@@ -94,6 +102,7 @@ namespace UserManagementSystem.API.Controllers
         }
 
         // Endpoint to get users by their role
+        [Authorize(Roles = "Admin")]
         [HttpGet("by-role/{roleName}")]
         public async Task<IActionResult> GetUsersByRoleAsync(string? roleName, int page = 1, int pageSize = 10)
         {
@@ -107,7 +116,8 @@ namespace UserManagementSystem.API.Controllers
             return Ok(users);
         }
         
-        // Endpoint to add new user
+        // Endpoint to add a new user
+        [Authorize(Roles = "Admin")]
         [HttpPost]
         public async Task<IActionResult> AddUserAsync(UserAddDto userAddDto)
         {

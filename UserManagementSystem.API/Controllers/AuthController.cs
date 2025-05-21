@@ -1,9 +1,11 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using UserManagementSystem.Business.Dtos.Auth;
 using UserManagementSystem.Business.Interfaces;
 
 namespace UserManagementSystem.API.Controllers
 {
+    [Authorize]
     [Route("api/auth")]
     [ApiController]
     public class AuthController : ControllerBase
@@ -15,6 +17,7 @@ namespace UserManagementSystem.API.Controllers
             _authService = authService;
         }
         
+        [AllowAnonymous]
         // Endpoint for user login
         [HttpPost("login")]
         public async Task<IActionResult> LoginAsync([FromBody] LoginDto loginDto)
@@ -34,7 +37,7 @@ namespace UserManagementSystem.API.Controllers
                 return Unauthorized($"{ex.Message}");
             }
         }
-        
+        [AllowAnonymous]
         // Endpoint for user password
         [HttpPost("forgot-password")]
         public async Task<IActionResult> ForgotPasswordAsync([FromBody] RequestResetPasswordDto request)
@@ -49,7 +52,7 @@ namespace UserManagementSystem.API.Controllers
             
             return Ok( new {Token = token});
         }
-
+        [AllowAnonymous]
         [HttpPost("reset-password")]
         public async Task<IActionResult> ResetPasswordAsync([FromBody] ResetPasswordDto resetPasswordDto)
         {
@@ -63,7 +66,7 @@ namespace UserManagementSystem.API.Controllers
             else
                 return BadRequest();
         }
-
+        [AllowAnonymous]
         [HttpDelete("logout")]
         public async Task<IActionResult> LogoutAsync(LogoutDto logoutDto)
         { 

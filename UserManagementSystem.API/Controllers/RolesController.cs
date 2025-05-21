@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using UserManagementSystem.Business.Dtos;
 using UserManagementSystem.Business.Dtos.Role;
@@ -5,6 +6,7 @@ using UserManagementSystem.Business.Interfaces;
 
 namespace UserManagementSystem.API.Controllers
 {
+    [Authorize]
     [Route("api/roles")]
     [ApiController]
     public class RolesController : ControllerBase
