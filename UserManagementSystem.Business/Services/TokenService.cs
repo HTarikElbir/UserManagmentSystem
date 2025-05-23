@@ -38,6 +38,9 @@ public class TokenService : ITokenService
     // Validates tokens
     public async Task<bool> ValidateToken(string token, int userId )
     {
+        if(await _tokenCacheService.IsInBlackListAsync(token))
+            return false;
+        
         var cachedToken = await _tokenCacheService.GetTokenAsync($"user:{userId}:login_token");
 
         return !string.IsNullOrEmpty(cachedToken) && string.Equals(cachedToken, token, StringComparison.Ordinal);

@@ -55,6 +55,8 @@ public class AuthService: IAuthService
         if (!await _tokenService.ValidateToken(logoutDto.Token, user!.UserId))
             throw new Exception("Token is invalid or expired.");
         
+        await _tokenCacheService.AddToBlackListAsync(logoutDto.Token);
+        
         await _tokenCacheService.RemoveTokenAsync(($"user:{user!.UserId}:login_token"));
         
         return true;
