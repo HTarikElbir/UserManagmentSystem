@@ -77,7 +77,7 @@ public class UserValidationService : IUserValidationService
             throw new ValidationException(validationResult.Errors);
         }
         
-        var existingUser = await _userRepository.GetByEmailAsync(userAddDto.Email);
+        var existingUser = await _userRepository.GetUserByEmailAsync(userAddDto.Email);
         if (existingUser != null)
         {
             throw new Exception($"User with email {userAddDto.Email} already exists.");

@@ -18,8 +18,11 @@ namespace UserManagementSystem.Data.Interfaces
         // Returns a user by their unique ID.
         Task<User?> GetByIdUserAsync(int userId);
         
+        // Returns a user by their username.
+        Task<User?> GetUserByUsernameAsync(string username);
+        
         // Returns a user by their Email
-        Task<User?> GetByEmailAsync(string email);
+        Task<User?> GetUserByEmailAsync(string email);
         
         // Adds a new user to the system.
         Task AddUserAsync(User user);

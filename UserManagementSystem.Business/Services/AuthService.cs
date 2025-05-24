@@ -8,6 +8,7 @@ namespace UserManagementSystem.Business.Services;
 public class AuthService: IAuthService
 {
     private readonly IAuthRepository _authRepository;
+    private readonly IUserRepository _userRepository;
     private readonly ITokenService _tokenService;
     private readonly IAuthValidationService _authValidationService;
     private readonly ITokenCacheService _tokenCacheService;
@@ -17,13 +18,15 @@ public class AuthService: IAuthService
         ITokenService tokenService, 
         IAuthValidationService authValidationService,
         ITokenCacheService tokenCacheService,
-        IPasswordHasher passwordHasher)
+        IPasswordHasher passwordHasher,
+        IUserRepository userRepository)
     {
         _authRepository = authRepository;
         _tokenService = tokenService;
         _authValidationService = authValidationService;
         _tokenCacheService = tokenCacheService;
         _passwordHasher = passwordHasher;
+        _userRepository = userRepository;
     }
 
     // This method handles user login by validating the provided credentials and generating a token.
@@ -31,7 +34,7 @@ public class AuthService: IAuthService
     {
         await _authValidationService.ValidateCredentialsAsync(loginDto.UserName, loginDto.Password);
         
-        var user = await _authRepository.GetUserByUsernameAsync(loginDto.UserName);
+        var user = await _userRepository.GetUserByUsernameAsync(loginDto.UserName);
         
         var token = _tokenService.CreateToken(user!);
         
@@ -50,7 +53,7 @@ public class AuthService: IAuthService
     {
         await _authValidationService.ValidateExistingEmailAsync(logoutDto.Email);
         
-        var user = await _authRepository.GetUserByEmailAsync(logoutDto.Email);
+        var user = await _userRepository.GetUserByEmailAsync(logoutDto.Email);
         
         if (!await _tokenService.ValidateToken(logoutDto.Token, user!.UserId))
             throw new Exception("Token is invalid or expired.");
@@ -67,7 +70,7 @@ public class AuthService: IAuthService
     {
         await _authValidationService.ValidateExistingEmailAsync(resetPasswordDto.Email);
         
-        var user = await _authRepository.GetUserByEmailAsync(resetPasswordDto.Email);
+        var user = await _userRepository.GetUserByEmailAsync(resetPasswordDto.Email);
         
         var token = _tokenService.CreateResetPasswordToken(resetPasswordDto.Email);
         
@@ -81,7 +84,7 @@ public class AuthService: IAuthService
     {
         await _authValidationService.ValidateResetPasswordDtoAsync(resetPasswordDto);
         
-        var user = await _authRepository.GetUserByEmailAsync(resetPasswordDto.Email);
+        var user = await _userRepository.GetUserByEmailAsync(resetPasswordDto.Email);
         
         var result = await _tokenService.ValidateToken(resetPasswordDto.Token, user!.UserId);
         if (!result)

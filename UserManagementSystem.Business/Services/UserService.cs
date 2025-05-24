@@ -101,7 +101,7 @@ public class UserService : IUserService
     // Retrieves a user by their email address.
     public async Task<User?> GetUserByEmailAsync(string email)
     {
-        return await _userRepository.GetByEmailAsync(email);
+        return await _userRepository.GetUserByEmailAsync(email);
     }
     
     // Adds a new user to the system after validating the input and hashing the password.

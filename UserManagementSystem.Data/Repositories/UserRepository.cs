@@ -32,7 +32,12 @@ public class UserRepository : IUserRepository
         .FirstOrDefaultAsync(u => u.UserId == userId);
     
     // Returns a user by their email address.
-    public async Task<User?> GetByEmailAsync(string email) => await _context.Users.FirstOrDefaultAsync(u => u.Email == email);
+    public async  Task<User?> GetUserByEmailAsync(string email)
+    {
+        return await _context.Users
+            .AsNoTracking()
+            .FirstOrDefaultAsync(u => u.Email == email);
+    }
     
     // Adds a new user to the database. 
     public async Task AddUserAsync(User user)
@@ -80,5 +85,14 @@ public class UserRepository : IUserRepository
             .AsNoTracking()
             .Paginate(page,pageSize)
             .ToListAsync();
+    }
+    
+    public async Task<User?> GetUserByUsernameAsync(string username)
+    {
+        return await _context.Users
+            .Include(u => u.UserRoles)
+                .ThenInclude(ur => ur.Role)
+            .AsNoTracking()
+            .FirstOrDefaultAsync(u => u.UserName == username);
     }
 }
