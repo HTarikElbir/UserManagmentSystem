@@ -18,12 +18,18 @@ public class AuthRepository: IAuthRepository
     public async Task<User?> GetUserByUsernameAsync(string username)
     {
         return await _context.Users
+            .Include(u => u.UserRoles)
+                .ThenInclude(ur => ur.Role)
+            .AsNoTracking()
             .FirstOrDefaultAsync(u => u.UserName == username);
     }
 
-    public Task<User?> GetUserByEmailAsync(string email)
+    public async  Task<User?> GetUserByEmailAsync(string email)
     {
-        return _context.Users
+        return await _context.Users
+            .Include(u => u.UserRoles)
+                .ThenInclude(ur => ur.Role)
+            .AsNoTracking()
             .FirstOrDefaultAsync(u => u.Email == email);
     }
 
