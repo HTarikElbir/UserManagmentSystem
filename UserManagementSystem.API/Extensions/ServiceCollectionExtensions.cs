@@ -1,7 +1,9 @@
+using System.IdentityModel.Tokens.Jwt;
 using System.Text;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using UserManagementSystem.Business.Interfaces;
 using UserManagementSystem.Business.Settings;
 
 namespace UserManagementSystem.API.Extensions;
@@ -81,6 +83,19 @@ public static class ServiceCollectionExtensions
 
             options.Events = new JwtBearerEvents
             {
+                OnTokenValidated = async context =>
+                {
+                    var tokenCacheService = context.HttpContext.RequestServices.GetRequiredService<ITokenCacheService>();
+
+                    if (context.SecurityToken is JwtSecurityToken token)
+                    {
+                        var isBlacklisted = await tokenCacheService.IsInBlackListAsync(token.RawData);
+                        if (isBlacklisted)
+                        {
+                            context.Fail("Token has been revoked");
+                        }
+                    }
+                },
                 OnAuthenticationFailed = context =>
                 {
                     if (context.Exception.GetType() == typeof(SecurityTokenExpiredException))
