@@ -7,7 +7,7 @@ namespace UserManagementSystem.Data.Interfaces
     public interface IUserRoleRepository
     {
         // Assigns a role to a user.
-        Task AssignRoleToUserAsync(int userId, int roleId);
+        Task AssignRoleToUserAsync(UserRole userRole);
 
         // Removes a specific role from a user.
         Task RemoveRoleFromUserAsync(int userId, int roleId);

@@ -1,3 +1,4 @@
+using UserManagementSystem.Data.Contexts;
 using UserManagementSystem.Data.Entities;
 using UserManagementSystem.Data.Interfaces;
 
@@ -5,9 +6,17 @@ namespace UserManagementSystem.Data.Repositories;
 
 public class UserRoleRepository : IUserRoleRepository
 {
-    public Task AssignRoleToUserAsync(int userId, int roleId)
+    private readonly ApplicationDbContext _context;
+    
+    public UserRoleRepository(ApplicationDbContext context)
     {
-        throw new NotImplementedException();
+        _context = context;
+    }
+    
+    public async Task AssignRoleToUserAsync(UserRole userRole)
+    {
+        await _context.UserRoles.AddAsync(userRole);
+        await _context.SaveChangesAsync();
     }
 
     public Task RemoveRoleFromUserAsync(int userId, int roleId)
