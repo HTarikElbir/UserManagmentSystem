@@ -10,10 +10,10 @@ namespace UserManagementSystem.Data.Interfaces
         Task AssignRoleToUserAsync(UserRole userRole);
 
         // Removes a specific role from a user.
-        Task RemoveRoleFromUserAsync(int userId, int roleId);
+        Task RemoveRoleFromUserAsync(UserRole userRole);
 
         // Gets all roles assigned to a specific user.
-        Task<List<Role>> GetRolesByUserIdAsync(int userId);
+        Task<List<string>> GetRolesByUserIdAsync(int userId);
 
         // Gets all users who have a specific role.
         Task<List<User>> GetUsersByRoleIdAsync(int roleId);

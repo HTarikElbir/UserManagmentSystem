@@ -1,3 +1,4 @@
+using Microsoft.EntityFrameworkCore;
 using UserManagementSystem.Data.Contexts;
 using UserManagementSystem.Data.Entities;
 using UserManagementSystem.Data.Interfaces;
@@ -19,18 +20,29 @@ public class UserRoleRepository : IUserRoleRepository
         await _context.SaveChangesAsync();
     }
 
-    public Task RemoveRoleFromUserAsync(int userId, int roleId)
+    public async Task RemoveRoleFromUserAsync(UserRole userRole)
     {
-        throw new NotImplementedException();
+        _context.UserRoles.Remove(userRole);
+        await _context.SaveChangesAsync();
     }
 
-    public Task<List<Role>> GetRolesByUserIdAsync(int userId)
+    public async Task<List<string>> GetRolesByUserIdAsync(int userId)
     {
-        throw new NotImplementedException();
+        return await _context.UserRoles
+            .Where(ur => ur.UserId == userId)
+            .Include(ur => ur.Role)
+            .Select(ur => ur.Role.RoleName)
+            .AsNoTracking()
+            .ToListAsync();
     }
 
-    public Task<List<User>> GetUsersByRoleIdAsync(int roleId)
+    public async Task<List<User>> GetUsersByRoleIdAsync(int roleId)
     {
-        throw new NotImplementedException();
+        return await _context.UserRoles
+            .Where(ur => ur.RoleId == roleId)
+            .Include(ur => ur.User)
+            .Select(ur => ur.User)
+            .AsNoTracking()
+            .ToListAsync();
     }
 }
