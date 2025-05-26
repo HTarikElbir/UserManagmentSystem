@@ -86,7 +86,7 @@ public class RoleService : IRoleService
     // Deletes a role by its ID
     public async Task<bool> DeleteRoleAsync(int roleId)
     {
-        await _roleValidationService.ValidateRoleExistAsync(roleId);
+        await _roleValidationService.ValidateRoleCanBeDeletedAsync(roleId);
         
         await _roleRepository.DeleteRoleAsync(roleId);  
         

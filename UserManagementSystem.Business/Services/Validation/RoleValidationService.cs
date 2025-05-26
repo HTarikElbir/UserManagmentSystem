@@ -57,4 +57,17 @@ public class RoleValidationService : IRoleValidationService
             throw new Exception($"Role with name {roleAddDto.RoleName} already exists.");
         }
     }
+
+    public async Task ValidateRoleCanBeDeletedAsync(int roleId)
+    {
+        await ValidateRoleExistAsync(roleId);
+        
+        var role = await _roleRepository.GetRoleByIdAsync(roleId);
+
+        if (role!.RoleName.Equals("Admin", StringComparison.OrdinalIgnoreCase))
+            throw new Exception("Admin role cannot be deleted.");       
+        
+        if (role!.RoleName.Equals("User", StringComparison.OrdinalIgnoreCase))
+            throw new Exception("User role cannot be deleted.");       
+    }
 }

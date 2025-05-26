@@ -10,6 +10,6 @@ public interface IRoleValidationService
 {
     Task ValidateRoleExistAsync(int roleId);
     Task ValidateUpdateRequestAsync(int roleId, RoleUpdateDto roleUpdateDto);
-    
     Task ValidateAddRequestAsync(RoleAddDto roleAddDto);
+    Task ValidateRoleCanBeDeletedAsync(int roleId);
 }
