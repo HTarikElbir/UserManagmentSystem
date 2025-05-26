@@ -32,5 +32,8 @@ public class UserProfile : Profile
                     RoleId = 2 // Default role ID for new users
                 }
             }));
+        
+        // UserRoleAddDto -> UserRole
+        CreateMap<UserRoleAddDto, UserRole>();
     }
 }
