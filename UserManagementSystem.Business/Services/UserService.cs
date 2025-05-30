@@ -11,20 +11,26 @@ namespace UserManagementSystem.Business.Services;
 public class UserService : IUserService
 {
     private readonly IUserRepository _userRepository;
+    private readonly IUserRoleRepository _userRoleRepository;
     private readonly IMapper _mapper;
-    private readonly IUserValidationService _validator;
+    private readonly IUserValidationService _userValidator;
+    private readonly IRoleValidationService _roleValidator;
     private readonly IPasswordHasher _passwordHasher;
     
     // Initializes the dependencies of the UserService class.
     public UserService(
-        IUserRepository userRepository, 
+        IUserRepository userRepository,
+        IUserRoleRepository userRoleRepository,
         IMapper mapper, 
-        IUserValidationService validator,
+        IUserValidationService userValidator,
+        IRoleValidationService roleValidator,
         IPasswordHasher passwordHasher)
     {
         _userRepository = userRepository; 
+        _userRoleRepository = userRoleRepository;
         _mapper = mapper;
-        _validator = validator;
+        _userValidator = userValidator;
+        _roleValidator = roleValidator;
         _passwordHasher = passwordHasher;
     }
    
@@ -41,7 +47,7 @@ public class UserService : IUserService
     // Retrieves a user by their ID and maps it to a UserDto object.
     public async Task<UserDto?> GetUserByIdAsync(int userId)
     {
-        await _validator.ValidateUserExistAsync(userId); 
+        await _userValidator.ValidateUserExistAsync(userId); 
         
         var user = await _userRepository.GetByIdUserAsync(userId);
         
@@ -53,7 +59,7 @@ public class UserService : IUserService
     // Updates the user entity with new information
     public async Task<bool> UpdateUserAsync(int userId, UserUpdateDto userUpdateDto)
     {
-        await _validator.ValidateUserExistAsync(userId);
+        await _userValidator.ValidateUserExistAsync(userId);
         
         var user = await _userRepository.GetByIdUserAsync(userId);
         
@@ -67,7 +73,7 @@ public class UserService : IUserService
     // Deletes a user by their ID.
     public async Task<bool> DeleteUserAsync(int userId)
     {
-        await _validator.ValidateUserExistAsync(userId);
+        await _userValidator.ValidateUserExistAsync(userId);
         
         await _userRepository.DeleteUserAsync(userId);
         
@@ -77,7 +83,7 @@ public class UserService : IUserService
     // Retrieves users by department name, maps them to UserDto objects, and returns the list.
     public async Task<List<UserDto>> GetUsersByDepartmentAsync(string departmentName, int page = 1, int pageSize = 10)
     {
-        await _validator.ValidateUserExistByDepartmentAsync(departmentName, page, pageSize);
+        await _userValidator.ValidateUserExistByDepartmentAsync(departmentName, page, pageSize);
         
         var users = await _userRepository.GetUsersByDepartmentAsync(departmentName, page, pageSize);;
         
@@ -89,7 +95,7 @@ public class UserService : IUserService
     // Retrieves users by role name, maps them to UserDto objects, and returns the list.
     public async Task<List<UserDto>> GetUsersByRoleAsync(string roleName, int page = 1, int pageSize = 10)
     {
-        await _validator.ValidateUserExistByRoleAsync(roleName, page, pageSize);
+        await _userValidator.ValidateUserExistByRoleAsync(roleName, page, pageSize);
         
         var users = await _userRepository.GetUsersByRoleAsync(roleName, page, pageSize);
         
@@ -103,11 +109,11 @@ public class UserService : IUserService
     {
         return await _userRepository.GetUserByEmailAsync(email);
     }
-    
+
     // Adds a new user to the system after validating the input and hashing the password.
     public async Task<bool> AddUserAsync(UserAddDto userAddDto)
     {
-        await _validator.ValidateAddRequestAsync(userAddDto);
+        await _userValidator.ValidateAddRequestAsync(userAddDto);
         
         var user = _mapper.Map<User>(userAddDto);
         
@@ -116,5 +122,25 @@ public class UserService : IUserService
         await _userRepository.AddUserAsync(user);
         
         return true;
+    }
+    
+    public async Task<bool> AssignRoleToUserAsync(AssignRoleDto assignRoleDto)
+    {
+        await _userValidator.ValidateUserExistAsync(assignRoleDto.UserId);
+        
+        await _roleValidator.ValidateRoleExistAsync(assignRoleDto.RoleId);
+        
+        await _userValidator.ValidateUserRoleNotExistAsync(assignRoleDto.UserId, assignRoleDto.RoleId);
+        
+        var userRole = _mapper.Map<UserRole>(assignRoleDto);
+        
+        await _userRoleRepository.AssignRoleToUserAsync(userRole);
+        
+        return true;
+    }
+
+    public Task<bool> RemoveRoleFromUserAsync(int userId, int roleId)
+    {
+        throw new NotImplementedException();
     }
 }

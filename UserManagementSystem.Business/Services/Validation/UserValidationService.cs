@@ -9,14 +9,20 @@ namespace UserManagementSystem.Business.Services.Validation;
 public class UserValidationService : IUserValidationService
 {
     private readonly IUserRepository _userRepository;
+    private readonly IRoleRepository _roleRepository;
+    private readonly IUserRoleRepository _userRoleRepository;
     private readonly IValidator<UserUpdateDto> _updateValidator;
     private readonly IValidator<UserAddDto> _addValidator;
     
     public UserValidationService(IUserRepository userRepository,
+        IRoleRepository roleRepository,
+        IUserRoleRepository userRoleRepository,
         IValidator<UserUpdateDto> updateValidator, 
         IValidator<UserAddDto> addValidator)
     {
         _userRepository = userRepository;
+        _roleRepository = roleRepository;       
+        _userRoleRepository = userRoleRepository;
         _updateValidator = updateValidator;
         _addValidator = addValidator;
     }
@@ -53,7 +59,18 @@ public class UserValidationService : IUserValidationService
             throw new Exception("No users found for the specified department.");
         }
     }
-    
+
+    public async Task ValidateUserRoleNotExistAsync(int userId, int roleId)
+    {
+        var userRoles = await _userRoleRepository.GetRolesByUserIdAsync(userId);
+        var role = await _roleRepository.GetRoleByIdAsync(roleId);
+        
+        if (userRoles.Contains(role!.RoleName))
+        {
+            throw new Exception("User already has this role assigned.");
+        }
+    }
+
     // Validates for updating a user.
     public async Task ValidateUpdateRequestAsync(int userId, UserUpdateDto userUpdateDto)
     {
@@ -83,4 +100,6 @@ public class UserValidationService : IUserValidationService
             throw new Exception($"User with email {userAddDto.Email} already exists.");
         }
     }
+    
+    
 }

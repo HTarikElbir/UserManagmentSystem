@@ -30,4 +30,10 @@ public interface IUserService
     
     // Get user by email
     Task<User?> GetUserByEmailAsync(string email);
+    
+    // Assign a role to a user
+    Task<bool> AssignRoleToUserAsync(AssignRoleDto assignRoleDto);
+    
+    // Remove a role from a user
+    Task<bool> RemoveRoleFromUserAsync(int userId, int roleId);
 }
