@@ -4,7 +4,7 @@ using UserManagementSystem.Business.Dtos.User;
 using UserManagementSystem.Business.Interfaces;
 namespace UserManagementSystem.API.Controllers
 {
-    [Authorize]
+    //[Authorize]
     [Route("api/users")] 
     [ApiController] 
     public class UsersController : ControllerBase
@@ -62,8 +62,7 @@ namespace UserManagementSystem.API.Controllers
             {
                 return NoContent();
             }
-            else
-                return NotFound();
+            return NotFound();
         }
         
         // Endpoint to delete a user by ID
@@ -82,8 +81,8 @@ namespace UserManagementSystem.API.Controllers
             {
                 return NoContent(); 
             }
-            else
-                return NotFound(); 
+            
+            return NotFound(); 
         }
 
         // Endpoint to retrieve users based on the specified department name.
@@ -131,6 +130,24 @@ namespace UserManagementSystem.API.Controllers
             {
                 return BadRequest("User could not be added.");
             }
+        }
+
+        [HttpPost("assign-role")]
+        public async Task<IActionResult> AssignRoleToUserAsync(AssignRoleDto assignRoleDto)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+            
+            var result = await _userService.AssignRoleToUserAsync(assignRoleDto);
+            
+            if (result)
+            {
+                return Ok("Role successfully added to user");
+            }
+            
+            return BadRequest("Role could not be assigned to user.");
         }
     }
 }

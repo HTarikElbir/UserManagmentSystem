@@ -42,6 +42,7 @@ public static class DependencyInjection
         // Add AutoMapper Profiles
         services.AddAutoMapper(typeof(UserProfile).Assembly);
         services.AddAutoMapper(typeof(RoleProfile).Assembly);
+        services.AddAutoMapper(typeof(UserRoleProfile).Assembly);
         
         return services;
     }
