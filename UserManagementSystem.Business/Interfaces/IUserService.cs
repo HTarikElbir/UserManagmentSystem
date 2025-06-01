@@ -35,5 +35,5 @@ public interface IUserService
     Task<bool> AssignRoleToUserAsync(AssignRoleDto assignRoleDto);
     
     // Remove a role from a user
-    Task<bool> RemoveRoleFromUserAsync(int userId, int roleId);
+    Task<bool> RemoveRoleFromUserAsync(RemoveRoleDto removeRoleDto);
 }

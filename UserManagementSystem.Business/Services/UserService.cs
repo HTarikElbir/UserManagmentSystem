@@ -139,8 +139,16 @@ public class UserService : IUserService
         return true;
     }
 
-    public Task<bool> RemoveRoleFromUserAsync(int userId, int roleId)
+    public async Task<bool> RemoveRoleFromUserAsync(RemoveRoleDto removeRoleDto)
     {
-        throw new NotImplementedException();
+        await _userValidator.ValidateUserExistAsync(removeRoleDto.UserId);
+        
+        await _roleValidator.ValidateRoleCanBeRemovedAsync(removeRoleDto.UserId, removeRoleDto.RoleId);
+        
+        var removedRole = _mapper.Map<UserRole>(removeRoleDto);
+        
+        await _userRoleRepository.RemoveRoleFromUserAsync(removedRole);
+
+        return true;
     }
 }

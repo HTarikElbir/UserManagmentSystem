@@ -70,7 +70,7 @@ public class UserValidationService : IUserValidationService
             throw new Exception("User already has this role assigned.");
         }
     }
-
+    
     // Validates for updating a user.
     public async Task ValidateUpdateRequestAsync(int userId, UserUpdateDto userUpdateDto)
     {
