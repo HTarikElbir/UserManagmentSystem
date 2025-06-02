@@ -50,9 +50,9 @@ public class UserValidationService : IUserValidationService
     }
     
     // Validates if a user exists by their Department.
-    public async Task ValidateUserExistByDepartmentAsync(string departmentName, int page = 1, int pageSize = 10)
+    public async Task ValidateUserExistByDepartmentAsync(int departmentId, int page = 1, int pageSize = 10)
     {
-        var users = await _userRepository.GetUsersByDepartmentAsync(departmentName, page, pageSize);
+        var users = await _userRepository.GetUsersByDepartmentAsync(departmentId, page, pageSize);
         
         if (users == null || users.Count == 0)
         {

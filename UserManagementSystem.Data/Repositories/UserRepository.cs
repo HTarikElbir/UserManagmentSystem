@@ -64,11 +64,11 @@ public class UserRepository : IUserRepository
         
     }
     
-    public async Task<List<User>> GetUsersByDepartmentAsync(string department,int page, int pageSize)
+    public async Task<List<User>> GetUsersByDepartmentAsync(int departmentId,int page, int pageSize)
     {
         // // Returns a list of users that belong to the specified department.
         return await _context.Users
-            .Where(u => u.Department.ToLower() == department.ToLower())
+            .Where(u => u.DepartmentId == departmentId)
             .Include(u => u.UserRoles)
                 .ThenInclude(ur => ur.Role)
             .AsNoTracking()

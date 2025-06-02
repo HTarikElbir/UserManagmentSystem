@@ -10,7 +10,7 @@ namespace UserManagementSystem.Data.Interfaces
         Task<List<User>> GetAllUsersAsync(int page, int pageSize);
         
         // Returns users that belong to a specific department.
-        Task<List<User>> GetUsersByDepartmentAsync(string department,int page, int pageSize);
+        Task<List<User>> GetUsersByDepartmentAsync(int departmentId ,int page, int pageSize);
 
         // Returns users that have a specific role.
         Task<List<User>> GetUsersByRoleAsync(string roleName,int page, int pageSize);

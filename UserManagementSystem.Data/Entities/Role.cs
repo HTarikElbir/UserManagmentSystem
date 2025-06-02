@@ -12,6 +12,7 @@ public class Role
     
     public string Description { get; set; } = string.Empty;
     
+    public bool IsActive { get; set; } = true;
     public ICollection<UserRole> UserRoles { get; set; } = new List<UserRole>();
 }
 
@@ -27,4 +28,3 @@ public class Role
 // public string NormalizedRoleName { get; set; } = null!;
 // public string RoleDescription { get; set; } = null!;
 // public DateTime CreatedDate { get; set; }
-// public bool IsActive { get; set; }

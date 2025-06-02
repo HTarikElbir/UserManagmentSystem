@@ -88,14 +88,14 @@ namespace UserManagementSystem.API.Controllers
         // Endpoint to retrieve users based on the specified department name.
         [Authorize(Roles = "Admin")]
         [HttpGet("by-department/{departmentName}")]
-        public async Task<IActionResult> GetUsersByDepartmentAsync(string? departmentName, int page = 1, int pageSize = 10)
+        public async Task<IActionResult> GetUsersByDepartmentAsync(int departmentId, int page = 1, int pageSize = 10)
         {
-            if (departmentName == null)
+            if (departmentId == null)
             {
                 return BadRequest("Invalid department name.");
             }
             
-            var users = await _userService.GetUsersByDepartmentAsync(departmentName, page, pageSize);
+            var users = await _userService.GetUsersByDepartmentAsync(departmentId, page, pageSize);
             
             return Ok(users);
         }

@@ -20,7 +20,8 @@ public class User
     
     public string Phone { get; set; } = null!;
     
-    public string Department { get; set; } = null!;
+    public int DepartmentId { get; set; }
+    public Department Department { get; set; } = null!;
 
     public bool IsActive { get; set; } = false;
     
