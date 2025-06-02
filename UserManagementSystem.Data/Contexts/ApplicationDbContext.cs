@@ -167,7 +167,7 @@ public class ApplicationDbContext : DbContext
             {
                 UserId = 1,
                 UserName = "aliveli",
-                Password = "Ali123!!!",
+                Password = BCrypt.Net.BCrypt.HashPassword("Aliveli123321."),
                 Phone = "+905012345678",
                 Email = "aliveli@example.com",
                 DepartmentId = 1,
@@ -177,7 +177,7 @@ public class ApplicationDbContext : DbContext
             {
                 UserId = 2,
                 UserName = "aysefatma",
-                Password = "Ayse123!!!",
+                Password = BCrypt.Net.BCrypt.HashPassword("Aysefatma123321."),
                 Phone = "+905112345678",
                 Email = "aysefatma@example.com",
                 DepartmentId = 2,

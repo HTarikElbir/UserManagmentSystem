@@ -113,8 +113,8 @@ namespace UserManagementSystem.API.Migrations
                 columns: new[] { "UserId", "DepartmentId", "Email", "IsActive", "Password", "Phone", "UserName" },
                 values: new object[,]
                 {
-                    { 1, 1, "aliveli@example.com", true, "Ali123!!!", "+905012345678", "aliveli" },
-                    { 2, 2, "aysefatma@example.com", true, "Ayse123!!!", "+905112345678", "aysefatma" }
+                    { 1, 1, "aliveli@example.com", true, "$2a$11$WC7immPzVrKLBO8385g7RO5vND4u8.sgz0XRnT.GabjiULAhScd2e", "+905012345678", "aliveli" },
+                    { 2, 2, "aysefatma@example.com", true, "$2a$11$2XYsuBIR20q9WM6YbvDT1epnq/rwtoFj6/vIoDE0tO.SeamIvtDA6", "+905112345678", "aysefatma" }
                 });
 
             migrationBuilder.InsertData(

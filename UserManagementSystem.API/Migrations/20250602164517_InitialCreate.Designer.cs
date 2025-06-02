@@ -10,7 +10,7 @@ using UserManagementSystem.Data.Contexts;
 namespace UserManagementSystem.API.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20250602161755_InitialCreate")]
+    [Migration("20250602164517_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -165,7 +165,7 @@ namespace UserManagementSystem.API.Migrations
                             DepartmentId = 1,
                             Email = "aliveli@example.com",
                             IsActive = true,
-                            Password = "Ali123!!!",
+                            Password = "$2a$11$WC7immPzVrKLBO8385g7RO5vND4u8.sgz0XRnT.GabjiULAhScd2e",
                             Phone = "+905012345678",
                             UserName = "aliveli"
                         },
@@ -175,7 +175,7 @@ namespace UserManagementSystem.API.Migrations
                             DepartmentId = 2,
                             Email = "aysefatma@example.com",
                             IsActive = true,
-                            Password = "Ayse123!!!",
+                            Password = "$2a$11$2XYsuBIR20q9WM6YbvDT1epnq/rwtoFj6/vIoDE0tO.SeamIvtDA6",
                             Phone = "+905112345678",
                             UserName = "aysefatma"
                         });
