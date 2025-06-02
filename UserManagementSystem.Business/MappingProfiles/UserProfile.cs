@@ -1,6 +1,6 @@
 using AutoMapper;
-using UserManagementSystem.Data.Entities;
 using UserManagementSystem.Business.Dtos;
+using UserManagementSystem.Data.Entities;
 using UserManagementSystem.Business.Dtos.User;
 
 namespace UserManagementSystem.Business.MappingProfiles;
@@ -12,7 +12,7 @@ public class UserProfile : Profile
         // User -> UserDto
         CreateMap<User, UserDto>()
             .ForMember(dest => dest.Roles, opt => 
-                opt.MapFrom(src => src.UserRoles.Select(r => r.Role).ToList()));;
+                opt.MapFrom(src => src.UserRoles.Select(r => r.Role).ToList()));
         
         // UpdateUserDto -> User (For Update)
         CreateMap<UserUpdateDto, User>()
@@ -33,7 +33,15 @@ public class UserProfile : Profile
                 }
             }));
         
+        // User -> DepartmentUserDto
+        CreateMap<User, DepartmentUserDto>()
+            .ForMember(dest => dest.Roles, opt => 
+                opt.MapFrom(src => src.UserRoles.Select(r => r.Role).ToList()));
+            
+        
         // UserRoleAddDto -> UserRole
         CreateMap<UserRoleAddDto, UserRole>();
+        
+       
     }
 }

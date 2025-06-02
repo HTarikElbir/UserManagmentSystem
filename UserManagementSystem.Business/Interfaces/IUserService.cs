@@ -20,7 +20,7 @@ public interface IUserService
     Task<List<UserDto>> GetAllUsersAsync(int page, int pageSize);
     
     // Get users by Department 
-    Task<List<UserDto>> GetUsersByDepartmentAsync(int departmentId, int page, int pageSize);
+    Task<List<DepartmentUserDto>> GetUsersByDepartmentAsync(int departmentId, int page, int pageSize);
     
     // Get users by Role
     Task<List<UserDto>> GetUsersByRoleAsync(string roleName, int page, int pageSize);

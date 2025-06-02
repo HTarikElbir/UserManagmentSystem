@@ -81,13 +81,13 @@ public class UserService : IUserService
     }
 
     // Retrieves users by department name, maps them to UserDto objects, and returns the list.
-    public async Task<List<UserDto>> GetUsersByDepartmentAsync(int departmentId, int page = 1, int pageSize = 10)
+    public async Task<List<DepartmentUserDto>> GetUsersByDepartmentAsync(int departmentId, int page = 1, int pageSize = 10)
     {
         await _userValidator.ValidateUserExistByDepartmentAsync(departmentId, page, pageSize);
         
         var users = await _userRepository.GetUsersByDepartmentAsync(departmentId, page, pageSize);;
         
-        var userDtos = _mapper.Map<List<UserDto>>(users);
+        var userDtos = _mapper.Map<List<DepartmentUserDto>>(users);
         
         return userDtos;
     }
