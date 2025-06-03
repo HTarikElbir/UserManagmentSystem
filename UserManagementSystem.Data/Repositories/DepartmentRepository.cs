@@ -1,5 +1,7 @@
+using Microsoft.EntityFrameworkCore;
 using UserManagementSystem.Data.Contexts;
 using UserManagementSystem.Data.Entities;
+using UserManagementSystem.Data.Extensions;
 using UserManagementSystem.Data.Interfaces;
 
 namespace UserManagementSystem.Data.Repositories;
@@ -13,33 +15,33 @@ public class DepartmentRepository : IDepartmentRepository
         _context = context;
     }
     
-    public async Task<IEnumerable<Department>> GetAllAsync()
+    public async Task<List<Department>> GetAllAsync(int page = 1, int pageSize = 10) => await _context.Departments
+        .AsNoTracking()
+        .Paginate(page,pageSize)
+        .ToListAsync();
+
+    public async Task<Department?> GetByIdAsync(int id) => await _context.Departments.FirstOrDefaultAsync(d => d.DepartmentId == id);
+   
+    public async Task<Department?> GetByNameAsync(string name) => await _context.Departments.FirstOrDefaultAsync(d => d.DepartmentName.Equals(name, StringComparison.CurrentCultureIgnoreCase));
+    
+
+    public async Task AddAsync(Department department)
     {
-        throw new NotImplementedException();
+        await _context.Departments.AddAsync(department);
+        await _context.SaveChangesAsync();
     }
 
-    public Task<Department?> GetByIdAsync(int id)
+    public async Task UpdateAsync(Department department)
     {
-        throw new NotImplementedException();
+        _context.Departments.Update(department);
+        await _context.SaveChangesAsync();
     }
 
-    public Task<Department?> GetByNameAsync(string name)
+    public async Task DeleteAsync(int id)
     {
-        throw new NotImplementedException();
-    }
-
-    public Task<Department> AddAsync(Department department)
-    {
-        throw new NotImplementedException();
-    }
-
-    public Task<Department> UpdateAsync(Department department)
-    {
-        throw new NotImplementedException();
-    }
-
-    public Task DeleteAsync(int id)
-    {
-        throw new NotImplementedException();
+        var department = await _context.Departments.FindAsync(id);
+        
+        _context.Departments.Remove(department!);
+        await _context.SaveChangesAsync();
     }
 }
