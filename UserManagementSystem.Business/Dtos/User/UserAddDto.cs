@@ -10,6 +10,6 @@ public class UserAddDto
     
     public string Phone { get; set; } = null!;
     
-    public string Department { get; set; } = null!;
+    public string Department { get; set; } = null!; // Change value type to int
     
 }
