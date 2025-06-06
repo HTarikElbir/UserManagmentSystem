@@ -53,4 +53,18 @@ public class DepartmentsController : ControllerBase
         
         return BadRequest("Department Not Created");
     }
+
+    [HttpDelete]
+    public async Task<IActionResult> DeleteDepartmentAsync(int departmentId)
+    {
+        if(departmentId <= 0)
+            return BadRequest("Invalid Department Id");
+        
+        var result = await _departmentService.RemoveAsync(departmentId);
+        
+        if (result)
+            return Ok();
+        
+        return BadRequest("Department Not Deleted"); // Maybe i can use NotFound()
+    }
 }
