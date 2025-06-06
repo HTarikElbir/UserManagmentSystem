@@ -22,7 +22,7 @@ public class DepartmentRepository : IDepartmentRepository
 
     public async Task<Department?> GetByIdAsync(int id) => await _context.Departments.FirstOrDefaultAsync(d => d.DepartmentId == id);
    
-    public async Task<Department?> GetByNameAsync(string name) => await _context.Departments.FirstOrDefaultAsync(d => d.DepartmentName.Equals(name, StringComparison.CurrentCultureIgnoreCase));
+    public async Task<Department?> GetByNameAsync(string name) => await _context.Departments.FirstOrDefaultAsync(d => d.DepartmentName.ToLower() == name.ToLower());
     
 
     public async Task AddAsync(Department department)
