@@ -30,6 +30,7 @@ public static class DependencyInjection
         services.AddScoped<IAuthService, AuthService>();
         services.AddScoped<ITokenService, TokenService>();
         services.AddScoped<ITokenCacheService, TokenCacheService>();
+        services.AddScoped<IDepartmentService, DepartmentService>();
 
         // Add Validation Services
         services.AddScoped<IUserValidationService, UserValidationService>();
@@ -43,6 +44,7 @@ public static class DependencyInjection
         services.AddAutoMapper(typeof(UserProfile).Assembly);
         services.AddAutoMapper(typeof(RoleProfile).Assembly);
         services.AddAutoMapper(typeof(UserRoleProfile).Assembly);
+        services.AddAutoMapper(typeof(DepartmentProfile).Assembly);
         
         return services;
     }
