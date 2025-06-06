@@ -10,5 +10,7 @@ public class DepartmentProfile : Profile
     {
         // Department -> DepartmentDto
         CreateMap<Department, DepartmentDto>();
+        
+        
     }
 }

@@ -19,4 +19,5 @@ public class DepartmentsController : ControllerBase
     {
         return Ok(await _departmentService.GetAllAsync(page, pageSize));
     }
+    
 }
