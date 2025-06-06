@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
+using UserManagementSystem.Business.Dtos.Department;
 using UserManagementSystem.Business.Interfaces;
 
 namespace UserManagementSystem.API.Controllers;
@@ -40,5 +41,16 @@ public class DepartmentsController : ControllerBase
         var result = await _departmentService.GetByNameAsync(name);
         
         return Ok(result);
+    }
+
+    [HttpPost]
+    public async Task<IActionResult> AddDepartmentAsync(DepartmentAddDto departmentDto)
+    {
+        var result = await _departmentService.AddAsync(departmentDto);
+
+        if (result)
+            return Created();
+        
+        return BadRequest("Department Not Created");
     }
 }
