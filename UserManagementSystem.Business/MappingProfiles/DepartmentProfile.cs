@@ -11,6 +11,7 @@ public class DepartmentProfile : Profile
         // Department -> DepartmentDto
         CreateMap<Department, DepartmentDto>();
         
-        
+        // DepartmentAddDto -> Department
+        CreateMap<DepartmentAddDto, Department>();
     }
 }

@@ -8,6 +8,6 @@ public interface IDepartmentService
     Task<List<DepartmentDto>> GetAllAsync(int page, int pageSize);
     Task<DepartmentDto> GetByIdAsync(int id);
     Task<DepartmentDto> GetByNameAsync(string name);
-    Task AddAsync(DepartmentAddDto departmentAddDto);
-    Task RemoveAsync(int departmentId);
+    Task<bool> AddAsync(DepartmentAddDto departmentAddDto);
+    Task<bool> RemoveAsync(int departmentId);
 }
