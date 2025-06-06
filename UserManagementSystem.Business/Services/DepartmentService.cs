@@ -36,9 +36,14 @@ public class DepartmentService: IDepartmentService
         return departmentDto;
     }
 
-    public Task<DepartmentDto> GetByNameAsync(string name)
+    public async Task<DepartmentDto> GetByNameAsync(string name)
     {
-        throw new NotImplementedException();
+        // TODO: Add Validation Check here 
+        var department = await  _departmentRepository.GetByNameAsync(name);
+        
+        var departmentDto = _mapper.Map<DepartmentDto>(department);
+        
+        return departmentDto;
     }
 
     public Task AddAsync(DepartmentAddDto departmentAddDto)
