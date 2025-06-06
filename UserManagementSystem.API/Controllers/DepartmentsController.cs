@@ -19,5 +19,15 @@ public class DepartmentsController : ControllerBase
     {
         return Ok(await _departmentService.GetAllAsync(page, pageSize));
     }
-    
+
+    [HttpGet("by-id/{id}")]
+    public async Task<IActionResult> GetDepartmentById(int id)
+    {
+        if (id <= 0)
+            return BadRequest("Invalid Department Id");
+
+        var result = await _departmentService.GetByIdAsync(id);
+        
+        return Ok(result);
+    }
 }

@@ -26,7 +26,7 @@ public interface IUserService
     Task<List<UserDto>> GetUsersByRoleAsync(string roleName, int page, int pageSize);
     
     // Get user by ID
-    Task<UserDto?> GetUserByIdAsync(int userId);
+    Task<UserDto> GetUserByIdAsync(int userId);
     
     // Get user by email
     Task<User?> GetUserByEmailAsync(string email);

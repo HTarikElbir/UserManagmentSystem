@@ -38,11 +38,6 @@ namespace UserManagementSystem.API.Controllers
             
             var result = await _userService.GetUserByIdAsync(userId);
             
-            if (result == null)
-            {
-                return NotFound("User not found.");
-            }
-            
             return Ok(result);
         }
         

@@ -45,7 +45,7 @@ public class UserService : IUserService
     }
     
     // Retrieves a user by their ID and maps it to a UserDto object.
-    public async Task<UserDto?> GetUserByIdAsync(int userId)
+    public async Task<UserDto> GetUserByIdAsync(int userId)
     {
         await _userValidator.ValidateUserExistAsync(userId); 
         
