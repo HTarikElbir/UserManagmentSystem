@@ -59,6 +59,10 @@ public class DepartmentService: IDepartmentService
 
     public async  Task<bool> RemoveAsync(int departmentId)
     {
-        throw new NotImplementedException();
+        // TODO: Add Validation check here
+
+        await _departmentRepository.RemoveAsync(departmentId);
+        
+        return true;
     }
 }
