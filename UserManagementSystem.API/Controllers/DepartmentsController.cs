@@ -46,6 +46,9 @@ public class DepartmentsController : ControllerBase
     [HttpPost]
     public async Task<IActionResult> AddDepartmentAsync(DepartmentAddDto departmentDto)
     {
+        if(!ModelState.IsValid)
+            return BadRequest(ModelState);
+        
         var result = await _departmentService.AddAsync(departmentDto);
 
         if (result)
@@ -66,5 +69,22 @@ public class DepartmentsController : ControllerBase
             return Ok();
         
         return BadRequest("Department Not Deleted"); // Maybe i can use NotFound()
+    }
+
+    [HttpPut("{id:int}")]
+    public async Task<IActionResult> UpdateDepartmentAsync(int id, DepartmentUpdateDto departmentDto)
+    {
+        if(!ModelState.IsValid)
+            return BadRequest(ModelState);
+        
+        if (id <= 0)
+            return BadRequest("Invalid Department Id");
+        
+        bool result = await _departmentService.UpdateAsync(id, departmentDto);
+        
+        if (result)
+            return NoContent();
+
+        return NotFound("Department Not Found");
     }
 }
