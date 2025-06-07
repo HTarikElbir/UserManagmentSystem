@@ -13,5 +13,10 @@ public class DepartmentProfile : Profile
         
         // DepartmentAddDto -> Department
         CreateMap<DepartmentAddDto, Department>();
+        
+        // DepartmentUpdateDto -> Department
+        CreateMap<DepartmentUpdateDto, Department>()
+            .ForMember(dest => dest.DepartmentId, opt => opt.Ignore())
+            .ForMember(dest => dest.Users, opt => opt.Ignore());
     }
 }

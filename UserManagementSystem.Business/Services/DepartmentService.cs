@@ -59,6 +59,19 @@ public class DepartmentService: IDepartmentService
     }
     
     // TODO: Add UpdateAsync method here
+    public async Task<bool> UpdateAsync(int id, DepartmentUpdateDto departmentUpdateDto)
+    {
+        // TODO: Add Validation Check here
+
+        var department = await _departmentRepository.GetByIdAsync(id);
+        
+        _mapper.Map(departmentUpdateDto, department);
+        
+        await _departmentRepository.UpdateAsync(department!);
+        
+        return true;
+    }
+    
     public async  Task<bool> RemoveAsync(int departmentId)
     {
         // TODO: Add Validation check here
