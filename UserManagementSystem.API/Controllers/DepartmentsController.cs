@@ -1,9 +1,11 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using UserManagementSystem.Business.Dtos.Department;
 using UserManagementSystem.Business.Interfaces;
 
 namespace UserManagementSystem.API.Controllers;
 
+[Authorize(Roles = "Admin")]
 [Route("api/departments")] 
 [ApiController] 
 public class DepartmentsController : ControllerBase
@@ -60,6 +62,9 @@ public class DepartmentsController : ControllerBase
     [HttpDelete]
     public async Task<IActionResult> DeleteDepartmentAsync(int departmentId)
     {
+        if(!ModelState.IsValid)
+            return BadRequest(ModelState);
+        
         if(departmentId <= 0)
             return BadRequest("Invalid Department Id");
         
