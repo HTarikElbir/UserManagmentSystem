@@ -6,4 +6,6 @@ public interface IDepartmentValidationService
 {
     Task ValidateByIdAsync(int id);
     Task ValidateByNameAsync(string name);
+    Task ValidateAddRequestAsync(DepartmentAddDto departmentAddDto);
+    Task ValidateUpdateRequestAsync(DepartmentUpdateDto departmentUpdateDto);
 }
