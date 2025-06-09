@@ -149,5 +149,20 @@ namespace UserManagementSystem.API.Controllers
             
             return BadRequest("Role could not be assigned to user.");
         }
+
+        [HttpDelete("remove-role")]
+        public async Task<IActionResult> RemoveRoleFromUserAsync(RemoveRoleDto removeRoleDto)
+        {
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+            
+            var result = await _userService.RemoveRoleFromUserAsync(removeRoleDto);
+            
+            if (result)
+                return Ok("Role successfully removed from user");
+            
+            return BadRequest("Role could not be removed from user.");
+        }
     }
+    
 }
