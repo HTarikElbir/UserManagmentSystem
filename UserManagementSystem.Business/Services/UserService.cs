@@ -59,7 +59,7 @@ public class UserService : IUserService
     // Updates the user entity with new information
     public async Task<bool> UpdateUserAsync(int userId, UserUpdateDto userUpdateDto)
     {
-        await _userValidator.ValidateUserExistAsync(userId);
+        await _userValidator.ValidateUpdateRequestAsync(userId, userUpdateDto);
         
         var user = await _userRepository.GetByIdUserAsync(userId);
         

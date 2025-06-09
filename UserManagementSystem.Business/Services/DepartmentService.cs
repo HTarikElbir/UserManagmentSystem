@@ -53,7 +53,7 @@ public class DepartmentService: IDepartmentService
 
     public async Task<bool> AddAsync(DepartmentAddDto departmentAddDto)
     {
-        // TODO: Add Validation Check here 
+        await _departmentValidationService.ValidateAddRequestAsync(departmentAddDto);
         
         var department = _mapper.Map<Department>(departmentAddDto);
         
@@ -64,7 +64,9 @@ public class DepartmentService: IDepartmentService
     
     public async Task<bool> UpdateAsync(int id, DepartmentUpdateDto departmentUpdateDto)
     {
-        // TODO: Add Validation Check here
+        await _departmentValidationService.ValidateByIdAsync(id);
+
+        await _departmentValidationService.ValidateUpdateRequestAsync(departmentUpdateDto);
 
         var department = await _departmentRepository.GetByIdAsync(id);
         
