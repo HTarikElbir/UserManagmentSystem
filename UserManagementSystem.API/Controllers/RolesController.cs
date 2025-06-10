@@ -6,7 +6,7 @@ using UserManagementSystem.Business.Interfaces;
 
 namespace UserManagementSystem.API.Controllers
 {
-    [Authorize]
+    [Authorize(Roles="Admin")]
     [Route("api/roles")]
     [ApiController]
     public class RolesController : ControllerBase
