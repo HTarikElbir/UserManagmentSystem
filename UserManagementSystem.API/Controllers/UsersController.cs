@@ -1,24 +1,25 @@
+using System.Security.Claims;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using UserManagementSystem.Business.Dtos.User;
 using UserManagementSystem.Business.Interfaces;
+using UserManagementSystem.Data.Entities;
+
 namespace UserManagementSystem.API.Controllers
 {
-    [Authorize(Roles = "Admin")]
+    [Authorize]
     [Route("api/users")] 
     [ApiController] 
     public class UsersController : ControllerBase
     {
-        private readonly IUserService _userService; // Service layer to handle business logic
-
-        // Constructor to inject the IUserService dependency
+        private readonly IUserService _userService; 
+        
         public UsersController(IUserService userService)
         {
             _userService = userService;
         }
 
-        
-        // Endpoint to get all users
+        [Authorize(Roles = "Admin")]
         [HttpGet] 
         public async Task<IActionResult> GetAllUsersAsync(int page = 1, int pageSize = 10)
         {
@@ -26,11 +27,13 @@ namespace UserManagementSystem.API.Controllers
         }
         
         [Authorize(Roles = "Admin,User")]
-        // Endpoint to get a user by their ID
         [HttpGet("by-id/{userId}")] 
         public async Task<IActionResult> GetUserByIdAsync(int userId) 
         {
-            //TODO: Ensure that the user can only access the data in their own ID.
+            if (!IsAuthorized(userId))
+            {
+                return Forbid();
+            }
             
             if (userId <= 0)
             {
@@ -44,12 +47,16 @@ namespace UserManagementSystem.API.Controllers
         
         [Authorize(Roles = "Admin,User")]
         [HttpPut("{userId:int}")]
-        // Updates a user by their ID with the provided updated data
         public async Task<IActionResult> UpdateUserAsync(int userId, [FromBody] UserUpdateDto userUpdateDto)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
+            }
+            
+            if (!IsAuthorized(userId))
+            {
+                return Forbid();
             }
             
             bool updateSuccess = await _userService.UpdateUserAsync(userId, userUpdateDto);
@@ -61,7 +68,7 @@ namespace UserManagementSystem.API.Controllers
             return NotFound();
         }
         
-        // Endpoint to delete a user by ID
+        [Authorize(Roles = "Admin")]
         [HttpDelete("{userId:int}")] 
         public async Task<IActionResult> DeleteUserAsync(int userId)
         {
@@ -79,8 +86,8 @@ namespace UserManagementSystem.API.Controllers
             
             return NotFound(); 
         }
-
-        // Endpoint to retrieve users based on the specified department name.
+        
+        [Authorize(Roles = "Admin")]
         [HttpGet("by-department/{departmentId:int}")]
         public async Task<IActionResult> GetUsersByDepartmentAsync(int departmentId, int page = 1, int pageSize = 10)
         {
@@ -99,7 +106,7 @@ namespace UserManagementSystem.API.Controllers
             return Ok(users);
         }
 
-        // Endpoint to get users by their role
+        [Authorize(Roles = "Admin")]
         [HttpGet("by-role/{roleName}")]
         public async Task<IActionResult> GetUsersByRoleAsync(string? roleName, int page = 1, int pageSize = 10)
         {
@@ -113,7 +120,7 @@ namespace UserManagementSystem.API.Controllers
             return Ok(users);
         }
         
-        // Endpoint to add a new user
+        [Authorize(Roles = "Admin")]
         [HttpPost]
         public async Task<IActionResult> AddUserAsync(UserAddDto userAddDto)
         {
@@ -129,6 +136,7 @@ namespace UserManagementSystem.API.Controllers
             }
         }
 
+        [Authorize(Roles = "Admin")]
         [HttpPost("assign-role")]
         public async Task<IActionResult> AssignRoleToUserAsync(AssignRoleDto assignRoleDto)
         {
@@ -147,6 +155,7 @@ namespace UserManagementSystem.API.Controllers
             return BadRequest("Role could not be assigned to user.");
         }
 
+        [Authorize(Roles = "Admin")]
         [HttpDelete("remove-role")]
         public async Task<IActionResult> RemoveRoleFromUserAsync(RemoveRoleDto removeRoleDto)
         {
@@ -160,6 +169,16 @@ namespace UserManagementSystem.API.Controllers
             
             return BadRequest("Role could not be removed from user.");
         }
+        
+        private bool IsAuthorized(int userId)
+        {
+            var nameIdentifier = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            if (!int.TryParse(nameIdentifier, out var currentUserId))
+            {
+                return false;
+            }
+            var userRoles = User.FindAll(ClaimTypes.Role).Select(r => r.Value);
+            return userRoles.Contains("Admin") || currentUserId == userId;
+        }
     }
-    
 }
