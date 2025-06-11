@@ -1,3 +1,4 @@
+using QuestPDF.Infrastructure;
 using UserManagementSystem.API.Extensions;
 using UserManagementSystem.Business;
 using UserManagementSystem.Business.Settings;
@@ -14,6 +15,8 @@ builder.Services.AddControllers();
 builder.Services.AddJwtAuthentication(builder.Configuration);
 builder.Services.AddCorsConfiguration();
 builder.Services.AddRedisCache(builder.Configuration);
+
+QuestPDF.Settings.License = LicenseType.Community;
 
 // Connection String
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection")

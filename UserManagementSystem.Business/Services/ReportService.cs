@@ -73,6 +73,16 @@ public class ReportService: IReportService
     {
         container.Table(table =>
         {
+            // Önce kolonları tanımlayalım
+            table.ColumnsDefinition(columns =>
+            {
+                columns.RelativeColumn(1);  // ID
+                columns.RelativeColumn(2);  // Username
+                columns.RelativeColumn(3);  // Email
+                columns.RelativeColumn(2);  // Department
+                columns.RelativeColumn(2);  // Roles
+            });
+
             // Tablo başlıkları
             table.Header(header =>
             {

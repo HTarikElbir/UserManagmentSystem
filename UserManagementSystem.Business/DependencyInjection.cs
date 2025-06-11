@@ -34,6 +34,7 @@ public static class DependencyInjection
         services.AddScoped<ITokenService, TokenService>();
         services.AddScoped<ITokenCacheService, TokenCacheService>();
         services.AddScoped<IDepartmentService, DepartmentService>();
+        services.AddScoped<IReportService, ReportService>();
 
         // Add Validation Services
         services.AddScoped<IUserValidationService, UserValidationService>();
