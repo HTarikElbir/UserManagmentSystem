@@ -19,6 +19,9 @@ public interface IUserService
     // Get all users
     Task<List<UserDto>> GetAllUsersAsync(int page, int pageSize);
     
+    Task<List<UserDto>> GetAllUsersForReportAsync();
+    Task<List<UserDto>> GetUsersByDepartmentForReportAsync(int departmentId);
+    Task<List<UserDto>> GetUsersByRoleForReportAsync(int roleId);
     // Get users by Department 
     Task<List<DepartmentUserDto>> GetUsersByDepartmentAsync(int departmentId, int page, int pageSize);
     

@@ -15,6 +15,7 @@ public class UserService : IUserService
     private readonly IMapper _mapper;
     private readonly IUserValidationService _userValidator;
     private readonly IRoleValidationService _roleValidator;
+    private readonly IDepartmentValidationService _departmentValidator;
     private readonly IPasswordHasher _passwordHasher;
     
     // Initializes the dependencies of the UserService class.
@@ -24,6 +25,7 @@ public class UserService : IUserService
         IMapper mapper, 
         IUserValidationService userValidator,
         IRoleValidationService roleValidator,
+        IDepartmentValidationService departmentValidator,
         IPasswordHasher passwordHasher)
     {
         _userRepository = userRepository; 
@@ -31,6 +33,7 @@ public class UserService : IUserService
         _mapper = mapper;
         _userValidator = userValidator;
         _roleValidator = roleValidator;
+        _departmentValidator = departmentValidator;
         _passwordHasher = passwordHasher;
     }
    
@@ -43,7 +46,38 @@ public class UserService : IUserService
         
         return userDtos;
     }
-    
+
+    public async Task<List<UserDto>> GetAllUsersForReportAsync()
+    {
+        var users = await _userRepository.GetAllUsersWithoutPaginationAsync();
+        
+        var userDtos = _mapper.Map<List<UserDto>>(users);
+        
+        return userDtos;
+    }
+
+    public async Task<List<UserDto>> GetUsersByDepartmentForReportAsync(int departmentId)
+    {
+        await _departmentValidator.ValidateByIdAsync(departmentId);
+        
+        var users = await _userRepository.GetUsersByDepartmentWithoutPaginationAsync(departmentId);
+        
+        var userDtos = _mapper.Map<List<UserDto>>(users);
+        
+        return userDtos;
+    }
+
+    public async Task<List<UserDto>> GetUsersByRoleForReportAsync(int roleId)
+    {
+        await _roleValidator.ValidateRoleExistAsync(roleId);
+        
+        var users = await _userRepository.GetUsersByRoleWithoutPaginationAsync(roleId);
+        
+        var userDtos = _mapper.Map<List<UserDto>>(users);
+        
+        return userDtos;
+    }
+
     // Retrieves a user by their ID and maps it to a UserDto object.
     public async Task<UserDto> GetUserByIdAsync(int userId)
     {
