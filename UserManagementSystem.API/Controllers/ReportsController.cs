@@ -18,19 +18,27 @@ namespace UserManagementSystem.API.Controllers
         [HttpGet("all-users")]
         public async Task<IActionResult> GetAllUsersReportAsync()
         {
-            try
+            var reportBytes = await _reportService.GenerateAllUsersReportAsync();
+            return File(
+                reportBytes,
+                "application/pdf",
+                $"all-users-report-{DateTime.Now:yyyyMMdd}.pdf");
+        }
+
+        [HttpGet("by-department/{departmentId:int}")]
+        public async Task<IActionResult> GetUsersByDepartmentReportAsync(int departmentId)
+        {
+            if (departmentId <= 0)
             {
-                var reportBytes = await _reportService.GenerateAllUsersReportAsync();
-                return File(
-                    reportBytes,
-                    "application/pdf",
-                    $"all-users-report-{DateTime.Now:yyyyMMdd}.pdf"
-                );
+                return BadRequest("Invalid department ID.");
             }
-            catch (Exception ex)
-            {
-                return BadRequest(ex.Message);
-            }
+
+            var reportBytes = await _reportService.GenerateDepartmentUsersReportAsync(departmentId);
+            return File(
+                reportBytes,
+                "application/pdf",
+                $"department-users-report-{departmentId}-{DateTime.Now:yyyyMMdd}.pdf"
+            );
         }
     }
 }
