@@ -59,13 +59,21 @@ public class ReportService: IReportService
     
     private void ComposeHeader(IContainer container, string title)
     {
-        container.Row(row =>
+        container.Column(column =>
         {
-            row.RelativeItem().Column(column =>
-            {
-                column.Item().Text(title).FontSize(20).SemiBold();
-                column.Item().Text($"Generated on: {DateTime.Now:g}").FontSize(10);
-            });
+            column.Item().Text(title)
+                .FontSize(20)
+                .SemiBold()
+                .AlignCenter();
+
+            column.Item().Text($"Generated on: {DateTime.Now:g}")
+                .FontSize(10)
+                .AlignCenter();
+            
+            column.Item()
+                .PaddingVertical(10)
+                .LineHorizontal(1)
+                .LineColor(Colors.Grey.Darken2);
         });
     }
 
@@ -73,7 +81,6 @@ public class ReportService: IReportService
     {
         container.Table(table =>
         {
-            // Önce kolonları tanımlayalım
             table.ColumnsDefinition(columns =>
             {
                 columns.RelativeColumn(1);  // ID
@@ -82,25 +89,23 @@ public class ReportService: IReportService
                 columns.RelativeColumn(2);  // Department
                 columns.RelativeColumn(2);  // Roles
             });
-
-            // Tablo başlıkları
+            
             table.Header(header =>
             {
-                header.Cell().Text("ID").FontSize(10).SemiBold();
-                header.Cell().Text("Username").FontSize(10).SemiBold();
-                header.Cell().Text("Email").FontSize(10).SemiBold();
-                header.Cell().Text("Department").FontSize(10).SemiBold();
-                header.Cell().Text("Roles").FontSize(10).SemiBold();
+                header.Cell().Element(CellStyle).Text("ID").SemiBold();
+                header.Cell().Element(CellStyle).Text("Username").SemiBold();;
+                header.Cell().Element(CellStyle).Text("Email").SemiBold();
+                header.Cell().Element(CellStyle).Text("Department").SemiBold();;
+                header.Cell().Element(CellStyle).Text("Roles").SemiBold();;
             });
-
-            // Tablo içeriği
+            
             foreach (var user in users)
             {
-                table.Cell().Text(user.UserId.ToString());
-                table.Cell().Text(user.Username);
-                table.Cell().Text(user.Email);
-                table.Cell().Text(user.Department);
-                table.Cell().Text(string.Join(", ", user.Roles.Select(r => r.RoleName)));
+                table.Cell().Element(CellStyle).Text(user.UserId.ToString());
+                table.Cell().Element(CellStyle).Text(user.Username);
+                table.Cell().Element(CellStyle).Text(user.Email);
+                table.Cell().Element(CellStyle).Text(user.Department);
+                table.Cell().Element(CellStyle).Text(string.Join(", ", user.Roles.Select(r => r.RoleName)));
             }
         });
     }
@@ -109,7 +114,7 @@ public class ReportService: IReportService
     {
         container.Row(row =>
         {
-            row.RelativeItem().Text(text =>
+            row.RelativeItem().AlignCenter().Text(text =>
             {
                 text.Span("Page ");
                 text.CurrentPageNumber();
@@ -117,5 +122,15 @@ public class ReportService: IReportService
                 text.TotalPages();
             });
         });
+    }
+    
+    private IContainer CellStyle(IContainer container)
+    {
+        return container
+            .Border(1)
+            .BorderColor(Colors.Grey.Lighten1)
+            .PaddingVertical(5)
+            .PaddingHorizontal(3)
+            .AlignMiddle();
     }
 }
