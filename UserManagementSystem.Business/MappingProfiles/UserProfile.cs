@@ -11,6 +11,7 @@ public class UserProfile : Profile
     {
         // User -> UserDto
         CreateMap<User, UserDto>()
+            .ForMember(dest => dest.Department, opt => opt.MapFrom(src => src.Department.DepartmentName))
             .ForMember(dest => dest.Roles, opt => 
                 opt.MapFrom(src => src.UserRoles.Select(r => r.Role).ToList()));
         
