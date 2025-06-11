@@ -23,8 +23,40 @@ public class UserRepository : IUserRepository
         .AsNoTracking()
         .Paginate(page,pageSize)
         .ToListAsync();
-    
-    
+
+    public async Task<List<User>> GetAllUsersWithoutPaginationAsync()
+    {
+        return await _context.Users
+            .Include(u => u.UserRoles)
+                .ThenInclude(ur => ur.Role)
+            .Include(u => u.Department)
+            .AsNoTracking()
+            .ToListAsync();
+    }
+
+    public async Task<List<User>> GetUsersByDepartmentWithoutPaginationAsync(int departmentId)
+    {
+        return await _context.Users
+            .Where(u => u.DepartmentId == departmentId)
+            .Include(u => u.UserRoles)
+                .ThenInclude(ur => ur.Role)
+            .Include(u => u.Department)
+            .AsNoTracking()
+            .ToListAsync();
+    }
+
+    public async Task<List<User>> GetUsersByRoleWithoutPaginationAsync(int roleId)
+    {
+        return await _context.Users
+            .Where(u => u.UserRoles.Any(ur => ur.RoleId == roleId))
+            .Include(u => u.UserRoles)
+                .ThenInclude(ur => ur.Role)
+            .Include(u => u.Department)
+            .AsNoTracking()
+            .ToListAsync();
+    }
+
+
     // Returns a user by their unique ID.
     public async Task<User?> GetByIdUserAsync(int userId) => await _context.Users
         .Include(u=>u.UserRoles)
