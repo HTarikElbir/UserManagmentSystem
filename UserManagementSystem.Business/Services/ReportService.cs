@@ -10,11 +10,13 @@ namespace UserManagementSystem.Business.Services;
 public class ReportService: IReportService
 {
     private readonly IUserService _userService;
+    private readonly IDepartmentService _departmentService;
     private readonly IMapper _mapper;
 
-    public ReportService(IUserService userService, IMapper mapper)
+    public ReportService(IUserService userService, IMapper mapper, IDepartmentService departmentService)
     {
         _userService = userService;
+        _departmentService = departmentService;
         _mapper = mapper;
     }
     
@@ -42,9 +44,29 @@ public class ReportService: IReportService
         return document.GeneratePdf();
     }
 
-    public Task<byte[]> GenerateDepartmentUsersReportAsync(int departmentId)
+    public async Task<byte[]> GenerateDepartmentUsersReportAsync(int departmentId)
     {
-        throw new NotImplementedException();
+        var users = await _userService.GetUsersByDepartmentForReportAsync(departmentId);
+        
+        var department = await _departmentService.GetByIdAsync(departmentId);
+            
+        var document = Document.Create(container =>
+        {
+            container.Page(page =>
+            {
+                page.Header().Element(container => ComposeHeader(container, $"{department.DepartmentName} Department Users Report"));
+                
+                page.Content().Element(container => ComposeContent(container, users));
+                
+                page.Footer().Element(ComposeFooter);
+                
+                page.Size(PageSizes.A4);
+                page.Margin(2, Unit.Centimetre);
+                page.DefaultTextStyle(x => x.FontSize(10));
+            });
+        });
+
+        return document.GeneratePdf();
     }
 
     public Task<byte[]> GenerateRoleBasedUsersReportAsync(int roleId)
