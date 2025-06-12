@@ -74,13 +74,13 @@ public class ReportService: IReportService
     {
         var users = await _userService.GetUsersByRoleForReportAsync(roleId);
         
-        var role = _roleService.GetRoleByIdAsync(roleId);
+        var role = await _roleService.GetRoleByIdAsync(roleId);
         
         var document = Document.Create(container =>
         {
             container.Page(page =>
             {
-                page.Header().Element(container => ComposeHeader(container, $"{role} Department Users Report"));
+                page.Header().Element(container => ComposeHeader(container, $"{role!.RoleName} Role Users Report"));
                 
                 page.Content().Element(container => ComposeContent(container, users));
                 

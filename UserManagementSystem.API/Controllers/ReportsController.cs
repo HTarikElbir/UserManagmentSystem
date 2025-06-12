@@ -40,5 +40,22 @@ namespace UserManagementSystem.API.Controllers
                 $"department-users-report-{departmentId}-{DateTime.Now:yyyyMMdd}.pdf"
             );
         }
+
+        [HttpGet("by-role/{roleId:int}")]
+        public async Task<IActionResult> GetUsersByRoleReportAsync(int roleId)
+        {
+            if (roleId <= 0)
+            {
+                return BadRequest("Invalid role ID.");
+            }
+            
+            var reportBytes = await _reportService.GenerateRoleBasedUsersReportAsync(roleId);
+            
+            return File(
+                reportBytes,
+                "application/pdf",
+                $"role-users-report-{roleId}-{DateTime.Now:yyyyMMdd}.pdf"
+            );
+        }
     }
 }
