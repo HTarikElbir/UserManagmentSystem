@@ -11,13 +11,14 @@ public class ReportService: IReportService
 {
     private readonly IUserService _userService;
     private readonly IDepartmentService _departmentService;
-    private readonly IMapper _mapper;
+    private readonly IRoleService _roleService;
+  
 
-    public ReportService(IUserService userService, IMapper mapper, IDepartmentService departmentService)
+    public ReportService(IUserService userService, IMapper mapper, IDepartmentService departmentService, IRoleService roleService)
     {
         _userService = userService;
         _departmentService = departmentService;
-        _mapper = mapper;
+        _roleService = roleService;
     }
     
     public async Task<byte[]> GenerateAllUsersReportAsync()
@@ -69,9 +70,29 @@ public class ReportService: IReportService
         return document.GeneratePdf();
     }
 
-    public Task<byte[]> GenerateRoleBasedUsersReportAsync(int roleId)
+    public async Task<byte[]> GenerateRoleBasedUsersReportAsync(int roleId)
     {
-        throw new NotImplementedException();
+        var users = await _userService.GetUsersByRoleForReportAsync(roleId);
+        
+        var role = _roleService.GetRoleByIdAsync(roleId);
+        
+        var document = Document.Create(container =>
+        {
+            container.Page(page =>
+            {
+                page.Header().Element(container => ComposeHeader(container, $"{role} Department Users Report"));
+                
+                page.Content().Element(container => ComposeContent(container, users));
+                
+                page.Footer().Element(ComposeFooter);
+                
+                page.Size(PageSizes.A4);
+                page.Margin(2, Unit.Centimetre);
+                page.DefaultTextStyle(x => x.FontSize(10));
+            });
+        });
+        
+        return document.GeneratePdf();
     }
 
     public Task<byte[]> GenerateUsersByStatusReportAsync(bool isActive)
