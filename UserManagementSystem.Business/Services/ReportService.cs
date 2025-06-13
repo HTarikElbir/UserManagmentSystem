@@ -95,6 +95,7 @@ public class ReportService: IReportService
         return document.GeneratePdf();
     }
 
+    // TODO: Add method
     public Task<byte[]> GenerateUsersByStatusReportAsync(bool isActive)
     {
         throw new NotImplementedException();

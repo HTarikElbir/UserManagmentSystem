@@ -1,9 +1,11 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using UserManagementSystem.Business.Interfaces;
 
 namespace UserManagementSystem.API.Controllers
 {
+    [Authorize(Roles = "Admin")]
     [Route("api/reports")]
     [ApiController]
     public class ReportsController : ControllerBase
