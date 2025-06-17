@@ -1,5 +1,7 @@
 using QuestPDF.Infrastructure;
+using Serilog;
 using UserManagementSystem.API.Extensions;
+using UserManagementSystem.API.Middlewares;
 using UserManagementSystem.Business;
 using UserManagementSystem.Business.Settings;
 using UserManagementSystem.Data;
@@ -16,6 +18,17 @@ builder.Services.AddJwtAuthentication(builder.Configuration);
 builder.Services.AddCorsConfiguration();
 builder.Services.AddRedisCache(builder.Configuration);
 
+builder.Host.UseSerilog((context, services, configuration) => configuration
+    .ReadFrom.Configuration(context.Configuration)
+    .ReadFrom.Services(services)
+    .Enrich.FromLogContext()
+    .WriteTo.Console()
+    .WriteTo.File("logs/log-.txt", rollingInterval: RollingInterval.Day)
+    .WriteTo.SQLite(
+        sqliteDbPath: "UserManagement.db",
+        tableName: "Logs",
+        restrictedToMinimumLevel: Serilog.Events.LogEventLevel.Information));
+
 QuestPDF.Settings.License = LicenseType.Community;
 
 // Connection String
@@ -29,7 +42,7 @@ builder.Services.AddBusinessServices();
 var app = builder.Build();
 
 app.UseGlobalExceptionMiddleware();
-
+app.UseMiddleware<LoggingMiddleware>();
 app.UseHttpsRedirection();
 app.UseCors("AllowAll");
 
