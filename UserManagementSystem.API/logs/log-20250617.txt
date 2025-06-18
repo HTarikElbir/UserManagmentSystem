@@ -1,0 +1,14 @@
+2025-06-17 17:35:42.980 +03:00 [INF] Request: GET /swagger started at "2025-06-17T14:35:42.9716290Z"
+2025-06-17 17:35:43.090 +03:00 [INF] Response: GET /swagger completed with status code 301 in 118ms
+2025-06-17 17:35:43.107 +03:00 [INF] Request: GET /swagger/index.html started at "2025-06-17T14:35:43.1076860Z"
+2025-06-17 17:35:43.345 +03:00 [INF] Response: GET /swagger/index.html completed with status code 200 in 236ms
+2025-06-17 17:35:43.481 +03:00 [INF] Request: GET /swagger/swagger-ui.css started at "2025-06-17T14:35:43.4811286Z"
+2025-06-17 17:35:43.481 +03:00 [INF] Request: GET /swagger/swagger-ui-bundle.js started at "2025-06-17T14:35:43.4811286Z"
+2025-06-17 17:35:43.481 +03:00 [INF] Request: GET /swagger/swagger-ui-standalone-preset.js started at "2025-06-17T14:35:43.4812266Z"
+2025-06-17 17:35:43.500 +03:00 [INF] Response: GET /swagger/swagger-ui.css completed with status code 200 in 19ms
+2025-06-17 17:35:43.503 +03:00 [INF] Response: GET /swagger/swagger-ui-standalone-preset.js completed with status code 200 in 22ms
+2025-06-17 17:35:43.521 +03:00 [INF] Response: GET /swagger/swagger-ui-bundle.js completed with status code 200 in 40ms
+2025-06-17 17:35:43.887 +03:00 [INF] Request: GET /swagger/v1/swagger.json started at "2025-06-17T14:35:43.8869406Z"
+2025-06-17 17:35:43.922 +03:00 [INF] Request: GET /swagger/favicon-32x32.png started at "2025-06-17T14:35:43.9227615Z"
+2025-06-17 17:35:43.923 +03:00 [INF] Response: GET /swagger/favicon-32x32.png completed with status code 200 in 1ms
+2025-06-17 17:35:44.144 +03:00 [INF] Response: GET /swagger/v1/swagger.json completed with status code 200 in 257ms
