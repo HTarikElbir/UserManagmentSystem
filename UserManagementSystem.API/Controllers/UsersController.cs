@@ -3,7 +3,6 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using UserManagementSystem.Business.Dtos.User;
 using UserManagementSystem.Business.Interfaces;
-using UserManagementSystem.Data.Entities;
 
 namespace UserManagementSystem.API.Controllers
 {

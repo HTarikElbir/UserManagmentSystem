@@ -1,5 +1,5 @@
 using FluentValidation;
-using UserManagementSystem.Business.Dtos;
+using UserManagementSystem.Business.Dtos.Role;
 using UserManagementSystem.Data.Interfaces;
 
 namespace UserManagementSystem.Business.Validators;

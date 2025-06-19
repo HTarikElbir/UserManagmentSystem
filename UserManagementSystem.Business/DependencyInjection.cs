@@ -1,6 +1,5 @@
 using FluentValidation;
 using Microsoft.Extensions.DependencyInjection;
-using UserManagementSystem.Business.Dtos;
 using UserManagementSystem.Business.Dtos.Auth;
 using UserManagementSystem.Business.Dtos.Department;
 using UserManagementSystem.Business.Dtos.Role;

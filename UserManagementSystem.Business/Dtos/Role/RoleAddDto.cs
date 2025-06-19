@@ -1,4 +1,4 @@
-namespace UserManagementSystem.Business.Dtos;
+namespace UserManagementSystem.Business.Dtos.Role;
 
 public class RoleAddDto
 {
