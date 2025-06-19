@@ -26,7 +26,6 @@ namespace UserManagementSystem.API.Controllers
             
             if(!ModelState.IsValid)
             {
-                _logger.LogWarning("Invalid model state for login request: {Username}", loginDto.UserName);
                 return BadRequest(ModelState);
             }
             
@@ -51,7 +50,6 @@ namespace UserManagementSystem.API.Controllers
             
             if(!ModelState.IsValid)
             {
-                _logger.LogWarning("Invalid model state for forgot password request: {Email}", request.Email);
                 return BadRequest(ModelState);
             }
             
@@ -82,7 +80,6 @@ namespace UserManagementSystem.API.Controllers
             
             if(!ModelState.IsValid)
             {
-                _logger.LogWarning("Invalid model state for reset password request: {Email}", resetPasswordDto.Email);
                 return BadRequest(ModelState);
             }
             
@@ -115,7 +112,6 @@ namespace UserManagementSystem.API.Controllers
             
             if(!ModelState.IsValid)
             {
-                _logger.LogWarning("Invalid model state for logout request: {Email}", logoutDto.Email);
                 return BadRequest(ModelState);
             }
 
