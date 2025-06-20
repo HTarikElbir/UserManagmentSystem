@@ -20,18 +20,12 @@ public class UserRoleRepository : IUserRoleRepository
     {
         try
         {
-            _logger.LogInformation("Assigning role to user - UserId: {UserId}, RoleId: {RoleId}", 
-                userRole.UserId, userRole.RoleId);
-            
             await _context.UserRoles.AddAsync(userRole);
             await _context.SaveChangesAsync();
-            
-            _logger.LogInformation("Role assigned successfully to user - UserId: {UserId}, RoleId: {RoleId}", 
-                userRole.UserId, userRole.RoleId);
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "Failed to assign role to user - UserId: {UserId}, RoleId: {RoleId}", 
+            _logger.LogError(ex, "Database error during role assignment - UserId: {UserId}, RoleId: {RoleId}", 
                 userRole.UserId, userRole.RoleId);
             throw;
         }
@@ -41,18 +35,12 @@ public class UserRoleRepository : IUserRoleRepository
     {
         try
         {
-            _logger.LogInformation("Removing role from user - UserId: {UserId}, RoleId: {RoleId}", 
-                userRole.UserId, userRole.RoleId);
-            
             _context.UserRoles.Remove(userRole);
             await _context.SaveChangesAsync();
-            
-            _logger.LogInformation("Role removed successfully from user - UserId: {UserId}, RoleId: {RoleId}", 
-                userRole.UserId, userRole.RoleId);
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "Failed to remove role from user - UserId: {UserId}, RoleId: {RoleId}", 
+            _logger.LogError(ex, "Database error during role removal - UserId: {UserId}, RoleId: {RoleId}", 
                 userRole.UserId, userRole.RoleId);
             throw;
         }

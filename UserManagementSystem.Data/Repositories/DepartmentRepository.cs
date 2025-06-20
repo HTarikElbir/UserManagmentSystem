@@ -32,17 +32,12 @@ public class DepartmentRepository : IDepartmentRepository
     {
         try
         {
-            _logger.LogInformation("Adding new department: {DepartmentName}", department.DepartmentName);
-            
             await _context.Departments.AddAsync(department);
             await _context.SaveChangesAsync();
-            
-            _logger.LogInformation("Department added successfully: {DepartmentName}, DepartmentId: {DepartmentId}", 
-                department.DepartmentName, department.DepartmentId);
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "Failed to add department: {DepartmentName}", department.DepartmentName);
+            _logger.LogError(ex, "Database error during department creation: {DepartmentName}", department.DepartmentName);
             throw;
         }
     }
@@ -51,17 +46,12 @@ public class DepartmentRepository : IDepartmentRepository
     {
         try
         {
-            _logger.LogInformation("Updating department: {DepartmentId}, DepartmentName: {DepartmentName}", 
-                department.DepartmentId, department.DepartmentName);
-            
             _context.Departments.Update(department);
             await _context.SaveChangesAsync();
-            
-            _logger.LogInformation("Department updated successfully: {DepartmentId}", department.DepartmentId);
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "Failed to update department: {DepartmentId}", department.DepartmentId);
+            _logger.LogError(ex, "Database error during department update: {DepartmentId}", department.DepartmentId);
             throw;
         }
     }
@@ -70,17 +60,13 @@ public class DepartmentRepository : IDepartmentRepository
     {
         try
         {
-            _logger.LogInformation("Removing department: {DepartmentId}", id);
-            
             var department = await _context.Departments.FindAsync(id);
             _context.Departments.Remove(department!);
             await _context.SaveChangesAsync();
-            
-            _logger.LogInformation("Department removed successfully: {DepartmentId}", id);
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "Failed to remove department: {DepartmentId}", id);
+            _logger.LogError(ex, "Database error during department removal: {DepartmentId}", id);
             throw;
         }
     }

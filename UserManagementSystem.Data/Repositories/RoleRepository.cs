@@ -37,16 +37,12 @@ public class RoleRepository : IRoleRepository
     {
         try
         {
-            _logger.LogInformation("Adding new role: {RoleName}", role.RoleName);
-            
             await _context.Roles.AddAsync(role); 
             await _context.SaveChangesAsync();
-            
-            _logger.LogInformation("Role added successfully: {RoleName}, RoleId: {RoleId}", role.RoleName, role.RoleId);
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "Failed to add role: {RoleName}", role.RoleName);
+            _logger.LogError(ex, "Database error during role creation: {RoleName}", role.RoleName);
             throw;
         }
     }
@@ -56,16 +52,12 @@ public class RoleRepository : IRoleRepository
     {
         try
         {
-            _logger.LogInformation("Updating role: {RoleId}, RoleName: {RoleName}", role.RoleId, role.RoleName);
-            
             _context.Roles.Update(role);
             await _context.SaveChangesAsync();
-            
-            _logger.LogInformation("Role updated successfully: {RoleId}", role.RoleId);
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "Failed to update role: {RoleId}", role.RoleId);
+            _logger.LogError(ex, "Database error during role update: {RoleId}", role.RoleId);
             throw;
         }
     }
@@ -75,17 +67,13 @@ public class RoleRepository : IRoleRepository
     {
         try
         {
-            _logger.LogInformation("Deleting role: {RoleId}", roleId);
-        
             var role = await _context.Roles.FindAsync(roleId);
             _context.Roles.Remove(role!);
             await _context.SaveChangesAsync();
-        
-            _logger.LogInformation("Role deleted successfully: {RoleId}", roleId);
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "Failed to delete role: {RoleId}", roleId);
+            _logger.LogError(ex, "Database error during role deletion: {RoleId}", roleId);
             throw;
         }
     }

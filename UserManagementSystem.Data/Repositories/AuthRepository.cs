@@ -21,18 +21,14 @@ public class AuthRepository: IAuthRepository
     {
         try
         {
-            _logger.LogInformation("Resetting password for user: {UserId}", userId);
-            
             var user = await _context.Users.FindAsync(userId);
             user!.Password = password;
             await _context.SaveChangesAsync();
-            
-            _logger.LogInformation("Password reset successfully for user: {UserId}", userId);
             return true;
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "Failed to reset password for user: {UserId}", userId);
+            _logger.LogError(ex, "Database error during password reset for user: {UserId}", userId);
             throw;
         }
     }

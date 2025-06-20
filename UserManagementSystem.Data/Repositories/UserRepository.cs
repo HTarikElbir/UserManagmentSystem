@@ -79,16 +79,12 @@ public class UserRepository : IUserRepository
     { 
         try
         {
-            _logger.LogInformation("Adding new user: {Username}, Email: {Email}", user.UserName, user.Email);
-            
             await _context.Users.AddAsync(user);
             await _context.SaveChangesAsync();
-            
-            _logger.LogInformation("User added successfully: {Username}, UserId: {UserId}", user.UserName, user.UserId);
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "Failed to add user: {Username}, Email: {Email}", user.UserName, user.Email);
+            _logger.LogError(ex, "Database error during user creation: {Username}", user.UserName);
             throw;
         }
     }
@@ -98,16 +94,12 @@ public class UserRepository : IUserRepository
     {   
         try
         {
-            _logger.LogInformation("Updating user: {UserId}, Username: {Username}", user.UserId, user.UserName);
-            
             _context.Users.Update(user); 
             await _context.SaveChangesAsync();
-            
-            _logger.LogInformation("User updated successfully: {UserId}", user.UserId);
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "Failed to update user: {UserId}", user.UserId);
+            _logger.LogError(ex, "Database error during user update: {UserId}", user.UserId);
             throw;
         }
     }
@@ -117,17 +109,13 @@ public class UserRepository : IUserRepository
     {
         try
         {
-            _logger.LogInformation("Deleting user: {UserId}", userId);
-        
             var user = await _context.Users.FindAsync(userId);
             _context.Users.Remove(user!);
             await _context.SaveChangesAsync();
-        
-            _logger.LogInformation("User deleted successfully: {UserId}", userId);
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "Failed to delete user: {UserId}", userId);
+            _logger.LogError(ex, "Database error during user deletion: {UserId}", userId);
             throw;
         }
     }
