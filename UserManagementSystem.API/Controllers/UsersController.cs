@@ -63,24 +63,14 @@ namespace UserManagementSystem.API.Controllers
                 return Forbid();
             }
             
-            try
+            var updateSuccess = await _userService.UpdateUserAsync(userId, userUpdateDto);
+            
+            if (updateSuccess)
             {
-                bool updateSuccess = await _userService.UpdateUserAsync(userId, userUpdateDto);
-                
-                if (updateSuccess)
-                {
-                    _logger.LogInformation("UpdateUser successful: UserId={UserId}", userId);
-                    return NoContent();
-                }
-                
-                _logger.LogWarning("UpdateUser failed - User not found: UserId={UserId}", userId);
-                return NotFound();
+                return NoContent();
             }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, "UpdateUser failed: UserId={UserId}", userId);
-                return StatusCode(500, "Internal server error");
-            }
+            
+            return NotFound();
         }
         
         [Authorize(Roles = "Admin")]
@@ -93,24 +83,14 @@ namespace UserManagementSystem.API.Controllers
                 return BadRequest("Invalid user ID.");
             }
             
-            try
+            var deleteSuccess = await _userService.DeleteUserAsync(userId);
+
+            if (deleteSuccess)
             {
-                var deleteSuccess = await _userService.DeleteUserAsync(userId);
-        
-                if (deleteSuccess)
-                {
-                    _logger.LogInformation("User deleted successfully: UserId={UserId}", userId);
-                    return NoContent(); 
-                }
-        
-                _logger.LogWarning("User deletion failed - User not found: UserId={UserId}", userId);
-                return NotFound(); 
+                return NoContent(); 
             }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, "DeleteUser failed: UserId={UserId}", userId);
-                return StatusCode(500, "Internal server error");
-            }
+
+            return NotFound(); 
         }
         
         [Authorize(Roles = "Admin")]
@@ -137,7 +117,6 @@ namespace UserManagementSystem.API.Controllers
         [HttpGet("by-role/{roleName}")]
         public async Task<IActionResult> GetUsersByRoleAsync(string? roleName, int page = 1, int pageSize = 10)
         {
-            
             if (roleName == null)
             {
                 _logger.LogWarning("Invalid role name: {RoleName}", roleName); 
@@ -154,29 +133,19 @@ namespace UserManagementSystem.API.Controllers
         {
             if (!ModelState.IsValid)
             {
+                _logger.LogWarning("Invalid model state for add user: {Email}", userAddDto.Email);
                 return BadRequest(ModelState);
             }
     
-            try
-            {
-                var result = await _userService.AddUserAsync(userAddDto);
+            var result = await _userService.AddUserAsync(userAddDto);
         
-                if (result)
-                {
-                    _logger.LogInformation("User created successfully: Email={Email}", userAddDto.Email); 
-                    return Created();
-                }
-                else
-                {
-                    _logger.LogWarning("User creation failed: Email={Email}", userAddDto.Email);
-                    return BadRequest("User could not be added.");
-                }
-            }
-            catch (Exception ex)
+            if (result)
             {
-                _logger.LogError(ex, "AddUser failed: Email={Email}", userAddDto.Email);
-                return StatusCode(500, "Internal server error");
+                return Created();
             }
+            
+            return BadRequest("User could not be added.");
+            
         }
 
         [Authorize(Roles = "Admin")]
@@ -185,27 +154,18 @@ namespace UserManagementSystem.API.Controllers
         {
             if (!ModelState.IsValid)
             {
+                _logger.LogWarning("Invalid model state for assign role: UserId={UserId}, RoleId={RoleId}", assignRoleDto.UserId, assignRoleDto.RoleId);
                 return BadRequest(ModelState);
             }
     
-            try
+            var result = await _userService.AssignRoleToUserAsync(assignRoleDto);
+
+            if (result)
             {
-                var result = await _userService.AssignRoleToUserAsync(assignRoleDto);
-        
-                if (result)
-                {
-                    _logger.LogInformation("Role assigned successfully: UserId={UserId}, RoleId={RoleId}", assignRoleDto.UserId, assignRoleDto.RoleId);
-                    return Ok("Role successfully added to user");
-                }
-        
-                _logger.LogWarning("Role assignment failed: UserId={UserId}, RoleId={RoleId}", assignRoleDto.UserId, assignRoleDto.RoleId);
-                return BadRequest("Role could not be assigned to user.");
+                return Ok("Role successfully added to user");
             }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, "AssignRoleToUser failed: UserId={UserId}, RoleId={RoleId}", assignRoleDto.UserId, assignRoleDto.RoleId);
-                return StatusCode(500, "Internal server error");
-            }
+
+            return BadRequest("Role could not be assigned to user.");
         }
 
         [Authorize(Roles = "Admin")]
@@ -214,27 +174,18 @@ namespace UserManagementSystem.API.Controllers
         {
             if (!ModelState.IsValid)
             {
+                _logger.LogWarning("Invalid model state for remove role: UserId={UserId}, RoleId={RoleId}", removeRoleDto.UserId, removeRoleDto.RoleId);
                 return BadRequest(ModelState);
             }
     
-            try
+            var result = await _userService.RemoveRoleFromUserAsync(removeRoleDto);
+
+            if (result)
             {
-                var result = await _userService.RemoveRoleFromUserAsync(removeRoleDto);
-        
-                if (result)
-                {
-                    _logger.LogInformation("Role removed successfully: UserId={UserId}, RoleId={RoleId}", removeRoleDto.UserId, removeRoleDto.RoleId);
-                    return Ok("Role successfully removed from user");
-                }
-        
-                _logger.LogWarning("Role removal failed: UserId={UserId}, RoleId={RoleId}", removeRoleDto.UserId, removeRoleDto.RoleId);
-                return BadRequest("Role could not be removed from user.");
+                return Ok("Role successfully removed from user");
             }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, "RemoveRoleFromUser failed: UserId={UserId}, RoleId={RoleId}", removeRoleDto.UserId, removeRoleDto.RoleId);
-                return StatusCode(500, "Internal server error");
-            }
+
+            return BadRequest("Role could not be removed from user.");
         }
         
         private bool IsAuthorized(int userId)
