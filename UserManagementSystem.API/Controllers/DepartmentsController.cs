@@ -29,7 +29,10 @@ public class DepartmentsController : ControllerBase
     public async Task<IActionResult> GetDepartmentByIdAsync(int id)
     {
         if (id <= 0)
+        {
+            _logger.LogWarning("Invalid department ID: {DepartmentId}", id);
             return BadRequest("Invalid Department Id");
+        }
 
         var result = await _departmentService.GetByIdAsync(id);
         
@@ -40,7 +43,10 @@ public class DepartmentsController : ControllerBase
     public async Task<IActionResult> GetDepartmentByNameAsync(string name)
     {
         if(string.IsNullOrEmpty(name))
+        {
+            _logger.LogWarning("Invalid department name: {DepartmentName}", name);
             return BadRequest("Invalid Department Name");
+        }
         
         var result = await _departmentService.GetByNameAsync(name);
         
@@ -51,26 +57,19 @@ public class DepartmentsController : ControllerBase
     public async Task<IActionResult> AddDepartmentAsync(DepartmentAddDto departmentDto)
     {
         if(!ModelState.IsValid)
+        {
+            _logger.LogWarning("Invalid model state for add department: {DepartmentName}", departmentDto.DepartmentName);
             return BadRequest(ModelState);
+        }
         
-        try
-        {
-            var result = await _departmentService.AddAsync(departmentDto);
+        var result = await _departmentService.AddAsync(departmentDto);
 
-            if (result)
-            {
-                _logger.LogInformation("Department created successfully: DepartmentName={DepartmentName}", departmentDto.DepartmentName);
-                return Created();
-            }
-            
-            _logger.LogWarning("Department creation failed: DepartmentName={DepartmentName}", departmentDto.DepartmentName);
-            return BadRequest("Department Not Created");
-        }
-        catch (Exception ex)
+        if (result)
         {
-            _logger.LogError(ex, "AddDepartment failed: DepartmentName={DepartmentName}", departmentDto.DepartmentName);
-            return StatusCode(500, "Internal server error");
+            return Created();
         }
+        
+        return BadRequest("Department Not Created");
     }
 
     [HttpDelete]
@@ -78,54 +77,43 @@ public class DepartmentsController : ControllerBase
     {
         
         if(departmentId <= 0)
+        {
+            _logger.LogWarning("Invalid department ID for deletion: {DepartmentId}", departmentId);
             return BadRequest("Invalid Department Id");
+        }
         
-        try
+        var result = await _departmentService.RemoveAsync(departmentId);
+        
+        if (result)
         {
-            var result = await _departmentService.RemoveAsync(departmentId);
-            
-            if (result)
-            {
-                _logger.LogInformation("Department deleted successfully: DepartmentId={DepartmentId}", departmentId);
-                return Ok();
-            }
-            
-            _logger.LogWarning("Department deletion failed: DepartmentId={DepartmentId}", departmentId);
-            return BadRequest("Department Not Deleted");
+            return Ok();
         }
-        catch (Exception ex)
-        {
-            _logger.LogError(ex, "DeleteDepartment failed: DepartmentId={DepartmentId}", departmentId);
-            return StatusCode(500, "Internal server error");
-        }
+        
+        return BadRequest("Department Not Deleted");
     }
 
     [HttpPut("{id:int}")]
     public async Task<IActionResult> UpdateDepartmentAsync(int id, DepartmentUpdateDto departmentDto)
     {
         if(!ModelState.IsValid)
+        {
+            _logger.LogWarning("Invalid model state for update department: {DepartmentId}", id);
             return BadRequest(ModelState);
+        }
         
         if (id <= 0)
+        {
+            _logger.LogWarning("Invalid department ID for update: {DepartmentId}", id);
             return BadRequest("Invalid Department Id");
+        }
         
-        try
+        var result = await _departmentService.UpdateAsync(id, departmentDto);
+        
+        if (result)
         {
-            bool result = await _departmentService.UpdateAsync(id, departmentDto);
-            
-            if (result)
-            {
-                _logger.LogInformation("Department updated successfully: DepartmentId={DepartmentId}, NewDepartmentName={NewDepartmentName}", id, departmentDto.DepartmentName);
-                return NoContent();
-            }
+            return NoContent();
+        }
 
-            _logger.LogWarning("Department update failed - Department not found: DepartmentId={DepartmentId}", id);
-            return NotFound("Department Not Found");
-        }
-        catch (Exception ex)
-        {
-            _logger.LogError(ex, "UpdateDepartment failed: DepartmentId={DepartmentId}", id);
-            return StatusCode(500, "Internal server error");
-        }
+        return NotFound("Department Not Found");
     }
 }
