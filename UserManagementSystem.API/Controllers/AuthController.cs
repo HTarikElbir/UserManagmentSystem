@@ -22,117 +22,71 @@ namespace UserManagementSystem.API.Controllers
         [HttpPost("login")]
         public async Task<IActionResult> LoginAsync([FromBody] LoginDto loginDto)
         {
-            _logger.LogInformation("Login request received: {Username}", loginDto.UserName);
+            _logger.LogInformation("Login attempt by user: {Username} from IP: {IpAddress}", 
+                loginDto.UserName, HttpContext.Connection.RemoteIpAddress);
             
-            if(!ModelState.IsValid)
+            if (!ModelState.IsValid)
             {
+                _logger.LogWarning("Invalid model state for login: {Username}", loginDto.UserName);
                 return BadRequest(ModelState);
             }
             
-            try
-            {
-                var token = await _authService.LoginAsync(loginDto);
-                _logger.LogInformation("Login successful: {Username}", loginDto.UserName);
-                return Ok(new { Token = token });
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, "Login failed: {Username}", loginDto.UserName);
-                return Unauthorized($"{ex.Message}");
-            }
+            var token = await _authService.LoginAsync(loginDto);
+                
+            return Ok(new { Token = token });
         }
         
         // Endpoint for user password
         [HttpPost("forgot-password")]
-        public async Task<IActionResult> ForgotPasswordAsync([FromBody] RequestResetPasswordDto request)
+        public async Task<IActionResult> ForgotPasswordAsync([FromBody] RequestResetPasswordDto requestDto)
         {
-            _logger.LogInformation("Forgot password request received: {Email}", request.Email);
+            _logger.LogInformation("Password reset request by email: {Email} from IP: {IpAddress}", 
+                requestDto.Email, HttpContext.Connection.RemoteIpAddress);
             
-            if(!ModelState.IsValid)
+            if (!ModelState.IsValid)
             {
+                _logger.LogWarning("Invalid model state for password reset request: {Email}", requestDto.Email);
                 return BadRequest(ModelState);
             }
             
-            try
-            {
-                var token = await _authService.RequestResetPasswordAsync(request);
+            await _authService.RequestResetPasswordAsync(requestDto);
                 
-                if(String.IsNullOrEmpty(token))
-                {
-                    _logger.LogWarning("Invalid token generated for forgot password: {Email}", request.Email);
-                    return BadRequest("Invalid token.");
-                }
-                
-                _logger.LogInformation("Forgot password token generated: {Email}", request.Email);
-                return Ok(new {Token = token});
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, "Forgot password request failed: {Email}", request.Email);
-                return BadRequest(ex.Message);
-            }
+            return Ok("Password reset email sent");
+           
         }
         
         [HttpPost("reset-password")]
         public async Task<IActionResult> ResetPasswordAsync([FromBody] ResetPasswordDto resetPasswordDto)
         {
-            _logger.LogInformation("Reset password request received: {Email}", resetPasswordDto.Email);
+            _logger.LogInformation("Password reset attempt for token: {Token} from IP: {IpAddress}", 
+                resetPasswordDto.Token?.Substring(0, 8) + "...", HttpContext.Connection.RemoteIpAddress);
             
-            if(!ModelState.IsValid)
+            if (!ModelState.IsValid)
             {
+                _logger.LogWarning("Invalid model state for password reset from IP: {IpAddress}", 
+                    HttpContext.Connection.RemoteIpAddress);
                 return BadRequest(ModelState);
             }
             
-            try
-            {
-                var result = await _authService.ResetPasswordAsync(resetPasswordDto);
+            await _authService.ResetPasswordAsync(resetPasswordDto);
                 
-                if(result)
-                {
-                    _logger.LogInformation("Password reset successful: {Email}", resetPasswordDto.Email);
-                    return Ok();
-                }
-                else
-                {
-                    _logger.LogWarning("Password reset failed: {Email}", resetPasswordDto.Email);
-                    return BadRequest();
-                }
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, "Reset password failed: {Email}", resetPasswordDto.Email);
-                return BadRequest(ex.Message);
-            }
+            return Ok("Password reset successful");
         }
        
         [HttpDelete("logout")]
         public async Task<IActionResult> LogoutAsync(LogoutDto logoutDto)
         { 
-            _logger.LogInformation("Logout request received: {Email}", logoutDto.Email);
+            _logger.LogInformation("Logout request by user: {Email} from IP: {IpAddress}", 
+                logoutDto.Email, HttpContext.Connection.RemoteIpAddress);
             
-            if(!ModelState.IsValid)
+            if (!ModelState.IsValid)
             {
+                _logger.LogWarning("Invalid model state for logout by user: {Email}", logoutDto.Email);
                 return BadRequest(ModelState);
             }
-
-            try
-            {
-                var result = await _authService.LogoutAsync(logoutDto);
-        
-                if (result)
-                {
-                    _logger.LogInformation("Logout successful: {Email}", logoutDto.Email);
-                    return Ok(new { message = "Successfully logged out" });
-                }
-        
-                _logger.LogWarning("Logout failed: {Email}", logoutDto.Email);
-                return BadRequest("Logout failed");
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, "Logout failed: {Email}", logoutDto.Email);
-                return BadRequest(ex.Message);
-            }
+            
+            await _authService.LogoutAsync(logoutDto);
+            return Ok("Logout successful");
         }
     }
 }
