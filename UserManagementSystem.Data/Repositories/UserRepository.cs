@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using UserManagementSystem.Data.Contexts;
 using UserManagementSystem.Data.Entities;
 using UserManagementSystem.Data.Extensions;
@@ -10,10 +11,12 @@ namespace UserManagementSystem.Data.Repositories;
 public class UserRepository : IUserRepository
 {
     private readonly ApplicationDbContext _context;
+    private readonly ILogger<UserRepository> _logger;
 
-    public UserRepository(ApplicationDbContext context)
+    public UserRepository(ApplicationDbContext context, ILogger<UserRepository> logger)
     {
         _context = context;
+        _logger = logger;
     }
 
     // Returns a list of all users in the system.
@@ -74,26 +77,59 @@ public class UserRepository : IUserRepository
     // Adds a new user to the database. 
     public async Task AddUserAsync(User user)
     { 
-        await _context.Users.AddAsync(user);
-        await _context.SaveChangesAsync();
+        try
+        {
+            _logger.LogInformation("Adding new user: {Username}, Email: {Email}", user.UserName, user.Email);
+            
+            await _context.Users.AddAsync(user);
+            await _context.SaveChangesAsync();
+            
+            _logger.LogInformation("User added successfully: {Username}, UserId: {UserId}", user.UserName, user.UserId);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Failed to add user: {Username}, Email: {Email}", user.UserName, user.Email);
+            throw;
+        }
     }
     
     // Updates an existing user's data.
     public async Task UpdateUserAsync(User user)
     {   
-        _context.Users.Update(user); 
-        await _context.SaveChangesAsync();
+        try
+        {
+            _logger.LogInformation("Updating user: {UserId}, Username: {Username}", user.UserId, user.UserName);
+            
+            _context.Users.Update(user); 
+            await _context.SaveChangesAsync();
+            
+            _logger.LogInformation("User updated successfully: {UserId}", user.UserId);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Failed to update user: {UserId}", user.UserId);
+            throw;
+        }
     }
     
     // Deletes a user by ID if found.
     public async Task DeleteUserAsync(int userId)
     {
-        var user = await _context.Users.FindAsync(userId);
+        try
+        {
+            _logger.LogInformation("Deleting user: {UserId}", userId);
         
-        _context.Users.Remove(user!);
+            var user = await _context.Users.FindAsync(userId);
+            _context.Users.Remove(user!);
+            await _context.SaveChangesAsync();
         
-        await _context.SaveChangesAsync();
-        
+            _logger.LogInformation("User deleted successfully: {UserId}", userId);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Failed to delete user: {UserId}", userId);
+            throw;
+        }
     }
     
     public async Task<List<User>> GetUsersByDepartmentAsync(int departmentId,int page, int pageSize)
