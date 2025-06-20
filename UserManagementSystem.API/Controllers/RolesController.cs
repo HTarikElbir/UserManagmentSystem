@@ -33,16 +33,17 @@ namespace UserManagementSystem.API.Controllers
         {
             if (roleId <= 0)
             {
+                _logger.LogWarning("Invalid role ID: {RoleId}", roleId);
                 return BadRequest("Invalid role ID.");
             }
             
             var result = await _roleService.GetRoleByIdAsync(roleId);
         
-           if (result == null)
-           {
+            if (result == null)
+            {
                return NotFound("Role not found.");
-           }
-           return Ok(result);
+            }
+            return Ok(result);
         }
         
         // Endpoint to get a role by name
@@ -51,6 +52,7 @@ namespace UserManagementSystem.API.Controllers
         {
             if (string.IsNullOrEmpty(roleName))
             {
+                _logger.LogWarning("Invalid role name: {RoleName}", roleName);
                 return BadRequest("Role name cannot be null or empty.");
             }
             
@@ -72,29 +74,19 @@ namespace UserManagementSystem.API.Controllers
         {
             if (!ModelState.IsValid)
             {
+                _logger.LogWarning("Invalid model state for add role: {RoleName}", roleAddDto.RoleName);
                 return BadRequest(ModelState);
             }
+
+            var result = await _roleService.AddRoleAsync(roleAddDto);
+
+            if (result)
+            {
+                return Created();
+            }
             
-            try
-            {
-                var result = await _roleService.AddRoleAsync(roleAddDto);
-                
-                if (result)
-                {
-                    _logger.LogInformation("Role created successfully: RoleName={RoleName}", roleAddDto.RoleName); 
-                    return Created();
-                }
-                else
-                {
-                    _logger.LogWarning("Role creation failed: RoleName={RoleName}", roleAddDto.RoleName);
-                    return BadRequest("Role could not be added.");
-                }
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, "AddRole failed: RoleName={RoleName}", roleAddDto.RoleName);
-                return StatusCode(500, "Internal server error");
-            }
+            return BadRequest("Role could not be added.");
+            
         }
         
         // Endpoint to delete a role by ID
@@ -103,30 +95,18 @@ namespace UserManagementSystem.API.Controllers
         {
             if (roleId <= 0)
             {
+                _logger.LogWarning("Invalid role ID for deletion: {RoleId}", roleId);
                 return BadRequest("Invalid role ID.");
             }
 
-            try
-            {
-                var result = await _roleService.DeleteRoleAsync(roleId);
+            var result = await _roleService.DeleteRoleAsync(roleId);
 
-                if (result)
-                {
-                    _logger.LogInformation("Role deleted successfully: RoleId={RoleId}", roleId); 
-                    return NoContent();
-                }
-                else
-                {
-                    _logger.LogWarning("Role deletion failed - Role not found: RoleId={RoleId}", roleId);
-                    return NotFound("Role not found.");
-                }
-            }
-            catch (Exception ex)
+            if (result)
             {
-                _logger.LogError(ex, "DeleteRole failed: RoleId={RoleId}", roleId);
-                return StatusCode(500, "Internal server error");
+                return NoContent();
             }
-            
+           
+            return NotFound("Role not found.");
         }
         
         // Endpoint to update a role by ID
@@ -135,34 +115,24 @@ namespace UserManagementSystem.API.Controllers
         {
             if (roleId <= 0)
             {
+                _logger.LogWarning("Invalid role ID for update: {RoleId}", roleId);
                 return BadRequest("Invalid role ID.");
             }
-            
+
             if (!ModelState.IsValid)
             {
+                _logger.LogWarning("Invalid model state for update role: {RoleId}", roleId);
                 return BadRequest(ModelState);
             }
             
-            try
-            {
-                var result = await _roleService.UpdateRoleAsync(roleId, roleUpdateDto);
+            var result = await _roleService.UpdateRoleAsync(roleId, roleUpdateDto);
 
-                if (result)
-                {
-                    _logger.LogInformation("Role updated successfully: RoleId={RoleId}, NewRoleName={NewRoleName}", roleId, roleUpdateDto.RoleName);
-                    return NoContent();
-                }
-                else
-                {
-                    _logger.LogWarning("Role update failed - Role not found: RoleId={RoleId}", roleId);
-                    return NotFound();
-                }
-            }
-            catch (Exception ex)
+            if (result)
             {
-                _logger.LogError(ex, "UpdateRole failed: RoleId={RoleId}", roleId);
-                return StatusCode(500, "Internal server error");
+                return NoContent();
             }
+            
+            return NotFound();
         }
     }
 }
